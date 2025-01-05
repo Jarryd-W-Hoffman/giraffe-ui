@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The GiraffeUI Button component is a flexible and customizable Laravel Blade component designed to create buttons with various styles and functionalities, leveraging the power of Tailwind CSS for seamless styling integration. This component empowers you to easily integrate visually appealing buttons into your Laravel application with extensive options for colors, sizes, variants, and more.
+The GiraffeUI (GUI) Button component is a flexible and customizable Laravel Blade component designed to create buttons with various styles and functionalities, leveraging the power of Tailwind CSS for seamless styling integration. This component empowers you to easily integrate visually appealing buttons into your Laravel application with extensive options for colors, sizes, variants, and more.
 
 ## Usage
 
