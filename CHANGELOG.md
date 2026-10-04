@@ -6,7 +6,18 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 40 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 42 components and a catalog.
+
+### Number input and slider
+
+#### Added
+- Number input: a native number input with − and + buttons that call the browser's `stepUp()` and `stepDown()`, so `step`, `min` and `max` work exactly as on the input. They fire `input` and `change`, turn off at the limits, follow values set by `wire:model` or scripts, and stay out of the tab order because the arrow keys do the same. Without JavaScript it's a plain number input with the browser's spinners.
+- Slider: a native range input in the theme colour. `show-value` adds an `<output>`, `prefix` and `suffix` format it and `aria-valuetext` (so screen readers hear "8 hours"), and `marks` become a `<datalist>` for tick marks.
+- Icon: `minus`.
+- The Livewire demo form has a team size and years of experience.
+
+#### Fixed
+- Width classes on a control (e.g. `class="max-w-xs"`) no longer leave its parts behind. Date picker's button, Combobox's icon and list, and Input's leading and trailing content are now pinned to the control itself with anchor positioning, instead of to a full-width wrapper. Catalog pages are pixel-identical to before.
 
 ### Avatar group, description list and stat
 

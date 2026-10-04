@@ -29,7 +29,6 @@
 {{-- WAI-ARIA combobox with a listbox popup. Needs Alpine (Livewire includes it). --}}
 <div
     class="relative"
-    style="anchor-name: {{ \JayAitch\GiraffeUI\Support\Anchor::name($id) }}"
     x-data="{
         open: false,
         query: '',
@@ -141,10 +140,12 @@
                 'disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-500 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400',
                 'dark:bg-zinc-900 dark:text-zinc-100 dark:scheme-dark',
                 $sizes[$size] ?? $sizes['md'],
-            ]) }}
+            ])
+            ->style('anchor-name: '.\JayAitch\GiraffeUI\Support\Anchor::name($id)) }}
     >
 
-    <x-gui::icon name="chevron-up-down" size="sm" class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500 dark:text-zinc-400" />
+    {{-- Pinned to the text input, so width classes on it move the icon and size the list too. --}}
+    <x-gui::icon name="chevron-up-down" size="sm" class="pointer-events-none absolute inset-y-0 right-0 my-auto mr-3 text-zinc-500 dark:text-zinc-400" :style="\JayAitch\GiraffeUI\Support\Anchor::pin($id, 'right')" />
 
     {{-- A manual popover in the top layer, so the list isn't clipped by modals or scrolling containers. --}}
     <div

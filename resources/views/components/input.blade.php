@@ -19,6 +19,10 @@
     $hasLeading = isset($leading);
     $hasTrailing = isset($trailing);
 
+    // With leading or trailing content, those parts are pinned to the input itself (anchor positioning), so width
+    // classes on the input move them too.
+    $anchorId = ($hasLeading || $hasTrailing) ? ($control['attributes']['id'] ?? 'gui-input-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8))) : null;
+
     $input = $attributes
         ->except(['aria-describedby', 'value'])
         ->merge($control['attributes'] + ['type' => $type] + ($value !== null ? ['value' => $value] : []))
@@ -33,17 +37,18 @@
             $sizes[$size] ?? $sizes['md'],
             'pl-9' => $hasLeading,
             'pr-9' => $hasTrailing,
-        ]);
+        ])
+        ->when($anchorId, fn ($input) => $input->style('anchor-name: '.\JayAitch\GiraffeUI\Support\Anchor::name($anchorId)));
 @endphp
 
 @if ($hasLeading || $hasTrailing)
     <div class="relative">
         @if ($hasLeading)
-            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 dark:text-zinc-400">{{ $leading }}</div>
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 dark:text-zinc-400" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'left') }}">{{ $leading }}</div>
         @endif
         <input {{ $input }}>
         @if ($hasTrailing)
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-500 dark:text-zinc-400">{{ $trailing }}</div>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-500 dark:text-zinc-400" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right') }}">{{ $trailing }}</div>
         @endif
     </div>
 @else

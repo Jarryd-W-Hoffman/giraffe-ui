@@ -20,6 +20,19 @@ class Anchor
     }
 
     /**
+     * Inline style that pins an absolutely positioned part (a button or icon) to one side of its control.
+     *
+     * Classes like max-w-xs on the control then move the part with it. Browsers without anchor positioning drop
+     * these declarations and fall back to the part's own classes (e.g. right-0), which fit a full-width control.
+     */
+    public static function pin(string $id, string $side, string $inset = '0px'): string
+    {
+        $name = self::name($id);
+
+        return "position-anchor: {$name}; top: calc(anchor(top) + {$inset}); bottom: calc(anchor(bottom) + {$inset}); {$side}: calc(anchor({$side}) + {$inset})";
+    }
+
+    /**
      * Placement classes. The browser flips to the other side when there isn't room.
      */
     public static function position(string $position): string
