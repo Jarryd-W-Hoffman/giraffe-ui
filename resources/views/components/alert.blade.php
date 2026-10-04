@@ -40,7 +40,7 @@
         @if ($title)
             <p class="font-medium {{ $accent }}">{{ $title }}</p>
         @endif
-        @if ($slot->isNotEmpty())
+        @if (! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot))
             <div class="text-zinc-700 dark:text-zinc-300">{{ $slot }}</div>
         @endif
     </div>

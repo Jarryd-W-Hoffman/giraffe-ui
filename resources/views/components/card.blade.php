@@ -21,7 +21,7 @@
         </div>
     @endif
 
-    @if ($slot->isNotEmpty())
+    @if (! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot))
         <div class="p-6">{{ $slot }}</div>
     @endif
 

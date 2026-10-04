@@ -2,6 +2,7 @@
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use JayAitch\GiraffeUI\Support\Slot;
 
 function people(): array
 {
@@ -140,5 +141,13 @@ describe('pagination', function () {
         $html = (string) $this->blade('<x-gui::table :columns="[\'id\']" :rows="$paginator" />', ['paginator' => new LengthAwarePaginator(collect(range(11, 20))->map(fn ($id) => ['id' => $id]), 50, 10, 2, ['path' => '/users'])]);
 
         expect($html)->toContain('aria-label="Pagination"', '>11<');
+    });
+});
+
+describe('slots', function () {
+    it('treats Livewire morph markers as blank', function () {
+        expect(Slot::isBlank("\n <!--[if BLOCK]><![endif]-->\n<!--[if ENDBLOCK]><![endif]-->  "))->toBeTrue()
+            ->and(Slot::isBlank('<!--[if BLOCK]><![endif]--><tr></tr>'))->toBeFalse()
+            ->and(Slot::isBlank(null))->toBeTrue();
     });
 });

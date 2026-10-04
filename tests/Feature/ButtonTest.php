@@ -97,3 +97,47 @@ it('renders leading and trailing slots around the label', function () {
         BLADE)
         ->assertSeeInOrder(['data-icon="left"', 'Next', 'data-icon="right"'], false);
 });
+
+describe('loading', function () {
+    it('shows a spinner and disables the button when loading', function () {
+        $html = (string) $this->blade('<x-gui::button loading>Save</x-gui::button>');
+
+        expect($html)->toContain('data-loading="true"', 'aria-busy="true"', 'animate-spin')
+            ->toMatch('/<button\b[^>]*\sdisabled(\s|>)/');
+    });
+
+    it('carries a hidden spinner for Livewire actions, shown by data-loading', function () {
+        $html = (string) $this->blade('<x-gui::button wire:click="save">Save</x-gui::button>');
+
+        expect($html)->toContain('animate-spin', 'class="hidden group-data-loading/button:contents"')
+            ->not->toContain('data-loading="true"')
+            ->and(classesOf($html, 'button'))->toContain('group/button', 'data-loading:pointer-events-none');
+    });
+
+    it('shows the spinner on submit buttons while their form is busy', function () {
+        $html = (string) $this->blade('<x-gui::button type="submit">Save</x-gui::button>');
+
+        expect($html)->toContain('in-data-loading:contents')
+            ->and(classesOf($html, 'button'))->toContain('in-data-loading:pointer-events-none');
+    });
+
+    it('leaves plain buttons without a spinner', function () {
+        expect((string) $this->blade('<x-gui::button>Cancel</x-gui::button>'))->not->toContain('animate-spin');
+    });
+
+    it('hides the leading icon while loading', function () {
+        $html = (string) $this->blade('<x-gui::button wire:click="save"><x-slot:leading><svg data-icon></svg></x-slot:leading> Save</x-gui::button>');
+
+        expect($html)->toMatch('/<span class="contents group-data-loading\/button:hidden">\s*<svg data-icon>/');
+    });
+});
+
+describe('spinner', function () {
+    it('is decorative without a label', function () {
+        expect((string) $this->blade('<x-gui::spinner />'))->toContain('aria-hidden="true"')->not->toContain('role="status"');
+    });
+
+    it('is announced with a label', function () {
+        expect((string) $this->blade('<x-gui::spinner label="Loading results" />'))->toContain('role="status"', '<span class="sr-only">Loading results</span>');
+    });
+});

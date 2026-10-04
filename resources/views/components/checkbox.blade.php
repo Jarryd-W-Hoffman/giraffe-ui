@@ -9,7 +9,7 @@
     $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Form::id($name, $attributes->get('value')) ?? 'gui-'.\Illuminate\Support\Str::random(8);
     $errorKey = \JayAitch\GiraffeUI\Support\Form::errorKey($name, $attributes);
     $invalid ??= \JayAitch\GiraffeUI\Support\Form::error($errorKey, null, $errors ?? null) !== null;
-    $hasLabel = $label !== null || $slot->isNotEmpty();
+    $hasLabel = $label !== null || ! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot);
 @endphp
 
 <div class="flex gap-3 has-disabled:opacity-60">

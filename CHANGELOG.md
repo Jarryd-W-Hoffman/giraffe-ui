@@ -6,7 +6,18 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 24 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 25 components and a catalog.
+
+### Livewire and loading states
+
+#### Added
+- Spinner component.
+- Button loading state. Buttons with `wire:click`, and submit buttons in a `wire:submit` form, show a spinner and ignore clicks while their request runs, using the `data-loading` attribute Livewire 4 adds. No `wire:loading` or `wire:target` needed. Outside Livewire, set `loading`.
+- A Livewire guide in the catalog with live Livewire 4 demos (validated form, searchable and sortable paginated table, `wire:model` tabs), and Livewire tests for each.
+
+#### Fixed
+- Table, Card, Alert, Modal and the choice controls treated a slot as non-empty when it held only Livewire's `<!--[if BLOCK]>` markers, so a composed table showed no empty state under Livewire.
+- `gui:install` now checks the app's `composer.json` for Livewire instead of whether the class exists, which was true in any environment with Livewire installed (such as GiraffeUI's own development).
 
 ### Phase 3: data
 

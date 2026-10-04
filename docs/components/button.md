@@ -94,6 +94,20 @@ Disabled links lose their href and are marked aria-disabled.
 <x-gui::button href="#" disabled variant="outline">Disabled link</x-gui::button>
 ```
 
+## Loading
+
+With Livewire this is automatic: a button with wire:click, or a submit button in a wire:submit form, shows a spinner and ignores clicks while its request runs. Set loading yourself otherwise.
+
+```blade
+<x-gui::button loading>Saving</x-gui::button>
+<x-gui::button loading variant="outline">
+    <x-slot:leading>
+        <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" /></svg>
+    </x-slot:leading>
+    Creating
+</x-gui::button>
+```
+
 ## Full width
 
 ```blade
@@ -123,6 +137,7 @@ Any attribute passes straight through, including x-on and wire:click.
 | `external` | `bool` | `false` | With href, opens in a new tab with rel="noopener noreferrer". |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Ignored for links. |
 | `disabled` | `bool` | `false` | Disables a button, or removes the href from a link and sets aria-disabled. |
+| `loading` | `bool` | `false` | Shows a spinner in place of the leading icon and disables the button. Automatic for Livewire actions. |
 
 Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
 

@@ -6,6 +6,7 @@
     'type' => 'button',
     'disabled' => false,
     'external' => false,
+    'loading' => false,
 ])
 
 @php
@@ -43,11 +44,18 @@
         'lg' => 'h-12 px-6 gap-2.5 text-base',
     ];
 
-    $classes = implode(' ', [
+    // Only buttons that can be busy carry a spinner: Livewire actions, submit buttons, or loading set by hand.
+    $canLoad = $loading || $type === 'submit' || collect($attributes->getAttributes())->keys()->contains(fn ($key) => str_starts_with($key, 'wire:'));
+
+    $classes = \Illuminate\Support\Arr::toCssClasses([
         'inline-flex shrink-0 items-center justify-center rounded-gui font-medium whitespace-nowrap transition-colors',
         'cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2',
         'disabled:cursor-not-allowed disabled:opacity-50',
         'aria-disabled:pointer-events-none aria-disabled:opacity-50',
+        // Livewire 4 sets data-loading on the element that triggered a request.
+        'group/button data-loading:pointer-events-none',
+        // A submit button is also busy while its wire:submit form is.
+        'in-data-loading:pointer-events-none' => $type === 'submit' && ! $href,
         ($variants[$variant] ?? $variants['solid'])[$color] ?? $variants['solid']['primary'],
         $sizes[$size] ?? $sizes['md'],
     ]);
@@ -67,10 +75,23 @@
 @else
     <button
         type="{{ $type }}"
-        @disabled($disabled)
+        @disabled($disabled || $loading)
+        @if ($loading) data-loading="true" aria-busy="true" @endif
         {{ $attributes->class($classes) }}
     >
-        {{ $leading ?? '' }}
+        @if ($canLoad)
+            {{-- Shown and hidden on a wrapper, so these display classes don't fight the spinner's own. --}}
+            <span @class([
+                'hidden group-data-loading/button:contents',
+                'in-data-loading:contents' => $type === 'submit',
+            ])><x-gui::spinner size="sm" /></span>
+        @endif
+        @isset($leading)
+            <span @class([
+                'contents group-data-loading/button:hidden',
+                'in-data-loading:hidden' => $type === 'submit',
+            ])>{{ $leading }}</span>
+        @endisset
         {{ $slot }}
         {{ $trailing ?? '' }}
     </button>

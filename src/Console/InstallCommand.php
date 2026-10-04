@@ -103,7 +103,7 @@ class InstallCommand extends Command
      */
     protected function installLivewire(): void
     {
-        if (class_exists('Livewire\Livewire')) {
+        if ($this->livewireInstalled()) {
             $this->components->twoColumnDetail('Livewire', '<fg=yellow;options=bold>ALREADY INSTALLED</>');
 
             return;
@@ -189,6 +189,22 @@ class InstallCommand extends Command
         $this->files->put($path, rtrim($css)."\n\n".self::DARK_VARIANT."\n");
 
         $this->components->twoColumnDetail('Class-based dark mode', '<fg=green;options=bold>ENABLED</>');
+    }
+
+    /**
+     * Whether the app requires Livewire, according to its composer.json.
+     */
+    protected function livewireInstalled(): bool
+    {
+        $path = base_path('composer.json');
+
+        if (! $this->files->exists($path)) {
+            return false;
+        }
+
+        $composer = json_decode($this->files->get($path), true) ?: [];
+
+        return isset($composer['require']['livewire/livewire']) || isset($composer['require-dev']['livewire/livewire']);
     }
 
     /**
