@@ -30,8 +30,8 @@ it('applies the full class names for each variant and colour', function (string 
 })->with([
     ['solid', 'primary', ['bg-gui-primary', 'text-gui-primary-foreground']],
     ['solid', 'warning', ['bg-gui-warning', 'text-gui-warning-foreground']],
-    ['outline', 'danger', ['border', 'border-gui-danger', 'text-gui-danger']],
-    ['ghost', 'success', ['text-gui-success', 'hover:bg-gui-success/10']],
+    ['outline', 'danger', ['border', 'border-gui-danger-text', 'text-gui-danger-text']],
+    ['ghost', 'success', ['text-gui-success-text', 'hover:bg-gui-success/10']],
 ]);
 
 it('falls back to solid primary for unknown variants and colours', function () {

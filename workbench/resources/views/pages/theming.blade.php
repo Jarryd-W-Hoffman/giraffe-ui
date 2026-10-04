@@ -61,7 +61,7 @@
     </div>
 
     <h2 id="tokens" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Tokens</h2>
-    <p class="mt-2 text-zinc-600 dark:text-zinc-400">Each colour has a <code class="font-mono text-sm">-foreground</code> token for text placed on it. Override any of them in an <code class="font-mono text-sm">@@theme</code> block after the GiraffeUI import.</p>
+    <p class="mt-2 text-zinc-600 dark:text-zinc-400">Each colour has three tokens: the colour itself for solid backgrounds, <code class="font-mono text-sm">-foreground</code> for text on it, and <code class="font-mono text-sm">-text</code> for text, borders and focus rings on the page, which switches to a lighter shade in dark mode. Every default pairing meets WCAG AA in both modes. Override any of them in an <code class="font-mono text-sm">@@theme</code> block after the GiraffeUI import.</p>
     <div class="mt-4 overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
         <table class="min-w-full text-left text-sm">
             <thead class="bg-zinc-50 text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
@@ -75,10 +75,10 @@
                 @foreach ([
                     ['--color-gui-primary', 'indigo-600', 'bg-gui-primary'],
                     ['--color-gui-secondary', 'zinc-600', 'bg-gui-secondary'],
-                    ['--color-gui-success', 'emerald-600', 'bg-gui-success'],
-                    ['--color-gui-warning', 'amber-500', 'bg-gui-warning'],
+                    ['--color-gui-success', 'emerald-700', 'bg-gui-success'],
+                    ['--color-gui-warning', 'amber-400', 'bg-gui-warning'],
                     ['--color-gui-danger', 'red-600', 'bg-gui-danger'],
-                    ['--color-gui-info', 'sky-600', 'bg-gui-info'],
+                    ['--color-gui-info', 'sky-700', 'bg-gui-info'],
                     ['--radius-gui', '--radius-md', null],
                 ] as [$token, $default, $swatch])
                     <tr>

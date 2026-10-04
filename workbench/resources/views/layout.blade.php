@@ -42,13 +42,27 @@
                     return radius === 'none' ? '0px' : `var(--radius-${radius})`;
                 },
                 apply(theme) {
-                    const root = document.documentElement.style;
-                    theme.primary === this.defaults.primary
-                        ? root.removeProperty('--color-gui-primary')
-                        : root.setProperty('--color-gui-primary', `var(--color-${theme.primary}-600)`);
-                    theme.radius === this.defaults.radius
-                        ? root.removeProperty('--radius-gui')
-                        : root.setProperty('--radius-gui', this.radiusValue(theme.radius));
+                    // A <style> tag rather than inline styles, so the dark-mode text shade can apply too.
+                    let style = document.getElementById('catalog-theme');
+
+                    if (! style) {
+                        style = document.createElement('style');
+                        style.id = 'catalog-theme';
+                        document.head.appendChild(style);
+                    }
+
+                    const rules = [];
+
+                    if (theme.primary !== this.defaults.primary) {
+                        rules.push(`:root { --color-gui-primary: var(--color-${theme.primary}-600); }`);
+                        rules.push(`:root.dark { --color-gui-primary-text: var(--color-${theme.primary}-400); }`);
+                    }
+
+                    if (theme.radius !== this.defaults.radius) {
+                        rules.push(`:root { --radius-gui: ${this.radiusValue(theme.radius)}; }`);
+                    }
+
+                    style.textContent = rules.join('\n');
                 },
             };
             Catalog.apply(Catalog.load());
@@ -118,19 +132,27 @@
                     },
 
                     get snippet() {
-                        const lines = [];
+                        const theme = [];
 
                         if (this.primary !== Catalog.defaults.primary) {
-                            lines.push(`    --color-gui-primary: var(--color-${this.primary}-600);`);
+                            theme.push(`    --color-gui-primary: var(--color-${this.primary}-600);`);
                         }
 
                         if (this.radius !== Catalog.defaults.radius) {
-                            lines.push(`    --radius-gui: ${Catalog.radiusValue(this.radius)};`);
+                            theme.push(`    --radius-gui: ${Catalog.radiusValue(this.radius)};`);
                         }
 
-                        return lines.length
-                            ? `@theme {\n${lines.join('\n')}\n}`
-                            : '/* You are using the default theme. Pick a colour or radius to see the overrides. */';
+                        if (! theme.length) {
+                            return '/* You are using the default theme. Pick a colour or radius to see the overrides. */';
+                        }
+
+                        let css = `@theme {\n${theme.join('\n')}\n}`;
+
+                        if (this.primary !== Catalog.defaults.primary) {
+                            css += `\n\n/* A lighter shade for primary text in dark mode. */\n@layer base {\n    :root {\n        @variant dark {\n            --color-gui-primary-text: var(--color-${this.primary}-400);\n        }\n    }\n}`;
+                        }
+
+                        return css;
                     },
                 }));
             });

@@ -27,7 +27,7 @@ it('renders every example exactly as its code is written', function () {
 it('renders the playground with the requested props', function () {
     $this->get('/catalog/preview/button?variant=outline&color=danger&label=Delete&disabled=true')
         ->assertOk()
-        ->assertSee('border-gui-danger', false)
+        ->assertSee('border-gui-danger-text', false)
         ->assertSee('Delete')
         ->assertSee('disabled', false);
 });

@@ -6,33 +6,64 @@
  *     @import "tailwindcss";
  *     @import "../../vendor/jayaitch/giraffeui/resources/css/giraffeui.css";
  *
- * To re-theme, override any of the tokens below in your own @theme block
- * after the import, e.g. @theme { --color-gui-primary: var(--color-violet-600); }
+ * To re-theme, override any of the tokens below in your own theme block
+ * after the import, e.g. --color-gui-primary: var(--color-violet-600);
  */
 
 /* Let Tailwind find the classes used by GiraffeUI's Blade components. */
 @source "../views";
 
 @theme {
-    /* Brand colours. Each colour has a matching "-foreground" for text on top of it. */
+    /*
+     * Brand colours. Each colour has three tokens:
+     *   --color-gui-{name}             solid backgrounds
+     *   --color-gui-{name}-foreground  text on a solid background
+     *   --color-gui-{name}-text        text, borders and focus rings on the page background
+     * Every default pairing meets WCAG AA (4.5:1) in light and dark mode.
+     */
     --color-gui-primary: var(--color-indigo-600);
     --color-gui-primary-foreground: var(--color-white);
+    --color-gui-primary-text: var(--color-gui-primary);
 
     --color-gui-secondary: var(--color-zinc-600);
     --color-gui-secondary-foreground: var(--color-white);
+    --color-gui-secondary-text: var(--color-gui-secondary);
 
-    --color-gui-success: var(--color-emerald-600);
+    --color-gui-success: var(--color-emerald-700);
     --color-gui-success-foreground: var(--color-white);
+    --color-gui-success-text: var(--color-emerald-700);
 
-    --color-gui-warning: var(--color-amber-500);
+    --color-gui-warning: var(--color-amber-400);
     --color-gui-warning-foreground: var(--color-zinc-950);
+    --color-gui-warning-text: var(--color-amber-700);
 
     --color-gui-danger: var(--color-red-600);
     --color-gui-danger-foreground: var(--color-white);
+    --color-gui-danger-text: var(--color-red-700);
 
-    --color-gui-info: var(--color-sky-600);
+    --color-gui-info: var(--color-sky-700);
     --color-gui-info-foreground: var(--color-white);
+    --color-gui-info-text: var(--color-sky-700);
 
     /* Corner radius used by every component. */
     --radius-gui: var(--radius-md);
+}
+
+/*
+ * On dark backgrounds, text colours need lighter shades to stay readable.
+ * If you change a colour, override its -text token here too:
+ *
+ *     @layer base { :root { @variant dark { --color-gui-primary-text: var(--color-violet-400); } } }
+ */
+@layer base {
+    :root {
+        @variant dark {
+            --color-gui-primary-text: var(--color-indigo-400);
+            --color-gui-secondary-text: var(--color-zinc-400);
+            --color-gui-success-text: var(--color-emerald-400);
+            --color-gui-warning-text: var(--color-amber-400);
+            --color-gui-danger-text: var(--color-red-400);
+            --color-gui-info-text: var(--color-sky-400);
+        }
+    }
 }

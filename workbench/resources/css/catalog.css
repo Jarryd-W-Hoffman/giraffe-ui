@@ -7,6 +7,7 @@
 
 /* Colours and radii the theme customiser can switch to at runtime. */
 @source inline("bg-{indigo,violet,blue,sky,teal,emerald,rose,orange,zinc}-600");
+@source inline("text-{indigo,violet,blue,sky,teal,emerald,rose,orange,zinc}-400");
 @source inline("rounded-{none,sm,md,lg,xl,2xl}");
 
 @custom-variant dark (&:where(.dark, .dark *));

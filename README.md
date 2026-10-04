@@ -77,13 +77,29 @@ Override any token in your own `@theme` block, after the GiraffeUI import:
 |---|---|
 | `--color-gui-primary` | indigo-600 |
 | `--color-gui-secondary` | zinc-600 |
-| `--color-gui-success` | emerald-600 |
-| `--color-gui-warning` | amber-500 |
+| `--color-gui-success` | emerald-700 |
+| `--color-gui-warning` | amber-400 |
 | `--color-gui-danger` | red-600 |
-| `--color-gui-info` | sky-600 |
+| `--color-gui-info` | sky-700 |
 | `--radius-gui` | `--radius-md` |
 
-Each colour has a `-foreground` token for text placed on it.
+Each colour has three tokens:
+
+- `--color-gui-{name}`: solid backgrounds.
+- `--color-gui-{name}-foreground`: text on a solid background.
+- `--color-gui-{name}-text`: text, borders and focus rings on the page background. Dark mode uses a lighter shade.
+
+Every default pairing meets WCAG AA (4.5:1) in light and dark mode. If you change a colour, set its dark-mode text shade too:
+
+```css
+@layer base {
+    :root {
+        @variant dark {
+            --color-gui-primary-text: var(--color-violet-400);
+        }
+    }
+}
+```
 
 ## Dark mode
 

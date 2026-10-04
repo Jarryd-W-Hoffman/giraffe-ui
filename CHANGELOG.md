@@ -8,6 +8,7 @@ Phase 0: a rebuild on Tailwind CSS v4 and Laravel 13.
 
 ### Added
 - `resources/css/giraffeui.css`: one file to import, with `@theme` colour and radius tokens (`--color-gui-*`, `--radius-gui`).
+- `--color-gui-*-text` tokens for outline/ghost text, borders and focus rings, with lighter dark-mode shades. Every default colour pairing meets WCAG AA in light and dark mode.
 - `leading` and `trailing` slots on the button, for icons.
 - An empty state for the table (`No results.` by default, or an `empty` slot).
 - A component catalog (`composer catalog`) with live playgrounds, Preview/Code examples, API references, a theme customiser and dark mode.
