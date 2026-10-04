@@ -14,12 +14,15 @@
 
 @section('content')
     @php
-        $previewClasses = ($component['preview'] ?? 'inline') === 'block'
-            ? 'p-4 sm:p-8'
-            : 'flex flex-wrap items-center justify-center gap-3 p-8';
+        $preview = $component['preview'] ?? 'inline';
+        $previewClasses = match ($preview) {
+            'block' => 'p-4 sm:p-8',
+            'narrow' => 'px-4 py-8 sm:px-8 sm:py-10',
+            default => 'flex flex-wrap items-center justify-center gap-3 p-8',
+        };
     @endphp
 
-    <p class="text-sm text-zinc-500 dark:text-zinc-400">Components</p>
+    <p class="text-sm text-zinc-500 dark:text-zinc-400">{{ $component['group'] ?? 'Components' }}</p>
     <h1 class="mt-1 text-3xl font-bold tracking-tight">{{ $component['name'] }}</h1>
     <p class="mt-3 text-lg text-zinc-600 dark:text-zinc-400">{{ $component['description'] }}</p>
 
@@ -34,7 +37,7 @@
 
         <div
             class="mt-4 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800"
-            x-data="playground(@js(['slug' => $slug, 'controls' => $playground['controls']]))"
+            x-data="playground(@js(['slug' => $slug, 'controls' => $playground['controls'], 'selfClosing' => $playground['selfClosing'] ?? false]))"
         >
             <div class="grid md:grid-cols-[1fr_15rem]">
                 <div x-ref="preview" class="flex min-h-56 items-center justify-center p-8" aria-live="polite">
@@ -47,7 +50,7 @@
 
                         @if ($control['type'] === 'boolean')
                             <label for="{{ $id }}" class="flex items-center justify-between gap-3 text-sm font-medium">
-                                {{ $control['name'] }}
+                                {{ $control['label'] ?? $control['name'] }}
                                 <input id="{{ $id }}" type="checkbox" x-model="state.{{ $control['name'] }}" class="size-4 rounded border-zinc-300 accent-gui-primary">
                             </label>
                         @else
@@ -99,7 +102,11 @@
             </div>
 
             <div x-show="tab === 'preview'" role="tabpanel" class="mt-4 min-h-40 rounded-xl border border-zinc-200 dark:border-zinc-800 {{ $previewClasses }}">
-                {!! $example['html'] !!}
+                @if ($preview === 'narrow')
+                    <div class="mx-auto w-full max-w-sm space-y-4">{!! $example['html'] !!}</div>
+                @else
+                    {!! $example['html'] !!}
+                @endif
             </div>
 
             <div x-show="tab === 'code'" x-cloak role="tabpanel" class="mt-4">

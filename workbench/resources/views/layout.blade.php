@@ -68,7 +68,7 @@
             Catalog.apply(Catalog.load());
 
             document.addEventListener('alpine:init', () => {
-                Alpine.data('playground', ({ slug, controls }) => ({
+                Alpine.data('playground', ({ slug, controls, selfClosing }) => ({
                     controls,
                     state: Object.fromEntries(controls.map((control) => [control.name, control.default])),
                     request: 0,
@@ -101,17 +101,22 @@
                                 const value = this.state[control.name];
 
                                 if (control.type === 'boolean') {
-                                    return value ? control.name : null;
+                                    return value ? (control.attribute ?? control.name) : null;
                                 }
 
-                                return value !== '' && value !== control.default ? `${control.name}="${escape(value)}"` : null;
+                                // "always" is for controls whose starting value isn't the component's own default.
+                                const include = value !== '' && (control.always || value !== control.default);
+
+                                return include ? `${control.name}="${escape(value)}"` : null;
                             })
                             .filter(Boolean);
 
                         const slot = controls.find((control) => control.slot);
                         const content = slot ? this.state[slot.name] : '';
 
-                        return `<x-gui::${slug}${attributes.length ? ' ' + attributes.join(' ') : ''}>${content}</x-gui::${slug}>`;
+                        const tag = `x-gui::${slug}${attributes.length ? ' ' + attributes.join(' ') : ''}`;
+
+                        return selfClosing ? `<${tag} />` : `<${tag}>${content}</x-gui::${slug}>`;
                     },
                 }));
 
