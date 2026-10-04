@@ -52,6 +52,8 @@ Then rebuild your CSS (`npm run dev` or `npm run build`).
 | Actions | [Button](docs/components/button.md) |
 | Forms | [Field](docs/components/field.md), [Input](docs/components/input.md), [Textarea](docs/components/textarea.md), [Select](docs/components/select.md), [Checkbox](docs/components/checkbox.md), [Radio](docs/components/radio.md), [Switch](docs/components/switch.md), [Fieldset](docs/components/fieldset.md), [Label](docs/components/label.md) |
 | Display | [Alert](docs/components/alert.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md) |
+| Overlays | [Modal](docs/components/modal.md) |
+| Disclosure | [Accordion](docs/components/accordion.md), [Tabs](docs/components/tabs.md) |
 | Data | [Table](docs/components/table.md) |
 
 ### Forms
@@ -71,6 +73,21 @@ Wrap a control in a field to get a linked label, hint and error message. Errors 
 ```
 
 The input gets `id`, `name`, `required`, `aria-invalid` and `aria-describedby` automatically, and is refilled with old input after a failed submission. With Livewire, put `wire:model` on the control and keep `name` on the field.
+
+### Interactivity
+
+GiraffeUI uses the platform first. Modal is a native `<dialog>` opened with `command`/`commandfor` buttons, and Accordion is native `<details>`, so neither needs JavaScript. Components that do need behaviour the browser doesn't provide, like Tabs, use [Alpine](https://alpinejs.dev). Livewire includes Alpine; in other apps, install Alpine yourself.
+
+```blade
+<x-gui::button commandfor="confirm" command="show-modal">Delete</x-gui::button>
+
+<x-gui::modal id="confirm" title="Delete project?">
+    <x-slot:footer>
+        <x-gui::modal.close>Cancel</x-gui::modal.close>
+        <x-gui::button color="danger">Delete</x-gui::button>
+    </x-slot:footer>
+</x-gui::modal>
+```
 
 ## Conventions
 

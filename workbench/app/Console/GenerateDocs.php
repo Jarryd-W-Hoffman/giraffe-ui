@@ -33,7 +33,7 @@ class GenerateDocs extends Command
 
             foreach ($components as $slug => $component) {
                 $files->put("{$directory}/{$slug}.md", $this->page($component));
-                $index[] = "- [{$component['name']}]({$slug}.md): {$component['description']}";
+                $index[] = "- [{$component['name']}]({$slug}.md): {$this->text($component['description'])}";
             }
         }
 
@@ -54,7 +54,7 @@ class GenerateDocs extends Command
             '',
             '_Generated from `workbench/app/Catalog.php`. Edit that file, then run `composer docs`._',
             '',
-            $component['description'],
+            $this->text($component['description']),
             '',
             '```blade',
             $component['usage'],
@@ -65,7 +65,7 @@ class GenerateDocs extends Command
             array_push($lines, '', "## {$example['title']}");
 
             if (isset($example['description'])) {
-                array_push($lines, '', $example['description']);
+                array_push($lines, '', $this->text($example['description']));
             }
 
             array_push($lines, '', '```blade', $example['code'], '```');
@@ -74,7 +74,11 @@ class GenerateDocs extends Command
         array_push($lines, '', '## Props', '', '| Prop | Type | Default | Description |', '|---|---|---|---|');
 
         foreach ($component['props'] as [$name, $type, $default, $description]) {
-            $lines[] = '| `'.$name.'` | `'.str_replace('|', '\|', $type).'` | `'.$default.'` | '.str_replace('|', '\|', $description).' |';
+            $lines[] = '| `'.$name.'` | `'.str_replace('|', '\|', $type).'` | `'.$default.'` | '.str_replace('|', '\|', $this->text($description)).' |';
+        }
+
+        foreach ($component['notes'] ?? [] as $note) {
+            array_push($lines, '', $this->text($note));
         }
 
         array_push($lines, '', 'Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.');
@@ -83,10 +87,18 @@ class GenerateDocs extends Command
             array_push($lines, '', '## Slots', '', '| Slot | Description |', '|---|---|');
 
             foreach ($component['slots'] as [$name, $description]) {
-                $lines[] = "| `{$name}` | {$description} |";
+                $lines[] = "| `{$name}` | {$this->text($description)} |";
             }
         }
 
         return implode("\n", $lines)."\n";
+    }
+
+    /**
+     * Escape prose so tags like <dialog> show as text instead of being treated as HTML.
+     */
+    protected function text(string $value): string
+    {
+        return str_replace(['<', '>'], ['&lt;', '&gt;'], $value);
     }
 }
