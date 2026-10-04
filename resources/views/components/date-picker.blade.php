@@ -31,7 +31,6 @@
 --}}
 <div
     class="relative"
-    style="anchor-name: {{ $anchor }}"
     x-data="{
         locale: @js($locale ? str_replace('_', '-', $locale) : null),
         weekStart: @js($weekStart === null ? null : ((int) $weekStart) % 7),
@@ -179,12 +178,15 @@
                 // Our button replaces Chromium's picker icon, but only once Alpine is running.
                 'data-enhanced:[&::-webkit-calendar-picker-indicator]:hidden',
                 $sizes[$size] ?? $sizes['md'],
-            ]) }}
+            ])
+            ->style("anchor-name: {$anchor}") }}
     >
 
+    {{-- Pinned to the input with anchor positioning, so width classes on the input move it too. --}}
     <button
         type="button"
         x-ref="trigger"
+        style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($id, 'right', '0.25rem') }}"
         x-cloak
         commandfor="{{ $id }}-calendar"
         command="toggle-popover"

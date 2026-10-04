@@ -19,6 +19,12 @@ class ProfileForm extends Component
     #[Validate('nullable|date|before:today', message: ['before' => 'Your birthday must be in the past.'])]
     public string $birthday = '';
 
+    #[Validate('integer|min:1|max:500')]
+    public int $teamSize = 5;
+
+    #[Validate('integer|min:0|max:40')]
+    public int $experience = 10;
+
     #[Validate('max:160')]
     public string $bio = 'I build things.';
 
@@ -50,6 +56,14 @@ class ProfileForm extends Component
 
                 <x-gui::field label="Birthday" name="birthday">
                     <x-gui::date-picker wire:model="birthday" />
+                </x-gui::field>
+
+                <x-gui::field label="Team size" name="teamSize">
+                    <x-gui::number-input wire:model="teamSize" min="1" max="500" class="max-w-40" />
+                </x-gui::field>
+
+                <x-gui::field label="Years of experience" name="experience">
+                    <x-gui::slider wire:model="experience" min="0" max="40" show-value suffix=" years" />
                 </x-gui::field>
 
                 <x-gui::field label="Bio" name="bio" hint="Shown on your profile.">

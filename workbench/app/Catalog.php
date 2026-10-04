@@ -546,6 +546,104 @@ class Catalog
                 ],
             ],
 
+            'number-input' => [
+                'name' => 'Number input',
+                'group' => 'Forms',
+                'description' => 'A native number input with − and + buttons.',
+                'preview' => 'narrow',
+                'usage' => '<x-gui::number-input name="quantity" min="1" max="10" value="1" />',
+                'playground' => [
+                    'selfClosing' => true,
+                    'template' => '<x-gui::number-input aria-label="Quantity" value="2" :min="$min !== \'\' ? $min : null" :max="$max !== \'\' ? $max : null" :step="$step" :size="$size" :disabled="$disabled" :invalid="$invalid ?: null" class="max-w-40" />',
+                    'controls' => [
+                        ['name' => 'min', 'type' => 'text', 'default' => '0', 'always' => true],
+                        ['name' => 'max', 'type' => 'text', 'default' => '10', 'always' => true],
+                        ['name' => 'step', 'type' => 'select', 'options' => ['1', '2', '0.5'], 'default' => '1'],
+                        ['name' => 'size', 'type' => 'select', 'options' => ['sm', 'md', 'lg'], 'default' => 'md'],
+                        ['name' => 'disabled', 'type' => 'boolean', 'default' => false],
+                        ['name' => 'invalid', 'type' => 'boolean', 'default' => false],
+                    ],
+                ],
+                'examples' => [
+                    [
+                        'title' => 'In a field',
+                        'description' => 'Type a number, use the arrow keys, or press − and +. The buttons use the browser\'s own stepping, so step, min and max behave exactly as they do on the input, and they turn off at the limits. They are left out of the tab order because the arrow keys do the same thing.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Guests" name="guests" hint="Up to 8 per booking.">
+                                <x-gui::number-input min="1" max="8" value="2" class="max-w-40" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Decimal steps',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Weight (kg)" name="weight">
+                                <x-gui::number-input step="0.5" min="0" value="2.5" class="max-w-40" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                    ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
+                    ['decrement-label', 'string', "'Decrease'", 'The − button\'s accessible name.'],
+                    ['increment-label', 'string', "'Increase'", 'The + button\'s accessible name.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'min, max, step, wire:model and x-model go on the input. Pressing − or + fires input and change, so bindings update.',
+                    'Without JavaScript it is a plain number input with the browser\'s own spinners.',
+                ],
+            ],
+
+            'slider' => [
+                'name' => 'Slider',
+                'group' => 'Forms',
+                'description' => 'A native range input in the theme colour, with an optional value and tick marks.',
+                'preview' => 'narrow',
+                'usage' => '<x-gui::slider name="volume" min="0" max="100" value="60" show-value suffix="%" />',
+                'playground' => [
+                    'selfClosing' => true,
+                    'template' => '<x-gui::slider aria-label="Volume" min="0" max="100" value="60" :step="$step" :show-value="$showValue" suffix="%" :disabled="$disabled" />',
+                    'controls' => [
+                        ['name' => 'step', 'type' => 'select', 'options' => ['1', '5', '25'], 'default' => '1'],
+                        ['name' => 'showValue', 'label' => 'show-value', 'attribute' => 'show-value', 'type' => 'boolean', 'default' => true],
+                        ['name' => 'disabled', 'type' => 'boolean', 'default' => false],
+                    ],
+                ],
+                'examples' => [
+                    [
+                        'title' => 'With its value',
+                        'description' => 'prefix and suffix format the shown value and aria-valuetext, so screen readers hear "8 hours" rather than "8".',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Daily focus time" name="focus">
+                                <x-gui::slider min="0" max="12" value="8" show-value suffix=" hours" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Tick marks',
+                        'description' => 'marks become a datalist, which browsers can draw as ticks and snap towards. Give labels as value => label pairs.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Budget" name="budget">
+                                <x-gui::slider min="0" max="1000" step="50" value="400" :marks="[0, 250, 500, 750, 1000]" show-value prefix="$" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['show-value', 'bool', 'false', 'Show the current value beside the slider, in an output element.'],
+                    ['prefix', 'string', "''", 'Before the value, e.g. $. Also used in aria-valuetext.'],
+                    ['suffix', 'string', "''", 'After the value, e.g. %. Also used in aria-valuetext.'],
+                    ['marks', 'array', '[]', 'Values for tick marks, or value => label pairs.'],
+                    ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'min, max, step, wire:model and x-model go on the input. Without JavaScript the slider still works; the shown value just doesn\'t update.',
+                ],
+            ],
+
             'date-picker' => [
                 'name' => 'Date picker',
                 'group' => 'Forms',
