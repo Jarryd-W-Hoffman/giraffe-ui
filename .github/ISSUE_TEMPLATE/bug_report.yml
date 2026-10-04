@@ -1,0 +1,33 @@
+name: Bug report
+description: Something doesn't work as documented.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Blade to reproduce it
+      description: The smallest Blade snippet that shows the problem.
+      render: blade
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: GiraffeUI, Laravel, PHP, Tailwind, and Livewire/Alpine if you use them.
+      placeholder: GiraffeUI 0.1.0, Laravel 13.10, PHP 8.4, Tailwind 4.3, Livewire 4.4
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and assistive technology
+      description: For visual, keyboard or screen reader issues.
+      placeholder: Safari 26.2 with VoiceOver

@@ -18,6 +18,11 @@
             "email": "jarryd.hoffman@windowslive.com"
         }
     ],
+    "support": {
+        "issues": "https://github.com/Jarryd-W-Hoffman/GiraffeUI/issues",
+        "source": "https://github.com/Jarryd-W-Hoffman/GiraffeUI",
+        "security": "https://github.com/Jarryd-W-Hoffman/GiraffeUI/security/advisories/new"
+    },
     "require": {
         "php": "^8.4",
         "illuminate/console": "^13.0",
