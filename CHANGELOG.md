@@ -15,7 +15,12 @@ The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 43 componen
 - Sidebar navigation: `sidebar` (a labelled `nav`), `sidebar.group` (optionally headed, named without ids so it can render twice) and `sidebar.item` (icon, badge, and `aria-current="page"` when its URL is the current one, or when `current` says so).
 - Table `label`: names the scrolling region for screen readers.
 - Icon: `bars-3`.
-- Catalog: an Examples section of full pages built only from GiraffeUI components, starting with a Dashboard (sidebar layout, stats, a table of orders, goals, an invite modal and an account menu).
+- Catalog: an Examples section of full pages built only from GiraffeUI components:
+  - Dashboard: sidebar layout, stats, a table of orders, goals, an invite modal and an account menu.
+  - Settings: tabs for a profile form (combobox, date picker, textarea counter, file upload), notifications (switches, radio cards, a toggle group) and account (a working theme switcher and a danger zone with a confirmation modal).
+  - Sign in: a real form that validates on the server, shows errors in its fields, keeps the email, and signs in to the dashboard with a toast.
+  - Not found: a 404 page with search.
+- Icon: `cog-6-tooth`.
 
 #### Fixed
 - Wide tables can be scrolled with the keyboard: while a table overflows its container, the scroller joins the tab order and shows a focus ring (Chrome and Firefox did this already; Safari didn't).

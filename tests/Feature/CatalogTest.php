@@ -58,3 +58,15 @@ it('ignores playground values the controls do not allow', function () {
         ->assertSee('h-10', false)
         ->assertDontSee('<script>', false);
 });
+
+it('validates the sign-in example like a real form, then signs in with a toast', function () {
+    $this->from('/catalog/examples/sign-in')
+        ->post('/catalog/examples/sign-in', ['email' => 'nope', 'password' => 'short'])
+        ->assertRedirect('/catalog/examples/sign-in')
+        ->assertSessionHasErrors(['email', 'password' => 'Passwords are at least 8 characters.'])
+        ->assertSessionHasInput('email', 'nope');
+
+    $this->post('/catalog/examples/sign-in', ['email' => 'ada@example.com', 'password' => 'hunter22'])
+        ->assertRedirect('/catalog/examples/dashboard')
+        ->assertSessionHas('toast', ['message' => 'Signed in as ada@example.com.', 'color' => 'success']);
+});

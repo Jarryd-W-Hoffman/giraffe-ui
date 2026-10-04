@@ -36,6 +36,9 @@ class Catalog
     {
         return [
             'dashboard' => 'Dashboard',
+            'settings' => 'Settings',
+            'sign-in' => 'Sign in',
+            'not-found' => 'Not found',
         ];
     }
 
