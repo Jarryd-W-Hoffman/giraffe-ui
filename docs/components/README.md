@@ -17,6 +17,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [File upload](file-upload.md): A drop zone around a real file input, with the chosen files listed and Livewire upload progress.
 - [Checkbox](checkbox.md): A native checkbox with a label and optional description.
 - [Radio](radio.md): A native radio button. Group them in a fieldset.
+- [Segmented control](segmented-control.md): A row of options where one is always picked, like a view switcher. Native radios underneath, so no JavaScript.
 - [Switch](switch.md): An on/off toggle. A real checkbox with role="switch" underneath.
 - [Fieldset](fieldset.md): Groups related controls under a legend, with a shared hint and error.
 - [Label](label.md): A form label. Field uses it for you; use it directly for custom layouts.

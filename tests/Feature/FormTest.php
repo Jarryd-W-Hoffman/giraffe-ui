@@ -279,6 +279,77 @@ describe('fieldset', function () {
     });
 });
 
+describe('radio card', function () {
+    it('makes the whole card the label', function () {
+        $html = (string) $this->blade('<x-gui::radio variant="card" name="size" value="small" label="Small" description="1 CPU" checked />');
+
+        expect($html)->toMatch('/^\s*<label for="gui-size-small"[^>]*>\s*<input type="radio"/')
+            ->and(classesOf($html, 'label'))->toContain('has-checked:border-gui-primary-text', 'has-focus-visible:outline-2', 'has-aria-invalid:border-gui-danger-text')
+            ->and(attr($html, 'input', 'checked'))->not->toBeNull()
+            ->and(attr($html, 'input', 'aria-describedby'))->toBe('gui-size-small-description')
+            ->and(attr($html, 'input', 'variant'))->toBeNull()
+            ->and($html)->toContain('<span id="gui-size-small-description"', '1 CPU')
+            ->not->toContain('<p ', '<div');
+    });
+
+    it('marks the card invalid from the group error', function () {
+        withErrors(['size' => 'Pick a size.']);
+
+        $html = (string) $this->blade('<x-gui::radio variant="card" name="size" value="small" label="Small" />');
+
+        expect(attr($html, 'input', 'aria-invalid'))->toBe('true');
+    });
+});
+
+describe('segmented control', function () {
+    $options = ['list' => 'List', 'grid' => 'Grid'];
+
+    it('renders a labelled radiogroup of native radios', function () use ($options) {
+        $html = (string) $this->blade('<x-gui::segmented-control name="view" label="View" :options="$options" value="grid" class="mt-4" />', ['options' => $options]);
+
+        expect(attr($html, 'div', 'role'))->toBe('radiogroup')
+            ->and(attr($html, 'div', 'aria-label'))->toBe('View')
+            ->and(classesOf($html, 'div'))->toContain('mt-4', 'inline-flex')
+            ->and(substr_count($html, 'type="radio"'))->toBe(2)
+            ->and(substr_count($html, 'name="view"'))->toBe(2)
+            ->and($html)->toMatch('/value="grid"[^>]*checked/')
+            ->not->toMatch('/value="list"[^>]*checked/');
+    });
+
+    it('puts wire:model, disabled and required on every radio', function () use ($options) {
+        $html = (string) $this->blade('<x-gui::segmented-control wire:model.live="view" disabled required aria-labelledby="view-label" :options="$options" />', ['options' => $options]);
+
+        expect(substr_count($html, 'wire:model.live="view"'))->toBe(2)
+            ->and(substr_count($html, 'name="view"'))->toBe(2)
+            ->and(substr_count($html, 'disabled="disabled"'))->toBe(2)
+            ->and(substr_count($html, 'required="required"'))->toBe(2)
+            ->and(attr($html, 'div', 'aria-labelledby'))->toBe('view-label')
+            ->and(attr($html, 'div', 'disabled'))->toBeNull()
+            ->and($html)->not->toMatch('/\schecked[=\s>]/');
+    });
+
+    it('refills old input and shows errors', function () use ($options) {
+        withErrors(['view' => 'Pick one.']);
+        $this->app['session']->put('_old_input', ['view' => 'list']);
+        $this->app['request']->setLaravelSession($this->app['session']->driver());
+
+        $html = (string) $this->blade('<x-gui::segmented-control name="view" label="View" :options="$options" />', ['options' => $options]);
+
+        expect(attr($html, 'div', 'aria-invalid'))->toBe('true')
+            ->and($html)->toMatch('/value="list"[^>]*checked/');
+    });
+
+    it('gives unnamed radios a shared generated name', function () use ($options) {
+        $html = (string) $this->blade('<x-gui::segmented-control label="View" :options="$options" full />', ['options' => $options]);
+
+        preg_match_all('/name="(gui-segmented-[a-z0-9]{8})"/', $html, $names);
+
+        expect($names[1])->toHaveCount(2)
+            ->and(array_unique($names[1]))->toHaveCount(1)
+            ->and(classesOf($html, 'div'))->toContain('flex', 'w-full');
+    });
+});
+
 describe('label', function () {
     it('shows a required marker hidden from screen readers', function () {
         $html = (string) $this->blade('<x-gui::label for="x" required>Name</x-gui::label>');
