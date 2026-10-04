@@ -8,6 +8,13 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 35 components and a catalog.
 
+### Textarea autosize and character count
+
+#### Added
+- Textarea `autosize`: grows with its content using CSS `field-sizing`, with no JavaScript. `rows` becomes the minimum height and `max-rows` caps it. Browsers without `field-sizing` keep the fixed height and the resize handle.
+- Textarea `counter`: a character count, against `maxlength` when there is one. The limit is part of the accessible description and the visible count is hidden from screen readers. A polite live region says how many characters are left once typing pauses. The count also follows values set by `wire:model`, `x-model`, scripts and form resets.
+- The catalog's textarea page has a playground, and the Livewire demo form has a bio with a counter.
+
 ### File upload
 
 #### Added

@@ -16,6 +16,9 @@ class ProfileForm extends Component
     #[Validate('required', message: 'Choose a country.')]
     public string $country = '';
 
+    #[Validate('max:160')]
+    public string $bio = 'I build things.';
+
     public function save(): void
     {
         $this->validate();
@@ -40,6 +43,10 @@ class ProfileForm extends Component
 
                 <x-gui::field label="Country" name="country">
                     <x-gui::combobox wire:model="country" :options="\Workbench\App\Catalog::countries()" placeholder="Search countries" />
+                </x-gui::field>
+
+                <x-gui::field label="Bio" name="bio" hint="Shown on your profile.">
+                    <x-gui::textarea wire:model="bio" rows="2" autosize counter maxlength="160" />
                 </x-gui::field>
 
                 <x-gui::button type="submit">Save profile</x-gui::button>

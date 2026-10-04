@@ -140,6 +140,46 @@ describe('textarea', function () {
         expect(attr($html, 'textarea', 'rows'))->toBe('5')
             ->and($html)->toContain('>Hello &amp; welcome</textarea>');
     });
+
+    it('is a plain resizable textarea by default', function () {
+        $html = (string) $this->blade('<x-gui::textarea name="bio" />');
+
+        expect(classesOf($html, 'textarea'))->toContain('resize-y')->not->toContain('field-sizing-content')
+            ->and(attr($html, 'textarea', 'style'))->toBeNull()
+            ->and($html)->not->toContain('x-data');
+    });
+
+    it('grows with its content from a minimum of rows', function () {
+        $html = (string) $this->blade('<x-gui::textarea name="bio" rows="2" autosize :max-rows="8" />');
+
+        expect(classesOf($html, 'textarea'))->toContain('field-sizing-content', 'supports-[field-sizing:content]:resize-none')
+            ->and(attr($html, 'textarea', 'style'))->toBe('min-height: calc(2lh + 1rem + 2px); max-height: calc(8lh + 1rem + 2px);');
+    });
+
+    it('keeps the developer\'s own style when autosizing', function () {
+        $html = (string) $this->blade('<x-gui::textarea autosize style="color: red" />');
+
+        expect(attr($html, 'textarea', 'style'))->toContain('min-height: calc(3lh + 1rem + 2px)', 'color: red');
+    });
+
+    it('counts characters against maxlength and describes the limit', function () {
+        $html = (string) $this->blade('<x-gui::field label="Bio" name="bio" hint="Short."><x-gui::textarea counter maxlength="280">Café &amp; 🦒</x-gui::textarea></x-gui::field>');
+
+        expect(attr($html, 'textarea', 'maxlength'))->toBe('280')
+            ->and(attr($html, 'textarea', 'aria-describedby'))->toBe('gui-bio-hint gui-bio-limit')
+            ->and($html)->toContain('id="gui-bio-limit"', 'Up to 280 characters.', 'aria-live="polite"')
+            // "Café & 🦒" is 9 UTF-16 code units, which is what the browser counts.
+            ->and($html)->toContain('length: 9,', '<span x-text="length">9</span> / 280');
+    });
+
+    it('counts without a limit', function () {
+        $html = (string) $this->blade('<x-gui::textarea aria-label="Notes" counter />');
+
+        expect(attr($html, 'textarea', 'id'))->toStartWith('gui-textarea-')
+            ->and(attr($html, 'textarea', 'aria-describedby'))->toBeNull()
+            ->and($html)->toContain('max: null', '<span x-text="length">0</span> characters')
+            ->not->toContain('Up to');
+    });
 });
 
 describe('select', function () {
