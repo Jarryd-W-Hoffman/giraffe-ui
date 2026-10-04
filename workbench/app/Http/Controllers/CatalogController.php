@@ -38,6 +38,40 @@ class CatalogController
     }
 
     /**
+     * The Register example's form: real validation, then "creates" the account and signs in.
+     */
+    public function register(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => ['required', 'max:100'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:8', 'regex:/[0-9]/'],
+            'password_confirmation' => ['required', 'same:password'],
+            'terms' => ['accepted'],
+        ], [
+            'password.min' => 'Use at least 8 characters.',
+            'password.regex' => 'Add at least one number.',
+            'password_confirmation.required' => 'Type your password again.',
+            'password_confirmation.same' => "This doesn't match your password.",
+            'terms.accepted' => 'Accept the terms to create an account.',
+        ]);
+
+        $first = Str::before($request->input('name'), ' ');
+
+        return redirect('/catalog/examples/dashboard')->with('toast', ['message' => "Welcome to Acme, {$first}.", 'color' => 'success']);
+    }
+
+    /**
+     * The Forgot password example's form: always says a link was sent, so it doesn't reveal who has an account.
+     */
+    public function forgotPassword(Request $request): RedirectResponse
+    {
+        $request->validate(['email' => ['required', 'email']]);
+
+        return back()->withInput()->with('status', "If {$request->input('email')} has an Acme account, a reset link is on its way. It expires in an hour.");
+    }
+
+    /**
      * Show a guide or component page.
      */
     public function show(string $page): View

@@ -70,3 +70,51 @@ it('validates the sign-in example like a real form, then signs in with a toast',
         ->assertRedirect('/catalog/examples/dashboard')
         ->assertSessionHas('toast', ['message' => 'Signed in as ada@example.com.', 'color' => 'success']);
 });
+
+it('validates the register example, keeping everything but the passwords', function () {
+    $this->from('/catalog/examples/register')
+        ->post('/catalog/examples/register', ['name' => 'Ada Lovelace', 'email' => 'nope', 'password' => 'longenough', 'password_confirmation' => 'different'])
+        ->assertRedirect('/catalog/examples/register')
+        ->assertSessionHasErrors([
+            'email',
+            'password' => 'Add at least one number.',
+            'password_confirmation' => "This doesn't match your password.",
+            'terms' => 'Accept the terms to create an account.',
+        ])
+        ->assertSessionHasInput('name', 'Ada Lovelace')
+        ->assertSessionMissing('_old_input.password');
+
+    $this->post('/catalog/examples/register', ['name' => 'Ada Lovelace', 'email' => 'ada@example.com', 'password' => 'engine1843', 'password_confirmation' => 'engine1843', 'terms' => '1'])
+        ->assertRedirect('/catalog/examples/dashboard')
+        ->assertSessionHas('toast', ['message' => 'Welcome to Acme, Ada.', 'color' => 'success']);
+});
+
+it('shows register errors in their fields, with the summary counting them', function () {
+    $this->from('/catalog/examples/register')
+        ->followingRedirects()
+        ->post('/catalog/examples/register', ['name' => 'Ada', 'email' => 'ada@example.com', 'password' => 'engine1843', 'password_confirmation' => 'engine1843'])
+        ->assertSee('Fix the field below')
+        ->assertSee('Accept the terms to create an account.')
+        ->assertSee('aria-describedby="gui-terms-fieldset-error"', false)
+        ->assertSee('value="Ada"', false);
+});
+
+it('says a reset link was sent without revealing whether the account exists', function () {
+    $this->from('/catalog/examples/forgot-password')
+        ->post('/catalog/examples/forgot-password', ['email' => ''])
+        ->assertSessionHasErrors('email');
+
+    $this->from('/catalog/examples/forgot-password')
+        ->followingRedirects()
+        ->post('/catalog/examples/forgot-password', ['email' => 'ada@example.com'])
+        ->assertSee('Check your email')
+        ->assertSee('If ada@example.com has an Acme account')
+        ->assertSee('value="ada@example.com"', false)
+        ->assertSee('Send another link');
+});
+
+it('links the auth examples to each other', function () {
+    $this->get('/catalog/examples/sign-in')->assertSee('href="/catalog/examples/register"', false)->assertSee('href="/catalog/examples/forgot-password"', false);
+    $this->get('/catalog/examples/register')->assertSee('href="/catalog/examples/sign-in"', false);
+    $this->get('/catalog/examples/forgot-password')->assertSee('href="/catalog/examples/sign-in"', false);
+});

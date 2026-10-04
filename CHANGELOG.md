@@ -8,6 +8,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 43 components and a catalog.
 
+### Register and Forgot password examples
+
+#### Added
+- Catalog: two more full-page examples, linked from Sign in.
+  - Register: name, email, password and confirmation (each with a Show button) and a terms checkbox. It validates on the server, counts the problems in a summary, keeps everything but the passwords, and lands on the dashboard with a welcome toast.
+  - Forgot password: always confirms that a link was sent, without revealing whether the account exists, and keeps the email for a resend.
+- Icon: `arrow-left`.
+
 ### Sidebar layout and full-page examples
 
 #### Added
