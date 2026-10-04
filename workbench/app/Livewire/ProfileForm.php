@@ -13,6 +13,9 @@ class ProfileForm extends Component
     #[Validate('required|email')]
     public string $email = '';
 
+    #[Validate('required', message: 'Choose a country.')]
+    public string $country = '';
+
     public function save(): void
     {
         $this->validate();
@@ -33,6 +36,10 @@ class ProfileForm extends Component
 
                 <x-gui::field label="Email" name="email" required>
                     <x-gui::input type="email" wire:model="email" />
+                </x-gui::field>
+
+                <x-gui::field label="Country" name="country">
+                    <x-gui::combobox wire:model="country" :options="\Workbench\App\Catalog::countries()" placeholder="Search countries" />
                 </x-gui::field>
 
                 <x-gui::button type="submit">Save profile</x-gui::button>

@@ -6,7 +6,12 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 25 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 26 components and a catalog.
+
+### Combobox
+
+#### Added
+- Combobox: a select you can type into to filter, following the WAI-ARIA combobox pattern. Focus stays in the input with `aria-activedescendant`. Arrow keys open the list onto the current option; Enter picks; Escape closes, then clears. The list is a top-layer popover anchored to the input, the same width and flipping when there's no room, so modals and scroll containers don't clip it. It works in a Field (label, hint, errors), submits through a hidden input, and binds with `wire:model`/`x-model`. Needs Alpine.
 
 ### Livewire and loading states
 

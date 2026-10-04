@@ -12,6 +12,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Input](input.md): A text input that works on its own or inside a field.
 - [Textarea](textarea.md): A multi-line text input.
 - [Select](select.md): A native select, styled to match the other controls.
+- [Combobox](combobox.md): A select you can type into to filter. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.
 - [Checkbox](checkbox.md): A native checkbox with a label and optional description.
 - [Radio](radio.md): A native radio button. Group them in a fieldset.
 - [Switch](switch.md): An on/off toggle. A real checkbox with role="switch" underneath.

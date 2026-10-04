@@ -46,6 +46,7 @@ class Catalog
 
         return [
             'roles' => ['admin' => 'Admin', 'editor' => 'Editor', 'viewer' => 'Viewer'],
+            'countries' => self::countries(),
             // A self-contained "photo" so the catalog never depends on an image host.
             'photo' => 'data:image/svg+xml,'.rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><linearGradient id="g" x2="1" y2="1"><stop offset="0" stop-color="#f472b6"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><rect width="96" height="96" fill="url(#g)"/><circle cx="48" cy="38" r="16" fill="#fff" fill-opacity=".85"/><path d="M16 96c4-20 18-30 32-30s28 10 32 30z" fill="#fff" fill-opacity=".85"/></svg>'),
             'sort' => $sort,
@@ -72,6 +73,22 @@ class Catalog
             ['name' => 'Grace Hopper', 'email' => 'grace@example.com', 'role' => 'Editor', 'team' => ['name' => 'Compilers']],
             ['name' => 'Alan Turing', 'email' => 'alan@example.com', 'role' => 'Viewer', 'team' => ['name' => 'Codebreaking']],
             ['name' => 'Katherine Johnson', 'email' => 'katherine@example.com', 'role' => 'Editor', 'team' => ['name' => 'Trajectories']],
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function countries(): array
+    {
+        return [
+            'ar' => 'Argentina', 'au' => 'Australia', 'at' => 'Austria', 'be' => 'Belgium', 'br' => 'Brazil',
+            'ca' => 'Canada', 'cl' => 'Chile', 'cn' => 'China', 'dk' => 'Denmark', 'eg' => 'Egypt',
+            'fi' => 'Finland', 'fr' => 'France', 'de' => 'Germany', 'gr' => 'Greece', 'in' => 'India',
+            'id' => 'Indonesia', 'ie' => 'Ireland', 'it' => 'Italy', 'jp' => 'Japan', 'ke' => 'Kenya',
+            'mx' => 'Mexico', 'nl' => 'Netherlands', 'nz' => 'New Zealand', 'ng' => 'Nigeria', 'no' => 'Norway',
+            'pt' => 'Portugal', 'za' => 'South Africa', 'kr' => 'South Korea', 'es' => 'Spain', 'se' => 'Sweden',
+            'ch' => 'Switzerland', 'gb' => 'United Kingdom', 'us' => 'United States', 'vn' => 'Vietnam',
         ];
     }
 
@@ -435,6 +452,63 @@ class Catalog
                 ],
                 'slots' => [
                     ['default', 'Extra option and optgroup elements.'],
+                ],
+            ],
+
+            'combobox' => [
+                'name' => 'Combobox',
+                'group' => 'Forms',
+                'description' => 'A select you can type into to filter. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.',
+                'preview' => 'narrow',
+                'usage' => '<x-gui::combobox name="country" :options="$countries" placeholder="Search countries" />',
+                'examples' => [
+                    [
+                        'title' => 'In a field',
+                        'description' => 'Type to filter. Arrow keys move through the list, Enter picks, Escape closes the list (and clears the value when it is already closed). The value is submitted through a hidden input named after the field.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Country" name="country" hint="Where you're based.">
+                                <x-gui::combobox :options="$countries" placeholder="Search countries" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'With a value',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Role" name="role">
+                                <x-gui::combobox :options="$roles" value="editor" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'In a modal',
+                        'description' => 'The list is a top-layer popover, so it is never clipped by a modal or a scrolling container.',
+                        'code' => <<<'BLADE'
+                            <x-gui::button variant="outline" commandfor="move-project" command="show-modal">Move project</x-gui::button>
+
+                            <x-gui::modal id="move-project" title="Move project" size="sm">
+                                <x-gui::field label="Region" name="region">
+                                    <x-gui::combobox :options="$countries" placeholder="Search regions" />
+                                </x-gui::field>
+                                <x-slot:footer>
+                                    <x-gui::modal.close>Cancel</x-gui::modal.close>
+                                    <x-gui::button commandfor="move-project" command="close">Move</x-gui::button>
+                                </x-slot:footer>
+                            </x-gui::modal>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['options', 'array', '[]', 'value => label pairs.'],
+                    ['value', 'string', 'null', 'The selected value. Defaults to old input.'],
+                    ['placeholder', 'string', 'null', ''],
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                    ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
+                    ['empty', 'string', "'No results'", 'Shown when nothing matches.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'wire:model and x-model bind the value; other attributes go on the text input. The selected value fires a change event on the hidden input.',
+                    'Options are filtered in the browser. For very large lists, search on the server and pass fewer options.',
                 ],
             ],
 
