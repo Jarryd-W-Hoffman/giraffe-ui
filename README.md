@@ -164,6 +164,10 @@ The catalog is a docs-style site, like shadcn/ui's, for browsing and trying ever
 
 It runs on [Testbench Workbench](https://packages.tools/workbench) and lives in `workbench/`. It is not shipped with the package. To add a component, add an entry to `workbench/app/Catalog.php`, then run `composer docs`; the Markdown in `docs/components` is generated from the catalog, and CI fails if it's out of date. Example code is rendered as-is, so what you read is exactly what ran. While editing styles, run `npm run catalog:watch` in a second terminal.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Please report security issues privately, as described in [SECURITY.md](SECURITY.md).
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
