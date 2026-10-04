@@ -71,7 +71,7 @@ Use the leading and trailing slots. Mark decorative icons aria-hidden.
 Give icon-only buttons an aria-label so screen readers can name them.
 
 ```blade
-<x-gui::button variant="ghost" color="secondary" size="sm" aria-label="Close" class="w-8 px-0">
+<x-gui::button variant="ghost" color="secondary" size="sm" aria-label="Close" class="w-8 px-0!">
     <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" /></svg>
 </x-gui::button>
 ```
@@ -139,7 +139,7 @@ Any attribute passes straight through, including x-on and wire:click.
 | `disabled` | `bool` | `false` | Disables a button, or removes the href from a link and sets aria-disabled. |
 | `loading` | `bool` | `false` | Shows a spinner in place of the leading icon and disables the button. Automatic for Livewire actions. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

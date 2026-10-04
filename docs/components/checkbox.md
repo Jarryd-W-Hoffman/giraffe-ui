@@ -50,7 +50,7 @@ Wrap related checkboxes in a fieldset. Each gets its own id from its name and va
 | `description` | `string` | `null` | Help text, linked with aria-describedby. |
 | `invalid` | `bool \| null` | `null` | Force the invalid state. By default it follows the error bag for name. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

@@ -47,7 +47,7 @@ Alerts are static by default. When one appears after the page loads, add role="a
 | `title` | `string` | `null` | A bold first line. |
 | `icon` | `bool` | `true` | Set :icon="false" to hide the icon, or use the icon slot to replace it. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

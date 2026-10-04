@@ -6,7 +6,17 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 26 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 29 components and a catalog.
+
+### Breadcrumbs, skeletons and empty states
+
+#### Added
+- Breadcrumbs, following the WAI-ARIA breadcrumb pattern: a labelled `nav` with an ordered list, `aria-current="page"` on the current item, and decorative separators. Pass `items` or compose `breadcrumbs.item`.
+- Skeleton loading placeholders, hidden from screen readers, sized with classes, with a `lines` option. They stop pulsing with reduced motion.
+- Empty state with a title, description, icon and actions.
+
+#### Fixed
+- Catalog examples that override a component's own classes (icon-only buttons, a round skeleton, a compact empty state) now use Tailwind's `!` modifier. Without it the component's class could win, e.g. `px-0` lost to the button's `px-3`. The convention is documented.
 
 ### Accessibility audit
 

@@ -23,7 +23,7 @@ The asterisk is hidden from screen readers; put required on the control so they 
 |---|---|---|---|
 | `required` | `bool` | `false` | Shows a required marker. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

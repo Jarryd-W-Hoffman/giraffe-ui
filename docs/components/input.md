@@ -56,7 +56,7 @@ Leading content is decorative. Trailing content can be interactive, like a butto
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Height and text size. |
 | `invalid` | `bool \| null` | `null` | Force the invalid state. By default it follows the error bag. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

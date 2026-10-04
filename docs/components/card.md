@@ -57,7 +57,7 @@ A surface for grouping content, with an optional header and footer.
 | `title` | `string` | `null` | Heading (an h3). |
 | `description` | `string` | `null` | Text under the title. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

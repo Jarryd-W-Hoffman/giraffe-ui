@@ -179,7 +179,7 @@ class Catalog
                         'title' => 'Icon only',
                         'description' => 'Give icon-only buttons an aria-label so screen readers can name them.',
                         'code' => <<<'BLADE'
-                            <x-gui::button variant="ghost" color="secondary" size="sm" aria-label="Close" class="w-8 px-0">
+                            <x-gui::button variant="ghost" color="secondary" size="sm" aria-label="Close" class="w-8 px-0!">
                                 <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" /></svg>
                             </x-gui::button>
                             BLADE,
@@ -894,6 +894,94 @@ class Catalog
                 ],
             ],
 
+            'skeleton' => [
+                'name' => 'Skeleton',
+                'group' => 'Display',
+                'description' => 'A placeholder shaped like the content that is loading.',
+                'preview' => 'block',
+                'usage' => '<x-gui::skeleton class="h-4 w-48" />',
+                'examples' => [
+                    [
+                        'title' => 'Card placeholder',
+                        'description' => 'Skeletons are hidden from screen readers. Mark the loading region with aria-busy="true" instead.',
+                        'code' => <<<'BLADE'
+                            <div aria-busy="true" class="mx-auto flex max-w-sm items-start gap-4">
+                                <x-gui::skeleton class="size-10 shrink-0 rounded-full!" />
+                                <div class="flex-1 space-y-3">
+                                    <x-gui::skeleton class="h-4 w-1/2" />
+                                    <x-gui::skeleton :lines="3" />
+                                </div>
+                            </div>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'With Livewire',
+                        'description' => 'Show skeletons while a lazy component loads, or with wire:loading.',
+                        'code' => <<<'BLADE'
+                            <div class="mx-auto max-w-sm space-y-2">
+                                <x-gui::skeleton class="h-8 w-full" />
+                                <x-gui::skeleton class="h-8 w-full" />
+                                <x-gui::skeleton class="h-8 w-full" />
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['lines', 'int', 'null', 'Render this many text lines, the last one shorter.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'Size and shape it with classes. With reduced motion it stops pulsing.',
+                    'In a Livewire component, return skeletons from placeholder() for lazy loading.',
+                ],
+            ],
+
+            'empty-state' => [
+                'name' => 'Empty state',
+                'group' => 'Display',
+                'description' => 'What to show when there is nothing to show yet, with a way forward.',
+                'preview' => 'block',
+                'usage' => '<x-gui::empty-state title="No projects yet" description="Create one to get started." />',
+                'examples' => [
+                    [
+                        'title' => 'With an icon and actions',
+                        'code' => <<<'BLADE'
+                            <x-gui::empty-state title="No projects yet" description="Projects group your deployments, domains and team. Create one to get started.">
+                                <x-slot:icon>
+                                    <svg class="size-6" viewBox="0 0 20 20" fill="currentColor"><path d="M3.75 3A1.75 1.75 0 0 0 2 4.75v3.26a3.235 3.235 0 0 1 1.75-.51h12.5c.644 0 1.245.188 1.75.51V6.75A1.75 1.75 0 0 0 16.25 5h-4.836a.25.25 0 0 1-.177-.073L9.823 3.513A1.75 1.75 0 0 0 8.586 3H3.75ZM3.75 9A1.75 1.75 0 0 0 2 10.75v4.5c0 .966.784 1.75 1.75 1.75h12.5A1.75 1.75 0 0 0 18 15.25v-4.5A1.75 1.75 0 0 0 16.25 9H3.75Z" /></svg>
+                                </x-slot:icon>
+                                <x-slot:actions>
+                                    <x-gui::button>New project</x-gui::button>
+                                    <x-gui::button variant="ghost" color="secondary" href="#">Import</x-gui::button>
+                                </x-slot:actions>
+                            </x-gui::empty-state>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'In a table',
+                        'code' => <<<'BLADE'
+                            <x-gui::table :columns="['name', 'email']" :rows="[]">
+                                <x-slot:empty>
+                                    <x-gui::empty-state title="No members" description="Invite people to collaborate on this project." class="py-6!">
+                                        <x-slot:actions>
+                                            <x-gui::button size="sm" variant="outline">Invite</x-gui::button>
+                                        </x-slot:actions>
+                                    </x-gui::empty-state>
+                                </x-slot:empty>
+                            </x-gui::table>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['title', 'string', 'required', 'A short heading (an h3).'],
+                    ['description', 'string', 'null', 'What this is and what to do next.'],
+                ],
+                'slots' => [
+                    ['icon', 'A decorative icon above the title.'],
+                    ['actions', 'Buttons or links.'],
+                ],
+            ],
+
             'card' => [
                 'name' => 'Card',
                 'group' => 'Display',
@@ -992,6 +1080,45 @@ class Catalog
                     ['label', 'string', 'null', 'Text in the middle of a horizontal line.'],
                 ],
                 'slots' => [],
+            ],
+
+            'breadcrumbs' => [
+                'name' => 'Breadcrumbs',
+                'group' => 'Navigation',
+                'description' => 'Shows where the current page sits in the site. Follows the WAI-ARIA breadcrumb pattern.',
+                'usage' => '<x-gui::breadcrumbs :items="[\'Home\' => \'/\', \'Projects\' => \'/projects\', \'GiraffeUI\' => null]" />',
+                'examples' => [
+                    [
+                        'title' => 'From an array',
+                        'description' => 'Pass label => url pairs. The item with a null url is the current page and gets aria-current="page".',
+                        'code' => <<<'BLADE'
+                            <x-gui::breadcrumbs :items="['Home' => '#', 'Projects' => '#', 'GiraffeUI' => null]" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Composed, with an icon',
+                        'code' => <<<'BLADE'
+                            <x-gui::breadcrumbs>
+                                <x-gui::breadcrumbs.item href="#">
+                                    <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M9.293 2.293a1 1 0 0 1 1.414 0l7 7A1 1 0 0 1 17 11h-1v6a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-6H3a1 1 0 0 1-.707-1.707l7-7Z" clip-rule="evenodd" /></svg>
+                                    <span class="sr-only">Home</span>
+                                </x-gui::breadcrumbs.item>
+                                <x-gui::breadcrumbs.item href="#">Settings</x-gui::breadcrumbs.item>
+                                <x-gui::breadcrumbs.item>Billing</x-gui::breadcrumbs.item>
+                            </x-gui::breadcrumbs>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['items', 'array', 'null', 'label => url pairs. Use null for the current page. Or compose breadcrumbs.item.'],
+                    ['href (item)', 'string', 'null', 'Leave it out on the current page.'],
+                ],
+                'slots' => [
+                    ['default', 'breadcrumbs.item elements, when not using items.'],
+                ],
+                'notes' => [
+                    'Separators are decorative and hidden from screen readers; the list order already conveys the hierarchy.',
+                ],
             ],
 
             'modal' => [
@@ -1223,7 +1350,7 @@ class Catalog
                         'description' => 'Tooltips describe; they don\'t name. Icon-only buttons still need an aria-label.',
                         'code' => <<<'BLADE'
                             <x-gui::tooltip text="Copy to clipboard">
-                                <x-gui::button variant="outline" color="secondary" size="sm" aria-label="Copy" class="w-8 px-0">
+                                <x-gui::button variant="outline" color="secondary" size="sm" aria-label="Copy" class="w-8 px-0!">
                                     <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 3.5A1.5 1.5 0 0 1 8.5 2h3.879a1.5 1.5 0 0 1 1.06.44l3.122 3.12A1.5 1.5 0 0 1 17 6.622V12.5a1.5 1.5 0 0 1-1.5 1.5h-1v-3.379a3 3 0 0 0-.879-2.121L10.5 5.379A3 3 0 0 0 8.379 4.5H7v-1Z" /><path d="M4.5 6A1.5 1.5 0 0 0 3 7.5v9A1.5 1.5 0 0 0 4.5 18h7a1.5 1.5 0 0 0 1.5-1.5v-5.879a1.5 1.5 0 0 0-.44-1.06L9.44 6.439A1.5 1.5 0 0 0 8.378 6H4.5Z" /></svg>
                                 </x-gui::button>
                             </x-gui::tooltip>

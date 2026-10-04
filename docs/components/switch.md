@@ -31,7 +31,7 @@ An on/off toggle. A real checkbox with role="switch" underneath.
 | `label` | `string` | `null` | Label text. Or use the slot. |
 | `description` | `string` | `null` | Help text, linked with aria-describedby. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

@@ -38,7 +38,7 @@ Rich content in a floating panel. A native popover, so Escape and clicking outsi
 | `label` | `string` | `null` | Text for the default trigger button. |
 | `position` | `'bottom-start' \| 'bottom' \| 'bottom-end' \| 'top-start' \| 'top' \| 'top-end' \| 'left' \| 'right'` | `'bottom-start'` | Flips automatically when there is no room. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

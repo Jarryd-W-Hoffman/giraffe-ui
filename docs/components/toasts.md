@@ -52,4 +52,4 @@ After a redirect: session()-&gt;flash('toast', 'Saved') or an array of options.
 
 While a modal is open, toasts still appear and are announced, but the browser makes everything outside the modal unclickable, so they dismiss on their own timer.
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.

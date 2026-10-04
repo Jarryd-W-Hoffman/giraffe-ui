@@ -59,7 +59,7 @@ Put wire:model on the control and name on the field so errors are found.
 | `error` | `string` | `null` | An error message. Defaults to the first error for name. |
 | `required` | `bool` | `false` | Marks the label and makes the control required. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

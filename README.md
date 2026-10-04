@@ -51,7 +51,8 @@ Then rebuild your CSS (`npm run dev` or `npm run build`).
 |---|---|
 | Actions | [Button](docs/components/button.md) |
 | Forms | [Field](docs/components/field.md), [Input](docs/components/input.md), [Textarea](docs/components/textarea.md), [Select](docs/components/select.md), [Combobox](docs/components/combobox.md), [Checkbox](docs/components/checkbox.md), [Radio](docs/components/radio.md), [Switch](docs/components/switch.md), [Fieldset](docs/components/fieldset.md), [Label](docs/components/label.md) |
-| Display | [Alert](docs/components/alert.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md), [Spinner](docs/components/spinner.md) |
+| Display | [Alert](docs/components/alert.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md), [Spinner](docs/components/spinner.md), [Skeleton](docs/components/skeleton.md), [Empty state](docs/components/empty-state.md) |
+| Navigation | [Breadcrumbs](docs/components/breadcrumbs.md) |
 | Overlays | [Modal](docs/components/modal.md), [Dropdown](docs/components/dropdown.md), [Popover](docs/components/popover.md), [Tooltip](docs/components/tooltip.md), [Toast](docs/components/toasts.md) |
 | Disclosure | [Accordion](docs/components/accordion.md), [Tabs](docs/components/tabs.md) |
 | Data | [Table](docs/components/table.md), [Pagination](docs/components/pagination.md) |
@@ -95,6 +96,7 @@ Every component follows the same rules:
 
 - **Props:** `variant` (`solid`, `outline`, `ghost`), `color` (`primary`, `secondary`, `success`, `warning`, `danger`, `info`), `size` (`sm`, `md`, `lg`).
 - **Attributes pass through.** `class`, `wire:*`, `x-*`, `data-*` and anything else lands on the component's main element.
+- **Override built-in classes with `!`.** Your classes are added to the component's own, and when two set the same property, the order in the stylesheet decides which wins, not the order you wrote them. To replace one, use Tailwind's important modifier: `<x-gui::button class="px-0!">`, `<x-gui::skeleton class="rounded-full!">`.
 - **Slots, not HTML strings,** for icons and other parts (e.g. `<x-slot:leading>`).
 - **Theming is CSS variables only.** There is no PHP config.
 

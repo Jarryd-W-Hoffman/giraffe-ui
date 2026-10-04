@@ -37,7 +37,7 @@ Groups related controls under a legend, with a shared hint and error.
 | `name` | `string` | `null` | Used to find a group error, e.g. "roles" for roles[] checkboxes. |
 | `error` | `string` | `null` | An error message. Defaults to the first error for name. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

@@ -50,7 +50,7 @@ Arrow keys move between tabs, Home and End jump to the first and last, and Tab m
 
 Bind the selected tab with wire:model="tab" or x-model.
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

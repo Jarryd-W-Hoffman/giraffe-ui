@@ -25,8 +25,14 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Avatar](avatar.md): A profile image, with initials when there is no image.
 - [Badge](badge.md): A small label for status, counts or categories.
 - [Spinner](spinner.md): Shows that something is loading. Buttons use it for their loading state.
+- [Skeleton](skeleton.md): A placeholder shaped like the content that is loading.
+- [Empty state](empty-state.md): What to show when there is nothing to show yet, with a way forward.
 - [Card](card.md): A surface for grouping content, with an optional header and footer.
 - [Separator](separator.md): A line that divides content, optionally with a label.
+
+## Navigation
+
+- [Breadcrumbs](breadcrumbs.md): Shows where the current page sits in the site. Follows the WAI-ARIA breadcrumb pattern.
 
 ## Overlays
 
