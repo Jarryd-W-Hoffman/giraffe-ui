@@ -1,0 +1,45 @@
+# Avatar
+
+_Generated from `workbench/app/Catalog.php`. Edit that file, then run `composer docs`._
+
+A profile image, with initials when there is no image.
+
+```blade
+<x-gui::avatar :src="$user->photo_url" :name="$user->name" />
+```
+
+## Image
+
+```blade
+<x-gui::avatar :src="$photo" name="Ada Lovelace" size="lg" />
+```
+
+## Initials and fallback
+
+```blade
+<x-gui::avatar name="Grace Hopper" size="sm" />
+<x-gui::avatar name="Alan Turing" />
+<x-gui::avatar name="Émile Ångström" size="lg" />
+<x-gui::avatar />
+```
+
+## Stacked
+
+```blade
+<div class="flex -space-x-2">
+    @foreach ($users as $user)
+        <x-gui::avatar :name="$user['name']" class="ring-2 ring-white dark:ring-zinc-950" />
+    @endforeach
+</div>
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `src` | `string` | `null` | Image URL. |
+| `name` | `string` | `null` | Used for initials and as the accessible name. |
+| `alt` | `string` | `null` | Overrides the accessible name. |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |  |
+
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.

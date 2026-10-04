@@ -48,7 +48,8 @@
             "Composer\\Config::disableProcessTimeout",
             "npm run catalog:css",
             "@php vendor/bin/testbench serve --port=8000"
-        ]
+        ],
+        "docs": "@php vendor/bin/testbench catalog:docs"
     },
     "extra": {
         "laravel": {

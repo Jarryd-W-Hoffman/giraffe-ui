@@ -108,7 +108,7 @@ class CatalogController
             ->map(fn ($title, $slug) => ['slug' => $slug, 'title' => $title, 'group' => 'Getting started']);
 
         $components = collect(Catalog::components())
-            ->map(fn ($component, $slug) => ['slug' => $slug, 'title' => $component['name'], 'group' => 'Components']);
+            ->map(fn ($component, $slug) => ['slug' => $slug, 'title' => $component['name'], 'group' => $component['group'] ?? 'Components']);
 
         return $guides->merge($components)->values()->all();
     }
