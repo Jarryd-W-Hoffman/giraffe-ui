@@ -26,4 +26,4 @@ Use it for every paginator: Paginator::defaultView('giraffeui::pagination.defaul
 
 In Livewire, return 'giraffeui::pagination.livewire' from paginationView(), or pass livewire to the component.
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.

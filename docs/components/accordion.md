@@ -49,7 +49,7 @@ Without exclusive, any number can be open.
 | `title (item)` | `string` | `required` | The item heading. |
 | `open (item)` | `bool` | `false` | Start expanded. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
 ## Slots
 

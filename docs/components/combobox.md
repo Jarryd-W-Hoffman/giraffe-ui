@@ -59,4 +59,4 @@ wire:model and x-model bind the value; other attributes go on the text input. Th
 
 Options are filtered in the browser. For very large lists, search on the server and pass fewer options.
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.

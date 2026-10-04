@@ -37,4 +37,4 @@ A line that divides content, optionally with a label.
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` |  |
 | `label` | `string` | `null` | Text in the middle of a horizontal line. |
 
-Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.

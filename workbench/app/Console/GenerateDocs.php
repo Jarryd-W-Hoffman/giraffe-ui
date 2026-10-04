@@ -81,7 +81,7 @@ class GenerateDocs extends Command
             array_push($lines, '', $this->text($note));
         }
 
-        array_push($lines, '', 'Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.');
+        array_push($lines, '', 'Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component\'s own classes, use Tailwind\'s `!` modifier, e.g. `class="px-0!"`.');
 
         if ($component['slots'] !== []) {
             array_push($lines, '', '## Slots', '', '| Slot | Description |', '|---|---|');
