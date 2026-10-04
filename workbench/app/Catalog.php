@@ -512,6 +512,42 @@ class Catalog
                 ],
             ],
 
+            'file-upload' => [
+                'name' => 'File upload',
+                'group' => 'Forms',
+                'description' => 'A drop zone around a real file input, with the chosen files listed and Livewire upload progress.',
+                'preview' => 'narrow',
+                'usage' => '<x-gui::file-upload name="avatar" accept="image/*" />',
+                'examples' => [
+                    [
+                        'title' => 'In a field',
+                        'description' => 'Click, press Enter or Space, or drag files in. It is a real file input, so it works without JavaScript too.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Avatar" name="avatar">
+                                <x-gui::file-upload accept="image/*" hint="PNG or JPG, up to 2 MB." />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Multiple files',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Attachments" name="attachments[]">
+                                <x-gui::file-upload multiple />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['hint', 'string', 'null', 'Shown inside the drop zone, e.g. allowed types and size.'],
+                    ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'accept, multiple, wire:model and other attributes go on the input. With Livewire, a progress bar shows while the file uploads; see the Livewire guide for a live demo.',
+                    'Browsers don\'t apply accept to dropped files, so validate on the server as usual.',
+                ],
+            ],
+
             'checkbox' => [
                 'name' => 'Checkbox',
                 'group' => 'Forms',
