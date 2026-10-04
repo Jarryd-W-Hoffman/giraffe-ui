@@ -9,7 +9,8 @@ describe('forms', function () {
     it('shows validation errors in the field and marks the input invalid', function () {
         Livewire::test(ProfileForm::class)
             ->call('save')
-            ->assertHasErrors(['name' => 'required', 'email' => 'required'])
+            ->assertHasErrors(['name' => 'required', 'email' => 'required', 'country' => 'required'])
+            ->assertSee('Choose a country.')
             ->assertSeeHtml('id="gui-name-error"')
             ->assertSeeHtml('aria-describedby="gui-name-error"')
             ->assertSeeHtml('aria-invalid="true"');
@@ -19,6 +20,7 @@ describe('forms', function () {
         Livewire::test(ProfileForm::class)
             ->set('name', 'Ada Lovelace')
             ->set('email', 'ada@example.com')
+            ->set('country', 'gb')
             ->call('save')
             ->assertHasNoErrors()
             ->assertDontSeeHtml('aria-invalid="true"')
@@ -26,9 +28,10 @@ describe('forms', function () {
     });
 
     it('does not refill wire:model inputs from old input', function () {
-        Livewire::test(ProfileForm::class)
-            ->assertSeeHtml('wire:model="name"')
-            ->assertDontSeeHtml('value=');
+        $html = Livewire::test(ProfileForm::class)->html();
+
+        expect($html)->toMatch('/<input(?=[^>]*wire:model="name")(?![^>]*\svalue=)[^>]*>/s')
+            ->toMatch('/<input(?=[^>]*wire:model="email")(?![^>]*\svalue=)[^>]*>/s');
     });
 });
 
