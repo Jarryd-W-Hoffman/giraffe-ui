@@ -259,5 +259,7 @@
                 </div>
             </main>
         </div>
+
+        <x-gui::toasts />
     </body>
 </html>

@@ -77,8 +77,9 @@ jobs:
         working-directory: app
         run: |
           status=0
-          for class in bg-gui-primary bg-gui-danger border-gui-warning-text text-gui-info-foreground 'hover\\:bg-gui-success\\/10' rounded-gui divide-zinc-200; do
-            if ! grep -q "\.$class" out.css; then
+          # Fixed-string matches on the escaped selectors Tailwind writes, e.g. .hover\:bg-gui-success\/10
+          for class in 'bg-gui-primary' 'bg-gui-danger' 'border-gui-warning-text' 'text-gui-info-foreground' 'hover\:bg-gui-success\/10' 'rounded-gui' 'divide-zinc-200' 'border-gui-input' '\[position-area\:bottom_span-right\]' 'group-has-focus-visible\/tooltip\:visible'; do
+            if ! grep -qF ".$class" out.css; then
               echo "::error::.$class is missing from the compiled CSS"
               status=1
             fi

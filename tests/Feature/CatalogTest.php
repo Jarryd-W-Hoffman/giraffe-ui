@@ -12,6 +12,15 @@ it('renders every catalog page', function (string $page) {
     $this->get("/catalog/{$page}")->assertOk();
 })->with(fn () => [...array_keys(Catalog::guides()), ...array_keys(Catalog::components())]);
 
+it('has no duplicate ids, so examples can target their own elements', function (string $page) {
+    $dom = new DOMDocument;
+    @$dom->loadHTML($this->get("/catalog/{$page}")->getContent(), LIBXML_NOERROR);
+
+    $ids = array_map(fn (DOMElement $element) => $element->getAttribute('id'), iterator_to_array((new DOMXPath($dom))->query('//*[@id]')));
+
+    expect(array_keys(array_filter(array_count_values($ids), fn ($count) => $count > 1)))->toBe([]);
+})->with(fn () => [...array_keys(Catalog::guides()), ...array_keys(Catalog::components())]);
+
 it('returns 404 for unknown pages', function () {
     $this->get('/catalog/nope')->assertNotFound();
 });

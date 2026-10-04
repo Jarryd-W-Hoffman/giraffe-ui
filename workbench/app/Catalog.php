@@ -946,6 +946,201 @@ class Catalog
                 ],
             ],
 
+            'dropdown' => [
+                'name' => 'Dropdown',
+                'group' => 'Overlays',
+                'description' => 'A menu of actions. A native popover positioned with CSS anchor positioning, with the menu keyboard pattern added by Alpine.',
+                'usage' => <<<'BLADE'
+                    <x-gui::dropdown id="project-actions" label="Options">
+                        <x-gui::dropdown.item wire:click="edit">Edit</x-gui::dropdown.item>
+                        <x-gui::dropdown.item color="danger" wire:click="delete">Delete</x-gui::dropdown.item>
+                    </x-gui::dropdown>
+                    BLADE,
+                'examples' => [
+                    [
+                        'title' => 'Actions',
+                        'description' => 'Opening focuses the first item. Arrow keys, Home and End move between items; Escape, Tab or clicking outside closes it and returns focus.',
+                        'code' => <<<'BLADE'
+                            <x-gui::dropdown id="project-actions" label="Options">
+                                <x-gui::dropdown.item x-on:click="GiraffeUI.toast('Editing…')">Edit</x-gui::dropdown.item>
+                                <x-gui::dropdown.item x-on:click="GiraffeUI.toast('Duplicated', { color: 'success' })">Duplicate</x-gui::dropdown.item>
+                                <x-gui::dropdown.item href="#">Settings</x-gui::dropdown.item>
+                                <x-gui::dropdown.item disabled>Archive</x-gui::dropdown.item>
+                                <x-gui::dropdown.separator />
+                                <x-gui::dropdown.item color="danger" commandfor="confirm-delete" command="show-modal">Delete…</x-gui::dropdown.item>
+                            </x-gui::dropdown>
+
+                            <x-gui::modal id="confirm-delete" title="Delete project?" size="sm">
+                                <x-slot:footer>
+                                    <x-gui::modal.close>Cancel</x-gui::modal.close>
+                                    <x-gui::button color="danger" commandfor="confirm-delete" command="close">Delete</x-gui::button>
+                                </x-slot:footer>
+                            </x-gui::modal>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Custom trigger and position',
+                        'code' => <<<'BLADE'
+                            <x-gui::dropdown id="account-menu" position="bottom-end">
+                                <x-slot:trigger>
+                                    <button type="button" commandfor="account-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Account" class="cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text">
+                                        <x-gui::avatar name="Ada Lovelace" />
+                                    </button>
+                                </x-slot:trigger>
+
+                                <x-gui::dropdown.item href="#">Profile</x-gui::dropdown.item>
+                                <x-gui::dropdown.item href="#">Billing</x-gui::dropdown.item>
+                                <x-gui::dropdown.separator />
+                                <x-gui::dropdown.item>Sign out</x-gui::dropdown.item>
+                            </x-gui::dropdown>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['id', 'string', 'required', 'Used by the trigger to open it.'],
+                    ['label', 'string', 'null', 'Text for the default trigger button.'],
+                    ['position', "'bottom-start' | 'bottom' | 'bottom-end' | 'top-start' | 'top' | 'top-end' | 'left' | 'right'", "'bottom-start'", 'Flips automatically when there is no room.'],
+                    ['href (item)', 'string', 'null', 'Renders the item as a link.'],
+                    ['color (item)', "'danger' | null", 'null', 'For destructive actions.'],
+                    ['disabled (item)', 'bool', 'false', 'Shown but not actionable.'],
+                ],
+                'slots' => [
+                    ['trigger', 'A custom trigger. Give it commandfor="{id}" command="toggle-popover".'],
+                    ['default', 'Items and separators.'],
+                    ['leading (item)', 'An icon before the item label.'],
+                ],
+            ],
+
+            'popover' => [
+                'name' => 'Popover',
+                'group' => 'Overlays',
+                'description' => 'Rich content in a floating panel. A native popover, so Escape and clicking outside close it without JavaScript.',
+                'usage' => <<<'BLADE'
+                    <x-gui::popover id="share" label="Share">
+                        …
+                    </x-gui::popover>
+                    BLADE,
+                'examples' => [
+                    [
+                        'title' => 'Share',
+                        'code' => <<<'BLADE'
+                            <x-gui::popover id="share" label="Share">
+                                <div class="w-72 space-y-3">
+                                    <p class="font-medium">Share this project</p>
+                                    <x-gui::input value="https://giraffeui.dev/p/8f3k" readonly aria-label="Link" />
+                                    <x-gui::button size="sm" class="w-full" x-on:click="GiraffeUI.toast('Link copied', { color: 'success' })">Copy link</x-gui::button>
+                                </div>
+                            </x-gui::popover>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Positions',
+                        'code' => <<<'BLADE'
+                            <x-gui::popover id="pop-top" label="Top" position="top">Above the trigger.</x-gui::popover>
+                            <x-gui::popover id="pop-right" label="Right" position="right">Beside the trigger.</x-gui::popover>
+                            <x-gui::popover id="pop-bottom-end" label="Bottom end" position="bottom-end">Below, aligned to the end.</x-gui::popover>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['id', 'string', 'required', 'Used by the trigger to open it.'],
+                    ['label', 'string', 'null', 'Text for the default trigger button.'],
+                    ['position', "'bottom-start' | 'bottom' | 'bottom-end' | 'top-start' | 'top' | 'top-end' | 'left' | 'right'", "'bottom-start'", 'Flips automatically when there is no room.'],
+                ],
+                'slots' => [
+                    ['trigger', 'A custom trigger. Give it commandfor="{id}" command="toggle-popover".'],
+                    ['default', 'The panel content.'],
+                ],
+            ],
+
+            'tooltip' => [
+                'name' => 'Tooltip',
+                'group' => 'Overlays',
+                'description' => 'A short label shown on hover and keyboard focus. Escape dismisses it, and you can hover over it.',
+                'usage' => <<<'BLADE'
+                    <x-gui::tooltip text="Copy to clipboard">
+                        <x-gui::button aria-label="Copy">…</x-gui::button>
+                    </x-gui::tooltip>
+                    BLADE,
+                'examples' => [
+                    [
+                        'title' => 'Icon buttons',
+                        'description' => 'Tooltips describe; they don\'t name. Icon-only buttons still need an aria-label.',
+                        'code' => <<<'BLADE'
+                            <x-gui::tooltip text="Copy to clipboard">
+                                <x-gui::button variant="outline" color="secondary" size="sm" aria-label="Copy" class="w-8 px-0">
+                                    <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M7 3.5A1.5 1.5 0 0 1 8.5 2h3.879a1.5 1.5 0 0 1 1.06.44l3.122 3.12A1.5 1.5 0 0 1 17 6.622V12.5a1.5 1.5 0 0 1-1.5 1.5h-1v-3.379a3 3 0 0 0-.879-2.121L10.5 5.379A3 3 0 0 0 8.379 4.5H7v-1Z" /><path d="M4.5 6A1.5 1.5 0 0 0 3 7.5v9A1.5 1.5 0 0 0 4.5 18h7a1.5 1.5 0 0 0 1.5-1.5v-5.879a1.5 1.5 0 0 0-.44-1.06L9.44 6.439A1.5 1.5 0 0 0 8.378 6H4.5Z" /></svg>
+                                </x-gui::button>
+                            </x-gui::tooltip>
+
+                            <x-gui::tooltip text="Opens in a new tab" position="bottom">
+                                <x-gui::button href="https://laravel.com" external variant="ghost" size="sm">Laravel</x-gui::button>
+                            </x-gui::tooltip>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['text', 'string', 'required', 'The tooltip text.'],
+                    ['position', "'top' | 'bottom' | 'left' | 'right' | …", "'top'", 'Flips automatically when there is no room.'],
+                ],
+                'slots' => [
+                    ['default', 'The trigger. Its first focusable element gets aria-describedby.'],
+                ],
+                'notes' => [
+                    'Showing and hiding is CSS. Alpine adds aria-describedby and Escape-to-dismiss.',
+                    'Touch screens can\'t hover, so never put essential information only in a tooltip.',
+                ],
+            ],
+
+            'toasts' => [
+                'name' => 'Toast',
+                'group' => 'Overlays',
+                'description' => 'Brief, non-blocking messages announced to screen readers. Place <x-gui::toasts /> once in your layout.',
+                'usage' => <<<'BLADE'
+                    {{-- In your layout --}}
+                    <x-gui::toasts />
+
+                    {{-- Anywhere --}}
+                    <x-gui::button x-on:click="GiraffeUI.toast('Saved', { color: 'success' })">Save</x-gui::button>
+                    BLADE,
+                'examples' => [
+                    [
+                        'title' => 'Colours and titles',
+                        'description' => 'Toasts dismiss after 5 seconds. Hovering or focusing one pauses it.',
+                        'code' => <<<'BLADE'
+                            <x-gui::button variant="outline" color="secondary" x-on:click="GiraffeUI.toast('Your changes were saved.', { color: 'success', title: 'Saved' })">Success</x-gui::button>
+                            <x-gui::button variant="outline" color="secondary" x-on:click="GiraffeUI.toast('Check your connection and try again.', { color: 'danger', title: 'Upload failed', duration: 0 })">Error (stays)</x-gui::button>
+                            <x-gui::button variant="outline" color="secondary" x-on:click="$dispatch('toast', { message: 'Sent with $dispatch' })">From Alpine</x-gui::button>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Above a modal',
+                        'description' => 'The region lives in the top layer, so toasts appear above open dialogs.',
+                        'code' => <<<'BLADE'
+                            <x-gui::button variant="outline" commandfor="toast-modal" command="show-modal">Open modal</x-gui::button>
+
+                            <x-gui::modal id="toast-modal" title="Invite a teammate" size="sm">
+                                <x-gui::field label="Email" name="invite"><x-gui::input type="email" value="grace@example.com" /></x-gui::field>
+                                <x-slot:footer>
+                                    <x-gui::modal.close>Close</x-gui::modal.close>
+                                    <x-gui::button x-on:click="GiraffeUI.toast('Invite sent to grace@example.com', { color: 'success' })">Send invite</x-gui::button>
+                                </x-slot:footer>
+                            </x-gui::modal>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['duration', 'int', '5000', 'Default time on screen, in milliseconds. 0 keeps toasts until dismissed.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'Options for each toast: message, title, color (primary, secondary, success, warning, danger, info) and duration.',
+                    'From Livewire: $this->dispatch(\'toast\', message: \'Saved\', color: \'success\').',
+                    'After a redirect: session()->flash(\'toast\', \'Saved\') or an array of options.',
+                    'While a modal is open, toasts still appear and are announced, but the browser makes everything outside the modal unclickable, so they dismiss on their own timer.',
+                ],
+            ],
+
             'accordion' => [
                 'name' => 'Accordion',
                 'group' => 'Disclosure',
