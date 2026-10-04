@@ -6,7 +6,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 37 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 40 components and a catalog.
+
+### Avatar group, description list and stat
+
+#### Added
+- Avatar group: overlapping avatars with a ring in the page colour. Pass `avatars` with `max` and the rest become a "+N" count that screen readers hear as "N more", or put avatars in the slot and pass `more`. `label` makes it a labelled group.
+- Description list: a real `<dl>` of terms and details, stacked on small screens and in two columns from the `sm` breakpoint. Pass `items`, or compose `description-list.item` when a detail needs markup.
+- Stat: a label, a headline value, and an optional change with a description. `trend` adds an arrow and hidden "Increased by" or "Decreased by" text, so the direction never relies on colour. `invert` is for metrics where down is good.
 
 ### Radio cards and segmented control
 

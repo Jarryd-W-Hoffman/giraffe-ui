@@ -989,12 +989,9 @@ class Catalog
                     ],
                     [
                         'title' => 'Stacked',
+                        'description' => 'Use Avatar group to overlap avatars and count the rest.',
                         'code' => <<<'BLADE'
-                            <div class="flex -space-x-2">
-                                @foreach ($users as $user)
-                                    <x-gui::avatar :name="$user['name']" class="ring-2 ring-white dark:ring-zinc-950" />
-                                @endforeach
-                            </div>
+                            <x-gui::avatar.group :avatars="$users" :max="3" label="Team" />
                             BLADE,
                     ],
                 ],
@@ -1003,6 +1000,145 @@ class Catalog
                     ['name', 'string', 'null', 'Used for initials and as the accessible name.'],
                     ['alt', 'string', 'null', 'Overrides the accessible name.'],
                     ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                ],
+                'slots' => [],
+            ],
+
+            'avatar-group' => [
+                'name' => 'Avatar group',
+                'group' => 'Display',
+                'description' => 'Overlapping avatars, with a count of the ones not shown.',
+                'usage' => '<x-gui::avatar.group :avatars="$team" :max="4" label="Team" />',
+                'playground' => [
+                    'selfClosing' => true,
+                    'template' => '<x-gui::avatar.group :avatars="array_map(fn ($name) => [\'name\' => $name], [\'Ada Lovelace\', \'Grace Hopper\', \'Alan Turing\', \'Katherine Johnson\', \'Margaret Hamilton\', \'Edsger Dijkstra\'])" :max="(int) $max" :size="$size" label="Team" />',
+                    'controls' => [
+                        ['name' => 'max', 'type' => 'select', 'options' => ['2', '3', '4', '5'], 'default' => '3', 'always' => true],
+                        ['name' => 'size', 'type' => 'select', 'options' => ['sm', 'md', 'lg'], 'default' => 'md'],
+                    ],
+                ],
+                'examples' => [
+                    [
+                        'title' => 'From an array',
+                        'description' => 'Each item takes name, src and alt. Avatars past max become a +N count, which screen readers hear as "N more".',
+                        'code' => <<<'BLADE'
+                            <x-gui::avatar.group :avatars="$users" :max="3" label="Reviewers" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'In the slot',
+                        'description' => 'Write the avatars yourself and pass more for the count, e.g. from a separate query.',
+                        'code' => <<<'BLADE'
+                            <x-gui::avatar.group size="sm" more="12" label="Attendees">
+                                <x-gui::avatar :src="$photo" name="Ada Lovelace" size="sm" />
+                                <x-gui::avatar name="Grace Hopper" size="sm" />
+                            </x-gui::avatar.group>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['avatars', 'array | null', 'null', 'Items with name, src and alt. Or use the slot.'],
+                    ['max', 'int | null', 'null', 'How many avatars to show before the count.'],
+                    ['more', 'int', '0', 'Extra people to count, on top of those past max.'],
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", 'For avatars from the array and the count. In the slot, size each avatar.'],
+                    ['label', 'string', 'null', 'Makes it a labelled group for screen readers.'],
+                    ['more-label', 'string', "':count more'", 'The count\'s accessible name.'],
+                ],
+                'slots' => [
+                    ['default', 'Avatars, when not passing avatars.'],
+                ],
+                'notes' => [
+                    'Each avatar has a ring in the page colour. On another background, change it with e.g. class="*:ring-zinc-50!".',
+                ],
+            ],
+
+            'description-list' => [
+                'name' => 'Description list',
+                'group' => 'Display',
+                'description' => 'Terms and their details, like the fields of a record. A real dl, in two columns from the sm breakpoint.',
+                'usage' => '<x-gui::description-list :items="[\'Name\' => $user->name, \'Email\' => $user->email]" />',
+                'examples' => [
+                    [
+                        'title' => 'From an array',
+                        'code' => <<<'BLADE'
+                            <x-gui::description-list :items="['Full name' => 'Ada Lovelace', 'Role' => 'Analyst', 'Email' => 'ada@example.com']" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Composed',
+                        'description' => 'Use items when a detail needs markup.',
+                        'code' => <<<'BLADE'
+                            <x-gui::card title="Order #1042" description="Placed on 5 October 2026.">
+                                <x-gui::description-list>
+                                    <x-gui::description-list.item term="Status">
+                                        <x-gui::badge color="success">Paid</x-gui::badge>
+                                    </x-gui::description-list.item>
+                                    <x-gui::description-list.item term="Customer">
+                                        <div class="flex items-center gap-2">
+                                            <x-gui::avatar name="Grace Hopper" size="sm" />
+                                            Grace Hopper
+                                        </div>
+                                    </x-gui::description-list.item>
+                                    <x-gui::description-list.item term="Total">$248.00</x-gui::description-list.item>
+                                </x-gui::description-list>
+                            </x-gui::card>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['items', 'array', '[]', 'term => detail pairs. Details are escaped.'],
+                ],
+                'slots' => [
+                    ['default', 'description-list.item components, after any items.'],
+                ],
+                'notes' => [
+                    'description-list.item takes a term prop, and its slot is the detail.',
+                ],
+            ],
+
+            'stat' => [
+                'name' => 'Stat',
+                'group' => 'Display',
+                'description' => 'A headline number with a label and an optional change.',
+                'usage' => '<x-gui::stat label="Revenue" value="$48,200" change="12%" trend="up" description="vs last month" />',
+                'playground' => [
+                    'selfClosing' => true,
+                    'template' => '<x-gui::stat label="Revenue" value="$48,200" :change="$change ?: null" :trend="$trend === \'none\' ? null : $trend" :invert="$invert" :description="$description ?: null" />',
+                    'controls' => [
+                        ['name' => 'change', 'type' => 'text', 'default' => '12%', 'always' => true],
+                        ['name' => 'trend', 'type' => 'select', 'options' => ['none', 'up', 'down'], 'default' => 'up', 'always' => true],
+                        ['name' => 'invert', 'type' => 'boolean', 'default' => false],
+                        ['name' => 'description', 'type' => 'text', 'default' => 'vs last month', 'always' => true],
+                    ],
+                ],
+                'examples' => [
+                    [
+                        'title' => 'A row of stats',
+                        'description' => 'The arrow and hidden text ("Increased by", "Decreased by") carry the direction, so it never relies on colour. Use invert when down is good, like response time.',
+                        'code' => <<<'BLADE'
+                            <div class="grid gap-4 sm:grid-cols-3">
+                                <x-gui::card>
+                                    <x-gui::stat label="Revenue" value="$48,200" change="12%" trend="up" description="vs last month" />
+                                </x-gui::card>
+                                <x-gui::card>
+                                    <x-gui::stat label="Churn" value="2.1%" change="0.4 pts" trend="up" invert description="vs last month" />
+                                </x-gui::card>
+                                <x-gui::card>
+                                    <x-gui::stat label="Response time" value="182 ms" change="24 ms" trend="down" invert />
+                                </x-gui::card>
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['label', 'string', '', 'What the number is.'],
+                    ['value', 'string', '', 'The number, formatted.'],
+                    ['change', 'string', 'null', 'The change, formatted, e.g. 12%.'],
+                    ['trend', "'up' | 'down' | null", 'null', 'Direction of the change. Adds an arrow and hidden text.'],
+                    ['invert', 'bool', 'false', 'Down is good: colours a fall green and a rise red.'],
+                    ['description', 'string', 'null', 'Context after the change, e.g. vs last month.'],
+                    ['increase-label', 'string', "'Increased by'", 'Hidden text for up, for translation.'],
+                    ['decrease-label', 'string', "'Decreased by'", 'Hidden text for down.'],
                 ],
                 'slots' => [],
             ],

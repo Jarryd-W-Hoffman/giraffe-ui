@@ -25,12 +25,10 @@ A profile image, with initials when there is no image.
 
 ## Stacked
 
+Use Avatar group to overlap avatars and count the rest.
+
 ```blade
-<div class="flex -space-x-2">
-    @foreach ($users as $user)
-        <x-gui::avatar :name="$user['name']" class="ring-2 ring-white dark:ring-zinc-950" />
-    @endforeach
-</div>
+<x-gui::avatar.group :avatars="$users" :max="3" label="Team" />
 ```
 
 ## Props
