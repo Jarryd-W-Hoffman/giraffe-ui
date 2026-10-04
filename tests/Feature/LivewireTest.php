@@ -2,10 +2,12 @@
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
 use Workbench\App\Livewire\AvatarUpload;
 use Workbench\App\Livewire\ProfileForm;
 use Workbench\App\Livewire\SettingsTabs;
+use Workbench\App\Livewire\SignupWizard;
 use Workbench\App\Livewire\UsersTable;
 
 describe('forms', function () {
@@ -93,6 +95,60 @@ describe('tabs', function () {
             ->set('digestDays', [])
             ->assertSee('On the server: never');
     });
+});
+
+describe('wizard', function () {
+    it('validates only the current step before moving on', function () {
+        Livewire::test(SignupWizard::class)
+            ->call('next')
+            ->assertHasErrors(['name' => 'required', 'email' => 'required'])
+            ->assertHasNoErrors('workspace')
+            ->assertSet('step', 'account')
+            ->set('name', 'Ada Lovelace')
+            ->set('email', 'ada@example.com')
+            ->call('next')
+            ->assertHasNoErrors()
+            ->assertSet('step', 'workspace')
+            ->assertSeeHtml('wire:click="goTo(\'account\')"');
+    });
+
+    it('only jumps back to steps already reached', function () {
+        Livewire::test(SignupWizard::class)
+            ->call('goTo', 'review')
+            ->assertSet('step', 'account')
+            ->set('name', 'Ada Lovelace')
+            ->set('email', 'ada@example.com')
+            ->call('next')
+            ->call('goTo', 'account')
+            ->assertSet('step', 'account');
+    });
+
+    it('sends people back to the first step with a problem, then finishes', function () {
+        $wizard = Livewire::test(SignupWizard::class)
+            ->set('name', 'Ada Lovelace')
+            ->set('email', 'ada@example.com')
+            ->call('next')
+            ->set('workspace', 'analytical-engine')
+            ->call('next')
+            ->assertSet('step', 'review')
+            ->set('name', '')
+            ->call('finish')
+            ->assertSet('step', 'account')
+            ->assertHasErrors('name')
+            ->assertSee('The name field is required.');
+
+        $wizard->set('name', 'Ada Lovelace')
+            ->call('next')
+            ->call('next')
+            ->call('finish')
+            ->assertDispatched('toast', message: 'Created the analytical-engine workspace.', color: 'success')
+            ->assertSet('step', 'account')
+            ->assertSet('name', '');
+    });
+
+    it('locks the current step', function () {
+        Livewire::test(SignupWizard::class)->set('step', 'review');
+    })->throws(CannotUpdateLockedPropertyException::class);
 });
 
 describe('generated ids', function () {

@@ -6,7 +6,16 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 43 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
+
+### Stepper
+
+#### Added
+- Stepper: progress through a multi-step flow, such as a signup or checkout wizard. Pass `steps` (key => label, or label, description and href) and the `current` key, or compose `stepper.step` with a `status`. Steps are complete (a check mark), current (`aria-current="step"`), upcoming, or need attention (`invalid` keys). Horizontal or vertical; numbers come from a CSS counter. Complete steps with an `href` become links back, and composed steps with a click handler become buttons. Screen readers hear "completed" and "needs attention" after the label.
+- Catalog: a Livewire signup wizard on the Livewire page that validates one step at a time, lets people jump back to completed steps, moves focus to each step's heading, and re-checks every step before finishing.
+
+#### Fixed
+- Catalog: the props and slots tables can be scrolled with the keyboard on narrow screens.
 
 ### Sidebar layout and full-page examples
 
