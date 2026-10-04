@@ -52,7 +52,7 @@ Then rebuild your CSS (`npm run dev` or `npm run build`).
 | Actions | [Button](docs/components/button.md) |
 | Forms | [Field](docs/components/field.md), [Input](docs/components/input.md), [Textarea](docs/components/textarea.md), [Select](docs/components/select.md), [Checkbox](docs/components/checkbox.md), [Radio](docs/components/radio.md), [Switch](docs/components/switch.md), [Fieldset](docs/components/fieldset.md), [Label](docs/components/label.md) |
 | Display | [Alert](docs/components/alert.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md) |
-| Overlays | [Modal](docs/components/modal.md) |
+| Overlays | [Modal](docs/components/modal.md), [Dropdown](docs/components/dropdown.md), [Popover](docs/components/popover.md), [Tooltip](docs/components/tooltip.md), [Toast](docs/components/toasts.md) |
 | Disclosure | [Accordion](docs/components/accordion.md), [Tabs](docs/components/tabs.md) |
 | Data | [Table](docs/components/table.md) |
 
@@ -76,7 +76,7 @@ The input gets `id`, `name`, `required`, `aria-invalid` and `aria-describedby` a
 
 ### Interactivity
 
-GiraffeUI uses the platform first. Modal is a native `<dialog>` opened with `command`/`commandfor` buttons, and Accordion is native `<details>`, so neither needs JavaScript. Components that do need behaviour the browser doesn't provide, like Tabs, use [Alpine](https://alpinejs.dev). Livewire includes Alpine; in other apps, install Alpine yourself.
+GiraffeUI uses the platform first. Modal is a native `<dialog>`, Dropdown and Popover are native popovers positioned with CSS anchor positioning, and all three open with `command`/`commandfor` buttons. Accordion is native `<details>`. None of them needs JavaScript to open, close or position. Where the browser has no built-in behaviour (Tabs, menu arrow keys, tooltip Escape, toasts), GiraffeUI uses [Alpine](https://alpinejs.dev). Livewire includes Alpine; in other apps, install Alpine yourself.
 
 ```blade
 <x-gui::button commandfor="confirm" command="show-modal">Delete</x-gui::button>

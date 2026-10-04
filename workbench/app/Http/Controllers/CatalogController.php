@@ -35,7 +35,7 @@ class CatalogController
         }
 
         $examples = array_map(fn (array $example) => $example + [
-            'id' => Str::slug($example['title']),
+            'id' => 'example-'.Str::slug($example['title']),
             'html' => Blade::render($example['code'], Catalog::data()),
         ], $component['examples']);
 

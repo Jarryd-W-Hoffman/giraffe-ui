@@ -12,6 +12,7 @@
 
 /* Let Tailwind find the classes used by GiraffeUI's Blade components. */
 @source "../views";
+@source "../../src";
 
 @theme {
     /*

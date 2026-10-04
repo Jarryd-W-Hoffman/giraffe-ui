@@ -4,6 +4,18 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [Unreleased]
 
+### Phase 2b: popovers, menus, tooltips and toasts
+
+#### Added
+- Dropdown: a menu in a native popover, positioned with CSS anchor positioning (Baseline since January 2026) and flipping when there's no room. Escape, Tab and outside clicks close it and return focus. Alpine adds the menu keyboard pattern: focus the first item on open, arrow keys skipping disabled items, Home/End. Items close the menu with `command="hide-popover"` after their own click handlers run, or use their own command (e.g. to open a modal). Items can be buttons or links, danger or disabled, and there are separators.
+- Popover: rich content in an anchored native popover, with 8 positions.
+- Tooltip: shown with CSS on hover and keyboard focus after a short delay, and stays open while the pointer is over it. Alpine adds `aria-describedby` and Escape-to-dismiss (WCAG 1.4.13).
+- Toasts: `<x-gui::toasts />` once in a layout, then `GiraffeUI.toast()`, `$dispatch('toast')`, Livewire's `$this->dispatch('toast')` or `session()->flash('toast')`. A polite live region in the top layer, so toasts appear above modals and are still announced. Hovering or focusing a toast pauses it, and `duration: 0` keeps it until dismissed.
+- `JayAitch\GiraffeUI\Support\Anchor` for anchor names and placement. `giraffeui.css` now also scans `src/` for classes.
+
+#### Fixed
+- Catalog example headings use `example-` ids, so they can't collide with ids in the examples (the "Share" heading was hijacking the Share popover).
+
 ### Phase 2a: overlays and disclosure
 
 #### Added

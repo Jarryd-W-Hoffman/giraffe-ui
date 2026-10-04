@@ -29,6 +29,10 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 ## Overlays
 
 - [Modal](modal.md): A dialog over the page. Built on the native &lt;dialog&gt; element, so focus trapping, Escape and the backdrop work without JavaScript.
+- [Dropdown](dropdown.md): A menu of actions. A native popover positioned with CSS anchor positioning, with the menu keyboard pattern added by Alpine.
+- [Popover](popover.md): Rich content in a floating panel. A native popover, so Escape and clicking outside close it without JavaScript.
+- [Tooltip](tooltip.md): A short label shown on hover and keyboard focus. Escape dismisses it, and you can hover over it.
+- [Toast](toasts.md): Brief, non-blocking messages announced to screen readers. Place &lt;x-gui::toasts /&gt; once in your layout.
 
 ## Disclosure
 
