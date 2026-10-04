@@ -1,17 +1,41 @@
 {
     "name": "jayaitch/giraffeui",
+    "description": "Free, accessible Blade + Alpine components for Laravel and Tailwind CSS v4. Livewire-friendly, never Livewire-required.",
+    "keywords": ["laravel", "blade", "components", "tailwindcss", "alpinejs", "livewire", "ui"],
+    "homepage": "https://github.com/Jarryd-W-Hoffman/GiraffeUI",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "JayAitch\\GiraffeUI\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Jarryd Hoffman",
             "email": "jarryd.hoffman@windowslive.com"
         }
     ],
+    "require": {
+        "php": "^8.3",
+        "illuminate/console": "^13.0",
+        "illuminate/support": "^13.0",
+        "illuminate/view": "^13.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^11.0",
+        "pestphp/pest": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "JayAitch\\GiraffeUI\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JayAitch\\GiraffeUI\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "lint": "pint",
+        "lint:check": "pint --test"
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -19,8 +43,12 @@
             ]
         }
     },
-    "minimum-stability": "dev",
-    "require": {
-        "laravel/prompts": "^0.1.15"
-    }
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

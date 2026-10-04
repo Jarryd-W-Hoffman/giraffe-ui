@@ -1,0 +1,81 @@
+name: Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }} (${{ matrix.stability }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.4', '8.5']
+        stability: [prefer-lowest, prefer-stable]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Install dependencies
+        run: composer update --${{ matrix.stability }} --no-interaction --prefer-dist
+
+      - name: Run tests
+        run: vendor/bin/pest
+
+  lint:
+    name: Pint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/pint --test
+
+  css:
+    name: Tailwind finds every class
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: giraffeui
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Build CSS the way an app would
+        run: |
+          mkdir -p app/resources/css app/vendor/jayaitch
+          ln -s "$GITHUB_WORKSPACE/giraffeui" app/vendor/jayaitch/giraffeui
+          cd app
+          npm init -y > /dev/null
+          npm install tailwindcss@4 @tailwindcss/cli@4
+          printf '@import "tailwindcss";\n@import "../../vendor/jayaitch/giraffeui/resources/css/giraffeui.css";\n' > resources/css/app.css
+          npx @tailwindcss/cli -i resources/css/app.css -o out.css
+
+      - name: Check component classes were generated
+        working-directory: app
+        run: |
+          status=0
+          for class in bg-gui-primary bg-gui-danger border-gui-warning text-gui-info-foreground 'hover\\:bg-gui-success\\/10' rounded-gui divide-zinc-200; do
+            if ! grep -q "\.$class" out.css; then
+              echo "::error::.$class is missing from the compiled CSS"
+              status=1
+            fi
+          done
+          exit $status

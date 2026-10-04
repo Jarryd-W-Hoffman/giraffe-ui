@@ -1,0 +1,106 @@
+# GiraffeUI
+
+Free, accessible Blade + Alpine components for Laravel and Tailwind CSS v4.
+Works great with Livewire, but never requires it.
+
+> **Status:** early development (pre-1.0). Expect breaking changes between minor versions until 1.0.
+
+## Requirements
+
+- PHP 8.3+
+- Laravel 13
+- Tailwind CSS v4 (new Laravel apps already have it)
+
+## Installation
+
+```bash
+composer require jayaitch/giraffeui
+php artisan gui:install
+```
+
+The installer:
+
+1. adds GiraffeUI's CSS to `resources/css/app.css`, right after `@import "tailwindcss"`;
+2. offers to install Livewire (optional, off by default);
+3. offers to publish an app layout with dark mode at `resources/views/components/layouts/app.blade.php`. If you already have one, you can install it under another name, overwrite it, or skip.
+
+It is safe to run again. It never runs npm or edits Tailwind config files.
+
+### Manual installation
+
+Add one line to `resources/css/app.css`:
+
+```css
+@import "tailwindcss";
+@import "../../vendor/jayaitch/giraffeui/resources/css/giraffeui.css";
+```
+
+Then rebuild your CSS (`npm run dev` or `npm run build`).
+
+## Usage
+
+```blade
+<x-gui::button color="success" wire:click="save">Save</x-gui::button>
+
+<x-gui::table :columns="['name', 'email']" :rows="$users" />
+```
+
+## Components
+
+| Component | Docs |
+|---|---|
+| Button | [docs/components/button.md](docs/components/button.md) |
+| Table | [docs/components/table.md](docs/components/table.md) |
+
+## Conventions
+
+Every component follows the same rules:
+
+- **Props:** `variant` (`solid`, `outline`, `ghost`), `color` (`primary`, `secondary`, `success`, `warning`, `danger`, `info`), `size` (`sm`, `md`, `lg`).
+- **Attributes pass through.** `class`, `wire:*`, `x-*`, `data-*` and anything else lands on the component's main element.
+- **Slots, not HTML strings,** for icons and other parts (e.g. `<x-slot:leading>`).
+- **Theming is CSS variables only.** There is no PHP config.
+
+## Theming
+
+Override any token in your own `@theme` block, after the GiraffeUI import:
+
+```css
+@theme {
+    --color-gui-primary: var(--color-violet-600);
+    --color-gui-primary-foreground: var(--color-white);
+    --radius-gui: var(--radius-lg);
+}
+```
+
+| Token | Default |
+|---|---|
+| `--color-gui-primary` | indigo-600 |
+| `--color-gui-secondary` | zinc-600 |
+| `--color-gui-success` | emerald-600 |
+| `--color-gui-warning` | amber-500 |
+| `--color-gui-danger` | red-600 |
+| `--color-gui-info` | sky-600 |
+| `--radius-gui` | `--radius-md` |
+
+Each colour has a `-foreground` token for text placed on it.
+
+## Dark mode
+
+Components use Tailwind's `dark:` variant. By default Tailwind follows the OS setting. The published layout switches to class-based dark mode instead. It adds `@custom-variant dark (&:where(.dark, .dark *));` to your CSS and sets the `.dark` class before the page paints, using the saved choice or the OS setting. Switch themes from anywhere with:
+
+```js
+GiraffeUI.setTheme('dark'); // or 'light', or 'system'
+```
+
+## Development
+
+```bash
+composer install
+composer test        # Pest
+composer lint        # Pint
+```
+
+## License
+
+MIT. See [LICENSE](LICENSE).

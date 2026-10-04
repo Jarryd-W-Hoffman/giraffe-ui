@@ -1,0 +1,38 @@
+/*
+ * GiraffeUI
+ *
+ * Import this file in your app's CSS, after Tailwind:
+ *
+ *     @import "tailwindcss";
+ *     @import "../../vendor/jayaitch/giraffeui/resources/css/giraffeui.css";
+ *
+ * To re-theme, override any of the tokens below in your own @theme block
+ * after the import, e.g. @theme { --color-gui-primary: var(--color-violet-600); }
+ */
+
+/* Let Tailwind find the classes used by GiraffeUI's Blade components. */
+@source "../views";
+
+@theme {
+    /* Brand colours. Each colour has a matching "-foreground" for text on top of it. */
+    --color-gui-primary: var(--color-indigo-600);
+    --color-gui-primary-foreground: var(--color-white);
+
+    --color-gui-secondary: var(--color-zinc-600);
+    --color-gui-secondary-foreground: var(--color-white);
+
+    --color-gui-success: var(--color-emerald-600);
+    --color-gui-success-foreground: var(--color-white);
+
+    --color-gui-warning: var(--color-amber-500);
+    --color-gui-warning-foreground: var(--color-zinc-950);
+
+    --color-gui-danger: var(--color-red-600);
+    --color-gui-danger-foreground: var(--color-white);
+
+    --color-gui-info: var(--color-sky-600);
+    --color-gui-info-foreground: var(--color-white);
+
+    /* Corner radius used by every component. */
+    --radius-gui: var(--radius-md);
+}
