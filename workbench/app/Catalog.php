@@ -383,6 +383,19 @@ class Catalog
                 'description' => 'A multi-line text input.',
                 'preview' => 'narrow',
                 'usage' => '<x-gui::textarea name="bio" rows="4" />',
+                'playground' => [
+                    'selfClosing' => true,
+                    'template' => '<x-gui::textarea aria-label="Message" :rows="$rows" :autosize="$autosize" :counter="$counter" :maxlength="$maxlength === \'none\' ? null : $maxlength" :placeholder="$placeholder ?: null" :disabled="$disabled" :invalid="$invalid ?: null" />',
+                    'controls' => [
+                        ['name' => 'rows', 'type' => 'select', 'options' => ['2', '3', '5'], 'default' => '3'],
+                        ['name' => 'autosize', 'type' => 'boolean', 'default' => false],
+                        ['name' => 'counter', 'type' => 'boolean', 'default' => false],
+                        ['name' => 'maxlength', 'type' => 'select', 'options' => ['none', '50', '280'], 'default' => 'none'],
+                        ['name' => 'placeholder', 'type' => 'text', 'default' => 'Write something…', 'always' => true],
+                        ['name' => 'disabled', 'type' => 'boolean', 'default' => false],
+                        ['name' => 'invalid', 'type' => 'boolean', 'default' => false],
+                    ],
+                ],
                 'examples' => [
                     [
                         'title' => 'In a field',
@@ -398,9 +411,30 @@ class Catalog
                             <x-gui::textarea aria-label="Notes">Remember the milk.</x-gui::textarea>
                             BLADE,
                     ],
+                    [
+                        'title' => 'Grows with its content',
+                        'description' => 'Uses CSS field-sizing, so no JavaScript. rows is the minimum height and max-rows caps it, after which it scrolls. Browsers without field-sizing keep the fixed height and the resize handle.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Message" name="message">
+                                <x-gui::textarea rows="2" autosize :max-rows="8" placeholder="Start typing and keep going…" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Character count',
+                        'description' => 'With maxlength the limit is part of the accessible description. The visible count is hidden from screen readers, and a polite live region says how many characters are left once typing pauses.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="About you" name="about" hint="Shown on your profile.">
+                                <x-gui::textarea counter maxlength="160" autosize>I build things.</x-gui::textarea>
+                            </x-gui::field>
+                            BLADE,
+                    ],
                 ],
                 'props' => [
-                    ['rows', 'int', '3', 'Visible lines of text.'],
+                    ['rows', 'int', '3', 'Visible lines of text. With autosize, the minimum.'],
+                    ['autosize', 'bool', 'false', 'Grow with the content, using CSS field-sizing.'],
+                    ['max-rows', 'int | null', 'null', 'With autosize, the most lines before it scrolls.'],
+                    ['counter', 'bool', 'false', 'Show a character count, against maxlength when there is one. Uses Alpine.'],
                     ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
                 ],
                 'slots' => [
