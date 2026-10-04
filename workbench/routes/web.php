@@ -7,5 +7,6 @@ Route::prefix('catalog')->middleware('web')->group(function () {
     Route::redirect('/', '/catalog/introduction');
     Route::get('assets/catalog.css', [CatalogController::class, 'css']);
     Route::get('preview/{component}', [CatalogController::class, 'preview']);
+    Route::get('examples/{example}', [CatalogController::class, 'example']);
     Route::get('{page}', [CatalogController::class, 'show']);
 });

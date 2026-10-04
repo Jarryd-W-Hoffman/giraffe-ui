@@ -19,11 +19,21 @@ it('has no duplicate ids, so examples can target their own elements', function (
     $ids = array_map(fn (DOMElement $element) => $element->getAttribute('id'), iterator_to_array((new DOMXPath($dom))->query('//*[@id]')));
 
     expect(array_keys(array_filter(array_count_values($ids), fn ($count) => $count > 1)))->toBe([]);
-})->with(fn () => [...array_keys(Catalog::guides()), ...array_keys(Catalog::components())]);
+})->with(fn () => [...array_keys(Catalog::guides()), ...array_keys(Catalog::components()), ...array_map(fn ($slug) => "examples/{$slug}", array_keys(Catalog::examples()))]);
 
 it('returns 404 for unknown pages', function () {
     $this->get('/catalog/nope')->assertNotFound();
+    $this->get('/catalog/examples/nope')->assertNotFound();
 });
+
+it('renders the full-page examples on their own, linked from the sidebar', function (string $example) {
+    $this->get("/catalog/examples/{$example}")
+        ->assertOk()
+        ->assertDontSee('id="sidebar"', false)
+        ->assertSee('Back to the catalog');
+
+    $this->get('/catalog/introduction')->assertSee("href=\"/catalog/examples/{$example}\"", false);
+})->with(fn () => array_keys(Catalog::examples()));
 
 it('renders every example exactly as its code is written', function () {
     foreach (Catalog::components() as $component) {

@@ -14,7 +14,7 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 
 // Every page linked from the sidebar.
 await page.goto(`${base}/introduction`);
-const slugs = await page.$$eval('#sidebar a[href^="/catalog/"]', (links) => links.map((link) => link.getAttribute('href').split('/').pop()));
+const slugs = await page.$$eval('#sidebar a[href^="/catalog/"]', (links) => links.map((link) => link.getAttribute('href').replace(/^\/catalog\//, '')));
 
 const failures = [];
 

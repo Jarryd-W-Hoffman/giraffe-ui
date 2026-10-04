@@ -1,5 +1,14 @@
 <div {{ $attributes->class('overflow-hidden rounded-gui border border-zinc-200 dark:border-zinc-800') }}>
-    <div class="overflow-x-auto">
+    {{--
+        Wide tables scroll sideways. While they overflow, the scroller joins the tab order so keyboard users can
+        scroll it too (Chrome and Firefox do this themselves; Safari doesn't).
+    --}}
+    <div
+        class="overflow-x-auto focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gui-primary-text"
+        @if ($label) role="region" aria-label="{{ $label }}" @endif
+        x-data
+        x-init="new ResizeObserver(() => $el.scrollWidth > $el.clientWidth ? $el.setAttribute('tabindex', '0') : $el.removeAttribute('tabindex')).observe($el.firstElementChild)"
+    >
         <table class="min-w-full divide-y divide-zinc-200 text-sm text-zinc-700 dark:divide-zinc-800 dark:text-zinc-300">
             <thead class="bg-zinc-50 dark:bg-zinc-900">
                 <tr>

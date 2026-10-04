@@ -28,6 +28,7 @@ class Table extends Component
      * @param  array<int|string, string>|null  $columns  ['name', 'email'] or ['name' => 'Full name']
      * @param  iterable<mixed>  $rows
      * @param  array<int, string>  $sortable  Column keys that can be sorted.
+     * @param  string|null  $label  Names the scrolling region for screen readers.
      */
     public function __construct(
         ?array $columns = null,
@@ -35,6 +36,7 @@ class Table extends Component
         public array $sortable = [],
         public ?string $sort = null,
         public string $direction = 'asc',
+        public ?string $label = null,
     ) {
         $this->direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
         $this->guiTable = ['sort' => $sort, 'direction' => $this->direction];
