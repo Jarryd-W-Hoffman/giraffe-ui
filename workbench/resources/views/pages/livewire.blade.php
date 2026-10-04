@@ -5,6 +5,7 @@
     <li><a href="#uploads" class="hover:text-zinc-900 dark:hover:text-zinc-100">Uploads</a></li>
     <li><a href="#tables" class="hover:text-zinc-900 dark:hover:text-zinc-100">Tables</a></li>
     <li><a href="#tabs" class="hover:text-zinc-900 dark:hover:text-zinc-100">Tabs</a></li>
+    <li><a href="#wizards" class="hover:text-zinc-900 dark:hover:text-zinc-100">Wizards</a></li>
     <li><a href="#overlays" class="hover:text-zinc-900 dark:hover:text-zinc-100">Modals and menus</a></li>
 @endsection
 
@@ -55,6 +56,18 @@
             <x-gui::tabs wire:model.live="tab" :selected="$tab" :tabs="['account' => 'Account', 'billing' => 'Billing']">
                 …
             </x-gui::tabs>
+            BLADE;
+
+        $wizard = <<<'BLADE'
+            <x-gui::stepper aria-label="Sign up">
+                @foreach ($steps as $key => $label)
+                    @if ($loop->index < $current)
+                        <x-gui::stepper.step status="complete" wire:click="goTo('{{ $key }}')">{{ $label }}</x-gui::stepper.step>
+                    @else
+                        <x-gui::stepper.step :status="$loop->index === $current ? 'current' : 'upcoming'">{{ $label }}</x-gui::stepper.step>
+                    @endif
+                @endforeach
+            </x-gui::stepper>
             BLADE;
 
         $overlays = <<<'PHP'
@@ -108,6 +121,17 @@
     </div>
     <div class="mt-4">
         @include('catalog::partials.code', ['code' => $tabs])
+    </div>
+
+    <h2 id="wizards" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Wizards</h2>
+    <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+        A stepper shows where people are in a multi-step form. Keep the current step in a property, validate only that step's fields on Continue, and give completed steps a <code class="font-mono text-sm">wire:click</code> so they become buttons for going back. Moving between steps puts focus on the new step's heading. Try continuing with empty fields.
+    </p>
+    <div class="mt-4 rounded-xl border border-zinc-200 p-6 sm:p-8 dark:border-zinc-800">
+        <livewire:signup-wizard />
+    </div>
+    <div class="mt-4">
+        @include('catalog::partials.code', ['code' => $wizard])
     </div>
 
     <h2 id="overlays" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Modals and menus</h2>

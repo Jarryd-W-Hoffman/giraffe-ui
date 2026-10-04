@@ -45,6 +45,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 
 - [Sidebar](sidebar.md): An application shell with side navigation: a sticky column on large screens and a drawer on small ones.
 - [Breadcrumbs](breadcrumbs.md): Shows where the current page sits in the site. Follows the WAI-ARIA breadcrumb pattern.
+- [Stepper](stepper.md): Shows progress through a multi-step flow such as a signup or checkout wizard. Steps are complete, current, upcoming or need attention.
 
 ## Overlays
 

@@ -1751,6 +1751,84 @@ class Catalog
                 ],
             ],
 
+            'stepper' => [
+                'name' => 'Stepper',
+                'group' => 'Navigation',
+                'description' => 'Shows progress through a multi-step flow such as a signup or checkout wizard. Steps are complete, current, upcoming or need attention.',
+                'usage' => '<x-gui::stepper :steps="[\'account\' => \'Account\', \'shipping\' => \'Shipping\', \'review\' => \'Review\']" current="shipping" />',
+                'playground' => [
+                    'selfClosing' => true,
+                    'template' => '<x-gui::stepper :steps="[\'cart\' => \'Cart\', \'shipping\' => \'Shipping\', \'payment\' => \'Payment\', \'review\' => \'Review\']" :current="$current" :orientation="$orientation" :complete="$complete" />',
+                    'controls' => [
+                        ['name' => 'current', 'type' => 'select', 'options' => ['cart', 'shipping', 'payment', 'review'], 'default' => 'payment', 'always' => true],
+                        ['name' => 'orientation', 'type' => 'select', 'options' => ['horizontal', 'vertical'], 'default' => 'horizontal'],
+                        ['name' => 'complete', 'type' => 'boolean', 'default' => false],
+                    ],
+                ],
+                'examples' => [
+                    [
+                        'title' => 'With descriptions and links back',
+                        'description' => 'Steps before the current one are complete. A complete step with an href links back to it; later steps never link, so people can\'t skip ahead. Below the sm breakpoint, horizontal descriptions are kept for screen readers only.',
+                        'code' => <<<'BLADE'
+                            <x-gui::stepper current="plan" :steps="[
+                                'account' => ['label' => 'Account', 'description' => 'Your details', 'href' => '#'],
+                                'plan' => ['label' => 'Plan', 'description' => 'Pick a plan'],
+                                'invite' => ['label' => 'Invite', 'description' => 'Add your team'],
+                            ]" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Vertical',
+                        'code' => <<<'BLADE'
+                            <x-gui::stepper orientation="vertical" current="deploy" :steps="[
+                                'repo' => ['label' => 'Connect a repository', 'description' => 'GitHub, GitLab or Bitbucket.'],
+                                'build' => ['label' => 'Configure the build', 'description' => 'We detected Laravel.'],
+                                'deploy' => ['label' => 'Deploy', 'description' => 'Your first deploy takes about a minute.'],
+                                'domain' => ['label' => 'Add a domain', 'description' => 'Optional.'],
+                            ]" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Steps that need attention',
+                        'description' => 'Pass the keys of steps with problems to invalid, for example after validating the whole form at the end.',
+                        'code' => <<<'BLADE'
+                            <x-gui::stepper current="review" :invalid="['shipping']" :steps="['cart' => 'Cart', 'shipping' => 'Shipping', 'review' => 'Review']" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Composed',
+                        'description' => 'Set each step\'s status yourself. A step with a click handler (wire:click, x-on:click) renders as a button, which suits Livewire wizards; see the Livewire page.',
+                        'code' => <<<'BLADE'
+                            <x-gui::stepper aria-label="Checkout">
+                                <x-gui::stepper.step status="complete" x-on:click="alert('Back to the cart')">Cart</x-gui::stepper.step>
+                                <x-gui::stepper.step status="current">Payment</x-gui::stepper.step>
+                                <x-gui::stepper.step>Confirmation</x-gui::stepper.step>
+                            </x-gui::stepper>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['steps', 'array', 'null', 'key => label, or key => [label, description, href]. Or compose stepper.step.'],
+                    ['current', 'string | int', 'first key', 'Key of the current step. Earlier steps are complete.'],
+                    ['complete', 'bool', 'false', 'Mark every step complete, for a finished flow.'],
+                    ['invalid', 'array', '[]', 'Keys of steps that need attention.'],
+                    ['orientation', "'horizontal' | 'vertical'", "'horizontal'", 'Horizontal puts labels under the indicators; vertical puts them beside.'],
+                    ['aria-label', 'string', "'Progress'", 'Name of the navigation landmark.'],
+                    ['status (step)', "'complete' | 'current' | 'upcoming' | 'error'", "'upcoming'", 'The step\'s state.'],
+                    ['current (step)', 'bool', 'status is current', 'Set aria-current="step" on a step with another status, such as error.'],
+                    ['description (step)', 'string', 'null', 'Secondary text under the label.'],
+                    ['href (step)', 'string', 'null', 'Makes the step a link.'],
+                ],
+                'slots' => [
+                    ['default', 'stepper.step elements, when not using steps.'],
+                ],
+                'notes' => [
+                    'The current step has aria-current="step". Complete steps and steps that need attention add "completed" or "needs attention" to their label for screen readers, since the check mark and colours are hidden from them.',
+                    'Step numbers come from a CSS counter, so composed steps number themselves.',
+                    'The stepper only shows progress; your form decides which step is showing. When moving between steps, put focus on the new step\'s heading.',
+                ],
+            ],
+
             'modal' => [
                 'name' => 'Modal',
                 'group' => 'Overlays',
