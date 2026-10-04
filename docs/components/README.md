@@ -25,6 +25,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Avatar](avatar.md): A profile image, with initials when there is no image.
 - [Badge](badge.md): A small label for status, counts or categories.
 - [Spinner](spinner.md): Shows that something is loading. Buttons use it for their loading state.
+- [Icon](icon.md): Heroicons that GiraffeUI ships with, or any icon from a blade-icons set.
 - [Skeleton](skeleton.md): A placeholder shaped like the content that is loading.
 - [Empty state](empty-state.md): What to show when there is nothing to show yet, with a way forward.
 - [Card](card.md): A surface for grouping content, with an optional header and footer.
