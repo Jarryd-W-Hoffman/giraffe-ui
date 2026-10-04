@@ -2,6 +2,7 @@
 
 namespace Workbench\App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Blade;
@@ -19,6 +20,21 @@ class CatalogController
         $title = Catalog::examples()[$example] ?? abort(404);
 
         return view("catalog::examples.{$example}", Catalog::data() + ['title' => $title]);
+    }
+
+    /**
+     * The Sign in example's form: validates like a real one, then "signs in" with any credentials.
+     */
+    public function signIn(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:8'],
+        ], [
+            'password.min' => 'Passwords are at least 8 characters.',
+        ]);
+
+        return redirect('/catalog/examples/dashboard')->with('toast', ['message' => "Signed in as {$request->input('email')}.", 'color' => 'success']);
     }
 
     /**

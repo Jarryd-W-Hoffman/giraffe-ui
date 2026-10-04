@@ -2,6 +2,7 @@
 
 namespace Workbench\App\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Workbench\App\Console\GenerateDocs;
@@ -29,6 +30,9 @@ class WorkbenchServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'catalog');
         $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
+
+        // Pieces shared by the full-page examples, e.g. <x-example::app-shell>.
+        Blade::anonymousComponentPath(__DIR__.'/../../resources/views/examples/components', 'example');
 
         // Livewire is a dev dependency, used to prove the components work with it.
         if (class_exists(Livewire::class)) {
