@@ -4,7 +4,7 @@
 ])
 
 @php
-    $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Form::id($attributes->get('name'), $attributes->get('value')) ?? 'gui-'.\Illuminate\Support\Str::random(8);
+    $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Form::id($attributes->get('name'), $attributes->get('value')) ?? \JayAitch\GiraffeUI\Support\Id::make('gui');
     $hasLabel = $label !== null || ! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot);
 @endphp
 

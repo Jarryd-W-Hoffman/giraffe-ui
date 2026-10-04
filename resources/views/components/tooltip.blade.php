@@ -4,7 +4,7 @@
 ])
 
 @php
-    $id = $attributes->get('id') ?? 'gui-tooltip-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Id::make('gui-tooltip');
     $anchor = \JayAitch\GiraffeUI\Support\Anchor::name($id);
 @endphp
 

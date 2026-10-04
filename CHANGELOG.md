@@ -8,6 +8,15 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 42 components and a catalog.
 
+### Toggle group, and stable ids under Livewire
+
+#### Added
+- Segmented control `multiple`: a toggle group. The options become checkboxes named `name[]` in a labelled group, each a tab stop toggled with Space. Selected options fill with the primary colour, so they're easy to tell apart. `value` and old input take arrays, `wire:model` binds an array, errors on `name.*` mark the group invalid, and `required` is left off (it would require every box).
+- The Livewire demo's notification settings pick digest days with it.
+
+#### Fixed
+- Inside Livewire components, ids that GiraffeUI generates (Tabs, Accordion, Tooltip, Combobox, Date picker, Command palette and controls without a name) are now stable across renders. They were random, so every Livewire update changed them and the morph replaced those elements: a focused control lost focus, and Alpine state was reset. They now come from the Livewire component's id plus a counter. Outside Livewire they stay random.
+
 ### Number input and slider
 
 #### Added

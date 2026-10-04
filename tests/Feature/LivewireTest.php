@@ -83,6 +83,40 @@ describe('tabs', function () {
             ->set('tab', 'billing')
             ->assertSeeHtmlInOrder(['-tab-billing"', 'aria-selected="true"']);
     });
+
+    it('binds a multiple segmented control to an array', function () {
+        Livewire::test(SettingsTabs::class)
+            ->assertSee('On the server: mon, thu')
+            ->assertSeeHtml('name="digestDays[]"')
+            ->set('digestDays', ['tue'])
+            ->assertSee('On the server: tue')
+            ->set('digestDays', [])
+            ->assertSee('On the server: never');
+    });
+});
+
+describe('generated ids', function () {
+    it('keeps generated ids stable across Livewire renders, so morphing keeps elements and focus', function () {
+        $component = Livewire::test(SettingsTabs::class);
+        preg_match('/id="(gui-tabs-[a-f0-9]{6}-\d+)-tab-account"/', $component->html(), $before);
+
+        $component->set('digestDays', ['fri']);
+        preg_match('/id="(gui-tabs-[a-f0-9]{6}-\d+)-tab-account"/', $component->html(), $after);
+
+        expect($before[1] ?? null)->not->toBeNull()
+            ->and($after[1] ?? null)->toBe($before[1]);
+    });
+
+    it('keeps generated ids random outside a Livewire component', function () {
+        $a = (string) $this->blade('<x-gui::tooltip text="A"><x-gui::button>A</x-gui::button></x-gui::tooltip>');
+        $b = (string) $this->blade('<x-gui::tooltip text="A"><x-gui::button>A</x-gui::button></x-gui::tooltip>');
+
+        preg_match('/id="(gui-tooltip-[a-z0-9]+)"/', $a, $first);
+        preg_match('/id="(gui-tooltip-[a-z0-9]+)"/', $b, $second);
+
+        expect($first[1])->toMatch('/^gui-tooltip-[a-z0-9]{8}$/')
+            ->and($first[1])->not->toBe($second[1]);
+    });
 });
 
 describe('uploads', function () {
