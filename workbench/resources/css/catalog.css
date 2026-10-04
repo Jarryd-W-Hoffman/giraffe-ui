@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@import "../../../resources/css/giraffeui.css";
+
+/* The catalog's own views, and the example code in Catalog.php. */
+@source "../views";
+@source "../../app";
+
+/* Colours and radii the theme customiser can switch to at runtime. */
+@source inline("bg-{indigo,violet,blue,sky,teal,emerald,rose,orange,zinc}-600");
+@source inline("text-{indigo,violet,blue,sky,teal,emerald,rose,orange,zinc}-400");
+@source inline("rounded-{none,sm,md,lg,xl,2xl}");
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+[x-cloak] {
+    display: none !important;
+}

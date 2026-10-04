@@ -1,0 +1,8 @@
+laravel: '@testbench'
+
+providers:
+  - JayAitch\GiraffeUI\GiraffeUIServiceProvider
+  - Workbench\App\Providers\WorkbenchServiceProvider
+
+workbench:
+  start: '/catalog'

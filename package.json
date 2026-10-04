@@ -1,0 +1,12 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "catalog:css": "tailwindcss -i workbench/resources/css/catalog.css -o workbench/dist/catalog.css",
+        "catalog:watch": "tailwindcss -i workbench/resources/css/catalog.css -o workbench/dist/catalog.css --watch"
+    },
+    "devDependencies": {
+        "@tailwindcss/cli": "^4.3",
+        "tailwindcss": "^4.3"
+    }
+}
