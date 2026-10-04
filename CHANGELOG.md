@@ -6,7 +6,17 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 33 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 34 components and a catalog.
+
+### Command palette
+
+#### Added
+- Command palette: ⌘K / Ctrl+K opens a native `<dialog>` with a search box (a combobox using `aria-activedescendant`) over grouped options. Typing filters by text and `keywords`, and groups with no matches hide. Arrow keys, Home and End move; Enter or a click activates the item, a real link or button, so `href`, `wire:click` and `x-on:click` all work. The palette closes before an item's own click handler runs. Items take an icon and a shortcut hint.
+- The catalog has its own palette: search every page and switch theme.
+
+#### Fixed
+- Combobox: pressing Enter straight after typing could pick the previously highlighted option, because the highlight updates a tick later. Enter now uses the first match when the highlight is stale. The palette had the same race and the same fix.
+- Catalog: Livewire requests failed when Testbench regenerated its skeleton `.env` with a database cache, so the workbench now sets file cache and sessions itself.
 
 ### Drawer, Progress and Kbd
 

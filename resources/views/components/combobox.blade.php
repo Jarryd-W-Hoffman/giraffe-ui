@@ -90,6 +90,11 @@
             this.hide();
             this.$nextTick(() => this.$refs.hidden.dispatchEvent(new Event('change', { bubbles: true })));
         },
+        // The highlighted option, or the first match if the highlight is stale (e.g. Enter straight after typing).
+        current() {
+            const option = document.getElementById(this.active);
+            return option && this.matches(option) ? option : this.visible()[0];
+        },
         typed() {
             this.filtering = true;
             this.show();
@@ -120,7 +125,7 @@
         x-on:click="open ? hide() : show()"
         x-on:keydown.down.prevent="$event.altKey ? show() : move(1)"
         x-on:keydown.up.prevent="move(-1)"
-        x-on:keydown.enter="if (open) { $event.preventDefault(); choose(document.getElementById(active)); }"
+        x-on:keydown.enter="if (open) { $event.preventDefault(); choose(current()); }"
         x-on:keydown.escape.prevent="open ? hide() : (value = '', query = '')"
         x-on:keydown.tab="hide()"
         x-on:blur="hide()"

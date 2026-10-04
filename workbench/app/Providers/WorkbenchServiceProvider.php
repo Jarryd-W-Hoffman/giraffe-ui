@@ -12,6 +12,16 @@ use Workbench\App\Livewire\UsersTable;
 class WorkbenchServiceProvider extends ServiceProvider
 {
     /**
+     * The catalog runs on Testbench's bare app, which has no database tables. Livewire needs a cache and a session
+     * that persist between requests, so keep both on disk whatever the generated skeleton .env says.
+     */
+    public function register(): void
+    {
+        $this->app['config']->set('cache.default', 'file');
+        $this->app['config']->set('session.driver', 'file');
+    }
+
+    /**
      * Bootstrap the catalog.
      */
     public function boot(): void

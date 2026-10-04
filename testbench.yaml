@@ -5,8 +5,8 @@ providers:
   - JayAitch\GiraffeUI\GiraffeUIServiceProvider
   - Workbench\App\Providers\WorkbenchServiceProvider
 
-# The catalog runs on Testbench's bare app, which has no database tables. Livewire needs a cache and a session
-# that persist between requests, so keep both on disk.
+# WorkbenchServiceProvider also forces file cache and sessions, because the served app reads the generated
+# skeleton .env, which can say otherwise.
 env:
   # A fixed key for the local catalog only. It protects nothing real.
   - APP_KEY=base64:R2lyYWZmZVVJIGNhdGFsb2cga2V5LCBub3QgcmVhbCE=

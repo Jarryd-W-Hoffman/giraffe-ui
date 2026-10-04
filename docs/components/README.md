@@ -41,6 +41,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 
 - [Modal](modal.md): A dialog over the page. Built on the native &lt;dialog&gt; element, so focus trapping, Escape and the backdrop work without JavaScript.
 - [Drawer](drawer.md): A panel that slides in from the side. The same native &lt;dialog&gt; as Modal, so focus trapping, Escape and the backdrop work without JavaScript.
+- [Command palette](command-palette.md): Search pages and run actions from the keyboard with ⌘K / Ctrl+K. This catalog has one: try it.
 - [Dropdown](dropdown.md): A menu of actions. A native popover positioned with CSS anchor positioning, with the menu keyboard pattern added by Alpine.
 - [Popover](popover.md): Rich content in a floating panel. A native popover, so Escape and clicking outside close it without JavaScript.
 - [Tooltip](tooltip.md): A short label shown on hover and keyboard focus. Escape dismisses it, and you can hover over it.
