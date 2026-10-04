@@ -4,6 +4,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [Unreleased]
 
+### Phase 2a: overlays and disclosure
+
+#### Added
+- Modal, built on native `<dialog>`: the browser handles focus trapping, Escape, the backdrop and returning focus. Open and close it with `command`/`commandfor` buttons (Baseline since Safari 26.2) and no JavaScript. Has title, description, sizes, a scrolling body, a footer, `<x-gui::modal.close>`, `:dismissible="false"` and `:open` for reopening after validation errors. `wire:ignore.self` keeps it open across Livewire re-renders.
+- Accordion, built on native `<details>`. `exclusive` uses a shared `name` so the browser keeps one item open. Works without JavaScript.
+- Tabs, following the WAI-ARIA tabs pattern: arrow keys, Home/End, roving tabindex, and linked tab/panel ids. The selected tab is rendered on the server, so there's no flash before Alpine starts. Supports `wire:model` via `x-modelable`, and underline and pills variants. Needs Alpine (Livewire includes it).
+- Catalog pages for all three, and usage notes in the catalog and generated docs.
+
 ### Phase 1: forms and display
 
 #### Added

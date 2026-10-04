@@ -839,6 +839,218 @@ class Catalog
                 'slots' => [],
             ],
 
+            'modal' => [
+                'name' => 'Modal',
+                'group' => 'Overlays',
+                'description' => 'A dialog over the page. Built on the native <dialog> element, so focus trapping, Escape and the backdrop work without JavaScript.',
+                'preview' => 'inline',
+                'usage' => <<<'BLADE'
+                    <x-gui::button commandfor="confirm" command="show-modal">Open</x-gui::button>
+
+                    <x-gui::modal id="confirm" title="Are you sure?">
+                        …
+                    </x-gui::modal>
+                    BLADE,
+                'examples' => [
+                    [
+                        'title' => 'Confirm',
+                        'description' => 'Buttons open and close the dialog with the command and commandfor attributes. No JavaScript needed.',
+                        'code' => <<<'BLADE'
+                            <x-gui::button color="danger" commandfor="delete-project" command="show-modal">Delete project</x-gui::button>
+
+                            <x-gui::modal id="delete-project" title="Delete project?" description="This permanently deletes the project and its deployments." size="sm">
+                                <x-slot:footer>
+                                    <x-gui::modal.close>Cancel</x-gui::modal.close>
+                                    <x-gui::button color="danger">Delete</x-gui::button>
+                                </x-slot:footer>
+                            </x-gui::modal>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'With a form',
+                        'description' => 'Put the form around the body and footer. After a failed submission, reopen it with :open="$errors->any()".',
+                        'code' => <<<'BLADE'
+                            <x-gui::button variant="outline" commandfor="edit-profile" command="show-modal">Edit profile</x-gui::button>
+
+                            <x-gui::modal id="edit-profile" title="Edit profile" description="Changes are visible to your team.">
+                                <form id="edit-profile-form" class="space-y-4" onsubmit="event.preventDefault(); this.closest('dialog').close()">
+                                    <x-gui::field label="Name" name="name">
+                                        <x-gui::input value="Ada Lovelace" />
+                                    </x-gui::field>
+                                    <x-gui::field label="Bio" name="bio">
+                                        <x-gui::textarea>Analyst, metaphysician and founder of scientific computing.</x-gui::textarea>
+                                    </x-gui::field>
+                                </form>
+
+                                <x-slot:footer>
+                                    <x-gui::modal.close>Cancel</x-gui::modal.close>
+                                    <x-gui::button type="submit" form="edit-profile-form">Save</x-gui::button>
+                                </x-slot:footer>
+                            </x-gui::modal>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Required action',
+                        'description' => 'With :dismissible="false" there is no close button, and Escape and backdrop clicks are ignored where the browser supports closedby.',
+                        'code' => <<<'BLADE'
+                            <x-gui::button variant="outline" color="secondary" commandfor="terms" command="show-modal">Show terms</x-gui::button>
+
+                            <x-gui::modal id="terms" title="Updated terms" :dismissible="false" size="sm">
+                                We've updated our terms of service. Please accept them to continue.
+
+                                <x-slot:footer>
+                                    <x-gui::button commandfor="terms" command="close">Accept</x-gui::button>
+                                </x-slot:footer>
+                            </x-gui::modal>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Long content',
+                        'description' => 'The body scrolls; the header and footer stay put.',
+                        'code' => <<<'BLADE'
+                            <x-gui::button variant="ghost" commandfor="changelog" command="show-modal">What's new</x-gui::button>
+
+                            <x-gui::modal id="changelog" title="What's new" size="lg">
+                                <div class="space-y-4">
+                                    @foreach (range(1, 12) as $release)
+                                        <div>
+                                            <p class="font-medium">Release 1.{{ $release }}</p>
+                                            <p class="text-zinc-600 dark:text-zinc-400">Faster deploys, fewer bugs and a better dark mode.</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <x-slot:footer>
+                                    <x-gui::modal.close>Close</x-gui::modal.close>
+                                </x-slot:footer>
+                            </x-gui::modal>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['id', 'string', 'required', 'Used by buttons to open and close it.'],
+                    ['title', 'string', 'null', 'Heading, linked with aria-labelledby.'],
+                    ['description', 'string', 'null', 'Text under the title, linked with aria-describedby.'],
+                    ['size', "'sm' | 'md' | 'lg' | 'xl'", "'md'", 'Maximum width.'],
+                    ['dismissible', 'bool', 'true', 'Show a close button and allow Escape and backdrop clicks.'],
+                    ['open', 'bool', 'false', 'Open when the page loads, e.g. :open="$errors->any()".'],
+                ],
+                'slots' => [
+                    ['default', 'The body. Scrolls when it is tall.'],
+                    ['footer', 'Actions. Stacked on small screens, right-aligned on larger ones.'],
+                ],
+                'notes' => [
+                    'Open with <button commandfor="id" command="show-modal">, close with command="close" or <x-gui::modal.close>.',
+                    'From JavaScript: document.getElementById(\'id\').showModal() and .close().',
+                    'From Livewire: $this->js("document.getElementById(\'id\').showModal()"). The dialog has wire:ignore.self, so re-renders don\'t close it.',
+                ],
+            ],
+
+            'accordion' => [
+                'name' => 'Accordion',
+                'group' => 'Disclosure',
+                'description' => 'Sections that expand and collapse. Built on native <details>, so it works without JavaScript.',
+                'preview' => 'block',
+                'usage' => <<<'BLADE'
+                    <x-gui::accordion exclusive>
+                        <x-gui::accordion.item title="Question">Answer</x-gui::accordion.item>
+                    </x-gui::accordion>
+                    BLADE,
+                'examples' => [
+                    [
+                        'title' => 'FAQ',
+                        'description' => 'With exclusive, opening one item closes the others.',
+                        'code' => <<<'BLADE'
+                            <x-gui::accordion exclusive class="mx-auto max-w-lg">
+                                <x-gui::accordion.item title="Is GiraffeUI free?" open>
+                                    Yes. Every component is MIT licensed.
+                                </x-gui::accordion.item>
+                                <x-gui::accordion.item title="Do I need Livewire?">
+                                    No. Components are plain Blade. Livewire works great with them, but it's optional.
+                                </x-gui::accordion.item>
+                                <x-gui::accordion.item title="Can I change the colours?">
+                                    Yes. Override the CSS variables in your own theme. See the theming guide.
+                                </x-gui::accordion.item>
+                            </x-gui::accordion>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Independent items',
+                        'description' => 'Without exclusive, any number can be open.',
+                        'code' => <<<'BLADE'
+                            <x-gui::accordion class="mx-auto max-w-lg">
+                                <x-gui::accordion.item title="Shipping" open>Orders ship within 2 business days.</x-gui::accordion.item>
+                                <x-gui::accordion.item title="Returns" open>Return anything within 30 days.</x-gui::accordion.item>
+                                <x-gui::accordion.item title="Warranty">Two years on all hardware.</x-gui::accordion.item>
+                            </x-gui::accordion>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['exclusive', 'bool', 'false', 'Only one item open at a time.'],
+                    ['name', 'string', 'generated', 'The shared details name when exclusive.'],
+                    ['title (item)', 'string', 'required', 'The item heading.'],
+                    ['open (item)', 'bool', 'false', 'Start expanded.'],
+                ],
+                'slots' => [
+                    ['default', 'Accordion items, or an item\'s content.'],
+                ],
+            ],
+
+            'tabs' => [
+                'name' => 'Tabs',
+                'group' => 'Disclosure',
+                'description' => 'Switch between panels of related content. Follows the WAI-ARIA tabs pattern. Needs Alpine, which Livewire includes.',
+                'preview' => 'block',
+                'usage' => <<<'BLADE'
+                    <x-gui::tabs :tabs="['account' => 'Account', 'password' => 'Password']">
+                        <x-gui::tabs.panel name="account">…</x-gui::tabs.panel>
+                        <x-gui::tabs.panel name="password">…</x-gui::tabs.panel>
+                    </x-gui::tabs>
+                    BLADE,
+                'examples' => [
+                    [
+                        'title' => 'Underline',
+                        'description' => 'Arrow keys move between tabs, Home and End jump to the first and last, and Tab moves into the panel.',
+                        'code' => <<<'BLADE'
+                            <x-gui::tabs :tabs="['account' => 'Account', 'password' => 'Password', 'notifications' => 'Notifications']" class="mx-auto max-w-lg">
+                                <x-gui::tabs.panel name="account">
+                                    <x-gui::field label="Name" name="name"><x-gui::input value="Ada Lovelace" /></x-gui::field>
+                                </x-gui::tabs.panel>
+                                <x-gui::tabs.panel name="password">
+                                    <x-gui::field label="New password" name="password"><x-gui::input type="password" /></x-gui::field>
+                                </x-gui::tabs.panel>
+                                <x-gui::tabs.panel name="notifications">
+                                    <x-gui::switch name="digest" label="Weekly digest" checked />
+                                </x-gui::tabs.panel>
+                            </x-gui::tabs>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Pills',
+                        'code' => <<<'BLADE'
+                            <x-gui::tabs variant="pills" :tabs="['monthly' => 'Monthly', 'yearly' => 'Yearly']" selected="yearly" class="mx-auto max-w-lg">
+                                <x-gui::tabs.panel name="monthly"><p class="text-2xl font-semibold">$12 <span class="text-sm font-normal text-zinc-500">/ month</span></p></x-gui::tabs.panel>
+                                <x-gui::tabs.panel name="yearly"><p class="text-2xl font-semibold">$120 <span class="text-sm font-normal text-zinc-500">/ year</span></p></x-gui::tabs.panel>
+                            </x-gui::tabs>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['tabs', 'array', '[]', 'name => label pairs, in order.'],
+                    ['selected', 'string', 'first tab', 'The tab selected on load.'],
+                    ['variant', "'underline' | 'pills'", "'underline'", ''],
+                    ['id', 'string', 'generated', 'Prefix for tab and panel ids.'],
+                    ['name (panel)', 'string', 'required', 'Matches a key in tabs.'],
+                ],
+                'slots' => [
+                    ['default', 'The panels.'],
+                ],
+                'notes' => [
+                    'Bind the selected tab with wire:model="tab" or x-model.',
+                ],
+            ],
+
             'table' => [
                 'name' => 'Table',
                 'group' => 'Data',

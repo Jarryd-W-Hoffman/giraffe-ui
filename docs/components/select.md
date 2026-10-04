@@ -10,7 +10,7 @@ A native select, styled to match the other controls.
 
 ## Options from an array
 
-Pass value => label pairs. The value prop (or old input) is selected.
+Pass value =&gt; label pairs. The value prop (or old input) is selected.
 
 ```blade
 <x-gui::field label="Role" name="role">
@@ -41,7 +41,7 @@ Write your own options and optgroups.
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `options` | `iterable` | `null` | value => label pairs. |
+| `options` | `iterable` | `null` | value =&gt; label pairs. |
 | `placeholder` | `string` | `null` | A disabled first option, selected when there is no value. |
 | `value` | `string \| array` | `null` | The selected value. Defaults to old input. |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Height and text size. |

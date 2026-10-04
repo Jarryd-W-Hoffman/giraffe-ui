@@ -26,6 +26,15 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Card](card.md): A surface for grouping content, with an optional header and footer.
 - [Separator](separator.md): A line that divides content, optionally with a label.
 
+## Overlays
+
+- [Modal](modal.md): A dialog over the page. Built on the native &lt;dialog&gt; element, so focus trapping, Escape and the backdrop work without JavaScript.
+
+## Disclosure
+
+- [Accordion](accordion.md): Sections that expand and collapse. Built on native &lt;details&gt;, so it works without JavaScript.
+- [Tabs](tabs.md): Switch between panels of related content. Follows the WAI-ARIA tabs pattern. Needs Alpine, which Livewire includes.
+
 ## Data
 
 - [Table](table.md): Displays rows of data with headings and an empty state.

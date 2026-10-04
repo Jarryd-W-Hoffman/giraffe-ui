@@ -78,7 +78,7 @@ Give icon-only buttons an aria-label so screen readers can name them.
 
 ## As a link
 
-Pass an href to render an <a>. Add external to open in a new tab safely.
+Pass an href to render an &lt;a&gt;. Add external to open in a new tab safely.
 
 ```blade
 <x-gui::button href="#">Internal link</x-gui::button>
@@ -119,7 +119,7 @@ Any attribute passes straight through, including x-on and wire:click.
 | `variant` | `'solid' \| 'outline' \| 'ghost'` | `'solid'` | Visual style. |
 | `color` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'primary'` | Theme colour. Unknown values fall back to primary. |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Height, padding and text size. |
-| `href` | `string` | `null` | Renders an <a> instead of a <button>. |
+| `href` | `string` | `null` | Renders an &lt;a&gt; instead of a &lt;button&gt;. |
 | `external` | `bool` | `false` | With href, opens in a new tab with rel="noopener noreferrer". |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Ignored for links. |
 | `disabled` | `bool` | `false` | Disables a button, or removes the href from a link and sets aria-disabled. |

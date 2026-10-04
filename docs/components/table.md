@@ -18,7 +18,7 @@ Pass a list of keys and they become headings automatically.
 
 ## Custom labels and nested keys
 
-Use a key => label map. Keys are read with data_get, so team.name works.
+Use a key =&gt; label map. Keys are read with data_get, so team.name works.
 
 ```blade
 <x-gui::table
@@ -39,7 +39,7 @@ Use a key => label map. Keys are read with data_get, so team.name works.
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `columns` | `array` | `[]` | A list of keys (['name', 'email']) or a key => label map. |
+| `columns` | `array` | `[]` | A list of keys (['name', 'email']) or a key =&gt; label map. |
 | `rows` | `iterable` | `[]` | Arrays, objects, Eloquent models or a collection. |
 
 Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
