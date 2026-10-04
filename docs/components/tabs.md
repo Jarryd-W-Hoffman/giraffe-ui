@@ -33,8 +33,8 @@ Arrow keys move between tabs, Home and End jump to the first and last, and Tab m
 
 ```blade
 <x-gui::tabs variant="pills" :tabs="['monthly' => 'Monthly', 'yearly' => 'Yearly']" selected="yearly" class="mx-auto max-w-lg">
-    <x-gui::tabs.panel name="monthly"><p class="text-2xl font-semibold">$12 <span class="text-sm font-normal text-zinc-500">/ month</span></p></x-gui::tabs.panel>
-    <x-gui::tabs.panel name="yearly"><p class="text-2xl font-semibold">$120 <span class="text-sm font-normal text-zinc-500">/ year</span></p></x-gui::tabs.panel>
+    <x-gui::tabs.panel name="monthly"><p class="text-2xl font-semibold">$12 <span class="text-sm font-normal text-zinc-600 dark:text-zinc-400">/ month</span></p></x-gui::tabs.panel>
+    <x-gui::tabs.panel name="yearly"><p class="text-2xl font-semibold">$120 <span class="text-sm font-normal text-zinc-600 dark:text-zinc-400">/ year</span></p></x-gui::tabs.panel>
 </x-gui::tabs>
 ```
 

@@ -94,7 +94,7 @@
                         type="button"
                         role="tab"
                         class="-mb-px border-b-2 px-1 pb-2 font-medium transition-colors"
-                        x-bind:class="tab === '{{ $tab }}' ? 'border-zinc-900 text-zinc-900 dark:border-zinc-100 dark:text-zinc-100' : 'border-transparent text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100'"
+                        x-bind:class="tab === '{{ $tab }}' ? 'border-zinc-900 text-zinc-900 dark:border-zinc-100 dark:text-zinc-100' : 'border-transparent text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100'"
                         x-bind:aria-selected="tab === '{{ $tab }}'"
                         x-on:click="tab = '{{ $tab }}'"
                     >{{ $label }}</button>

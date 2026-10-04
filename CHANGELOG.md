@@ -8,6 +8,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 26 components and a catalog.
 
+### Accessibility audit
+
+#### Added
+- `npm run audit:a11y` runs axe-core (WCAG 2.2 A and AA) on every catalog page in light and dark mode, and CI runs it on every pull request.
+
+#### Changed
+- Disabled checkboxes, radios and switches dim the control and use lighter (still 4.5:1) text, instead of fading the whole row to 60% opacity, which took descriptions down to 2.9:1.
+
 ### Combobox
 
 #### Added
