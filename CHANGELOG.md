@@ -6,7 +6,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 34 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 35 components and a catalog.
+
+### File upload
+
+#### Added
+- File upload: a drop zone with a real `<input type="file">` stretched invisibly across it. Clicking and dropping are native, it works without JavaScript, and the field's label stays the only accessible name. Alpine adds a list of chosen files with sizes, and a progress bar from Livewire's upload events. It works in a Field (label, hint, errors), and `wire:model` goes on the input.
+- A Livewire upload demo in the catalog.
+- `[x-cloak]` is hidden in `giraffeui.css`.
 
 ### Textarea autosize and character count
 

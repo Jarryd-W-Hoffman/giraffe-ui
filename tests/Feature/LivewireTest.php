@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
+use Workbench\App\Livewire\AvatarUpload;
 use Workbench\App\Livewire\ProfileForm;
 use Workbench\App\Livewire\SettingsTabs;
 use Workbench\App\Livewire\UsersTable;
@@ -71,5 +74,23 @@ describe('tabs', function () {
             ->assertSeeHtml('wire:model.live="tab"')
             ->set('tab', 'billing')
             ->assertSeeHtmlInOrder(['-tab-billing"', 'aria-selected="true"']);
+    });
+});
+
+describe('uploads', function () {
+    it('validates and uploads an image', function () {
+        Storage::fake('local');
+
+        Livewire::test(AvatarUpload::class)
+            ->call('save')
+            ->assertHasErrors(['avatar' => 'required'])
+            ->assertSee('Choose an image to upload.')
+            ->set('avatar', UploadedFile::fake()->create('notes.pdf', 10, 'application/pdf'))
+            ->call('save')
+            ->assertHasErrors(['avatar' => 'image'])
+            ->set('avatar', UploadedFile::fake()->image('ada.png'))
+            ->call('save')
+            ->assertHasNoErrors()
+            ->assertDispatched('toast', message: 'Uploaded ada.png.', color: 'success');
     });
 });
