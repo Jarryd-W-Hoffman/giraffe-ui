@@ -3,7 +3,7 @@
     'description' => null,
 ])
 
-<div {{ $attributes->class('rounded-gui border border-zinc-200 bg-white text-zinc-900 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100') }}>
+<div {{ $attributes->class('min-w-0 rounded-gui border border-zinc-200 bg-white text-zinc-900 shadow-xs dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100') }}>
     @if ($title || $description || isset($actions))
         <div class="flex items-start justify-between gap-4 px-6 pt-6">
             <div class="min-w-0 space-y-1">

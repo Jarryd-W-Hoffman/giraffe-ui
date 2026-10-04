@@ -43,6 +43,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 
 ## Navigation
 
+- [Sidebar](sidebar.md): An application shell with side navigation: a sticky column on large screens and a drawer on small ones.
 - [Breadcrumbs](breadcrumbs.md): Shows where the current page sits in the site. Follows the WAI-ARIA breadcrumb pattern.
 
 ## Overlays

@@ -42,3 +42,12 @@ it('merges classes onto the wrapper', function () {
     $this->blade('<x-gui::table :columns="[\'name\']" :rows="[]" class="mt-6" />')
         ->assertSee('mt-6', false);
 });
+
+it('lets keyboard users scroll a wide table, and names the region when labelled', function () {
+    $plain = (string) $this->blade('<x-gui::table :columns="[\'name\']" :rows="[]" />');
+    $labelled = (string) $this->blade('<x-gui::table label="Recent orders" :columns="[\'name\']" :rows="[]" />');
+
+    expect($plain)->toContain('x-init="new ResizeObserver(')
+        ->not->toContain('role="region"')
+        ->and($labelled)->toMatch('/<div\s+class="overflow-x-auto[^"]*"\s+role="region" aria-label="Recent orders"/');
+});

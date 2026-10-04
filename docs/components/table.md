@@ -89,6 +89,7 @@ Pass a paginator as rows and the table adds pagination for you.
 | `sortable` | `array` | `[]` | Column keys whose headings sort. |
 | `sort` | `string` | `null` | The column currently sorted. |
 | `direction` | `'asc' \| 'desc'` | `'asc'` | The current sort direction. |
+| `label` | `string` | `null` | Names the table's scrolling region for screen readers. While a wide table overflows, its scroller is keyboard focusable either way. |
 | `sortable (heading)` | `string` | `null` | Makes a composed heading sortable by this key. |
 | `wrap (cell)` | `bool` | `false` | Let a cell's text wrap. |
 

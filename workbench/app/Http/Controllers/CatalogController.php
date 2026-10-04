@@ -12,6 +12,16 @@ use Workbench\App\Catalog;
 class CatalogController
 {
     /**
+     * Show a full-page example on its own, without the catalog around it.
+     */
+    public function example(string $example): View
+    {
+        $title = Catalog::examples()[$example] ?? abort(404);
+
+        return view("catalog::examples.{$example}", Catalog::data() + ['title' => $title]);
+    }
+
+    /**
      * Show a guide or component page.
      */
     public function show(string $page): View
@@ -110,6 +120,9 @@ class CatalogController
         $components = collect(Catalog::components())
             ->map(fn ($component, $slug) => ['slug' => $slug, 'title' => $component['name'], 'group' => $component['group'] ?? 'Components']);
 
-        return $guides->merge($components)->values()->all();
+        $examples = collect(Catalog::examples())
+            ->map(fn ($title, $slug) => ['slug' => "examples/{$slug}", 'title' => $title, 'group' => 'Examples']);
+
+        return $guides->merge($components)->merge($examples)->values()->all();
     }
 }

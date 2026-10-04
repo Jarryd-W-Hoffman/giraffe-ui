@@ -6,7 +6,20 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 42 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 43 components and a catalog.
+
+### Sidebar layout and full-page examples
+
+#### Added
+- Sidebar layout: an application shell. From the `lg` breakpoint the sidebar is a sticky column with brand, navigation and footer slots; below it, a menu button opens the same navigation in a Drawer (focus trapped, Escape closes, focus returns). A header slot holds the top bar's contents.
+- Sidebar navigation: `sidebar` (a labelled `nav`), `sidebar.group` (optionally headed, named without ids so it can render twice) and `sidebar.item` (icon, badge, and `aria-current="page"` when its URL is the current one, or when `current` says so).
+- Table `label`: names the scrolling region for screen readers.
+- Icon: `bars-3`.
+- Catalog: an Examples section of full pages built only from GiraffeUI components, starting with a Dashboard (sidebar layout, stats, a table of orders, goals, an invite modal and an account menu).
+
+#### Fixed
+- Wide tables can be scrolled with the keyboard: while a table overflows its container, the scroller joins the tab order and shows a focus ring (Chrome and Firefox did this already; Safari didn't).
+- Card has `min-w-0`, so a wide table in a card in a grid or flex layout scrolls inside the card instead of stretching the page.
 
 ### Toggle group, and stable ids under Livewire
 
