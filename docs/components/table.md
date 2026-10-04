@@ -1,39 +1,51 @@
 # Table
 
+_Generated from `workbench/app/Catalog.php`. Edit that file, then run `composer docs`._
+
+Displays rows of data with headings and an empty state.
+
 ```blade
 <x-gui::table :columns="['name', 'email']" :rows="$users" />
 ```
 
-## Props
+## Basic
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `columns` | array | `[]` | A list of keys (`['name', 'email']`), labelled automatically ("First Name" from `first_name`), or a `key => label` map. |
-| `rows` | iterable | `[]` | Arrays, objects, Eloquent models or a collection. |
+Pass a list of keys and they become headings automatically.
 
-Keys are read with `data_get`, so nested values work: `['team.name' => 'Team']`.
-Every value is escaped.
+```blade
+<x-gui::table :columns="['name', 'email', 'role']" :rows="$users" />
+```
 
-Extra attributes such as `class` go on the scrolling wrapper.
+## Custom labels and nested keys
 
-## Slots
-
-| Slot | Purpose |
-|---|---|
-| `empty` | Shown when there are no rows. Defaults to "No results." |
-
-## Examples
+Use a key => label map. Keys are read with data_get, so team.name works.
 
 ```blade
 <x-gui::table
-    :columns="['name' => 'Name', 'email' => 'Email address', 'team.name' => 'Team']"
+    :columns="['name' => 'Full name', 'team.name' => 'Team', 'role' => 'Role']"
     :rows="$users"
-    class="mt-6"
->
+/>
+```
+
+## Empty state
+
+```blade
+<x-gui::table :columns="['name', 'email']" :rows="[]">
     <x-slot:empty>No users yet. Invite your first teammate.</x-slot:empty>
 </x-gui::table>
 ```
 
-## Coming later
+## Props
 
-Custom cell content, sortable headers and pagination are planned for v0.3.
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `columns` | `array` | `[]` | A list of keys (['name', 'email']) or a key => label map. |
+| `rows` | `iterable` | `[]` | Arrays, objects, Eloquent models or a collection. |
+
+Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element.
+
+## Slots
+
+| Slot | Description |
+|---|---|
+| `empty` | Shown when there are no rows. Defaults to "No results." |

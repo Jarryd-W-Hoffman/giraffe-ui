@@ -31,7 +31,7 @@ jobs:
         run: vendor/bin/pest
 
   lint:
-    name: Pint
+    name: Pint and docs
     runs-on: ubuntu-latest
 
     steps:
@@ -44,6 +44,11 @@ jobs:
 
       - run: composer install --no-interaction --prefer-dist
       - run: vendor/bin/pint --test
+
+      - name: Component docs are up to date
+        run: |
+          composer docs
+          git diff --exit-code docs || (echo "::error::docs/components is out of date. Run composer docs and commit the result." && exit 1)
 
   css:
     name: Tailwind finds every class

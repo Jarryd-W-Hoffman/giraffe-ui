@@ -47,10 +47,30 @@ Then rebuild your CSS (`npm run dev` or `npm run build`).
 
 ## Components
 
-| Component | Docs |
+| Group | Components |
 |---|---|
-| Button | [docs/components/button.md](docs/components/button.md) |
-| Table | [docs/components/table.md](docs/components/table.md) |
+| Actions | [Button](docs/components/button.md) |
+| Forms | [Field](docs/components/field.md), [Input](docs/components/input.md), [Textarea](docs/components/textarea.md), [Select](docs/components/select.md), [Checkbox](docs/components/checkbox.md), [Radio](docs/components/radio.md), [Switch](docs/components/switch.md), [Fieldset](docs/components/fieldset.md), [Label](docs/components/label.md) |
+| Display | [Alert](docs/components/alert.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md) |
+| Data | [Table](docs/components/table.md) |
+
+### Forms
+
+Wrap a control in a field to get a linked label, hint and error message. Errors come from Laravel's `$errors` bag, using the field's `name`:
+
+```blade
+<form method="POST" action="/profile">
+    @csrf
+
+    <x-gui::field label="Email" name="email" hint="We'll never share it." required>
+        <x-gui::input type="email" />
+    </x-gui::field>
+
+    <x-gui::button type="submit">Save</x-gui::button>
+</form>
+```
+
+The input gets `id`, `name`, `required`, `aria-invalid` and `aria-describedby` automatically, and is refilled with old input after a failed submission. With Livewire, put `wire:model` on the control and keep `name` on the field.
 
 ## Conventions
 
@@ -81,6 +101,7 @@ Override any token in your own `@theme` block, after the GiraffeUI import:
 | `--color-gui-warning` | amber-400 |
 | `--color-gui-danger` | red-600 |
 | `--color-gui-info` | sky-700 |
+| `--color-gui-input` | zinc-500 (input borders and switch tracks) |
 | `--radius-gui` | `--radius-md` |
 
 Each colour has three tokens:
@@ -117,13 +138,14 @@ npm install
 composer test        # Pest
 composer lint        # Pint
 composer catalog     # Build the catalog's CSS and serve it at http://localhost:8000/catalog
+composer docs        # Regenerate docs/components from the catalog
 ```
 
 ### Catalog
 
 The catalog is a docs-style site, like shadcn/ui's, for browsing and trying every component. Each component page has a live playground (the real component, re-rendered on the server as you change props), examples with Preview/Code tabs, and an API reference. There's also a theme customiser that generates the `@theme` overrides.
 
-It runs on [Testbench Workbench](https://packages.tools/workbench) and lives in `workbench/`. It is not shipped with the package. To add a component, add an entry to `workbench/app/Catalog.php`. Example code is rendered as-is, so what you read is exactly what ran. While editing styles, run `npm run catalog:watch` in a second terminal.
+It runs on [Testbench Workbench](https://packages.tools/workbench) and lives in `workbench/`. It is not shipped with the package. To add a component, add an entry to `workbench/app/Catalog.php`, then run `composer docs`; the Markdown in `docs/components` is generated from the catalog, and CI fails if it's out of date. Example code is rendered as-is, so what you read is exactly what ran. While editing styles, run `npm run catalog:watch` in a second terminal.
 
 ## License
 

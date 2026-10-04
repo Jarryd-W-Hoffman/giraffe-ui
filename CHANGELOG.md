@@ -4,9 +4,23 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [Unreleased]
 
-Phase 0: a rebuild on Tailwind CSS v4 and Laravel 13.
+### Phase 1: forms and display
 
-### Added
+#### Added
+- Form components: Field, Label, Input, Textarea, Select, Checkbox, Radio, Switch and Fieldset.
+  - Field links its label, hint and error to the control with `for`/`id` and `aria-describedby`, and passes down `name` and `required`.
+  - Controls set `aria-invalid` from Laravel's error bag (by `name`, or by `wire:model` when there's no name), and refill old input except for passwords and files.
+  - Array names work: `address[city]` gets the id `gui-address-city` and the error key `address.city`.
+- Display components: Alert, Avatar, Badge, Card and Separator.
+- `--color-gui-input` token for input borders and switch tracks. zinc-500 is the lightest shade with 3:1 contrast in both modes.
+- Catalog pages for every component, grouped in the sidebar, with playgrounds for Input, Alert, Avatar and Badge.
+- `composer docs` generates `docs/components/*.md` from the catalog. CI checks they're up to date.
+
+### Phase 0: foundation
+
+A rebuild on Tailwind CSS v4 and Laravel 13.
+
+#### Added
 - `resources/css/giraffeui.css`: one file to import, with `@theme` colour and radius tokens (`--color-gui-*`, `--radius-gui`).
 - `--color-gui-*-text` tokens for outline/ghost text, borders and focus rings, with lighter dark-mode shades. Every default colour pairing meets WCAG AA in light and dark mode.
 - `leading` and `trailing` slots on the button, for icons.
@@ -14,7 +28,7 @@ Phase 0: a rebuild on Tailwind CSS v4 and Laravel 13.
 - A component catalog (`composer catalog`) with live playgrounds, Preview/Code examples, API references, a theme customiser and dark mode.
 - Tests (Pest + Testbench) and GitHub Actions CI, including a check that Tailwind finds every component class.
 
-### Changed
+#### Changed
 - Requires PHP 8.4+ and Laravel 13.
 - Components are now anonymous Blade components. Usage is unchanged: `<x-gui::button>`, `<x-gui::table>`.
 - Button: `link` is now `href`; variants are `solid`, `outline` and `ghost`; sizes are `sm`, `md` and `lg`.
@@ -23,13 +37,13 @@ Phase 0: a rebuild on Tailwind CSS v4 and Laravel 13.
 - `gui:install` now only adds GiraffeUI's CSS import, offers Livewire (optional) and publishes a layout. It never runs npm or edits Tailwind config files, and is safe to run again.
 - The published layout is an anonymous component (`<x-layouts.app>`) with flash-free dark mode and no Alpine or Livewire requirement.
 
-### Removed
+#### Removed
 - `config/giraffeui.php`. Theme with CSS variables instead.
 - Button props `fullWidth` (use `class="w-full"`), `event` (use `x-on:click`, `wire:click` or `onclick` directly) and the unused `text`, `customLeft` and `customRight`.
 - Table prop `hiddenColumns`. Only list the columns you want.
 - Installer support for Tailwind v3, Volt and npm/yarn installs.
 
-### Fixed
+#### Fixed
 - Button classes running together (e.g. `text-smw-full`).
 - Outline and text button colours missing from production CSS because their class names were built at runtime.
 - Unescaped `onclick` output on every button.
