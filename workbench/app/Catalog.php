@@ -945,6 +945,62 @@ class Catalog
                 ],
             ],
 
+            'progress' => [
+                'name' => 'Progress',
+                'group' => 'Display',
+                'description' => 'Shows how far along a task is, or that it is working when you can\'t tell.',
+                'preview' => 'narrow',
+                'usage' => '<x-gui::progress :value="$percent" label="Uploading" />',
+                'examples' => [
+                    [
+                        'title' => 'Determinate',
+                        'code' => <<<'BLADE'
+                            <x-gui::progress :value="64" label="Uploading photos" show-value />
+                            <x-gui::progress :value="3" :max="4" label="Step 3 of 4" color="success" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Indeterminate',
+                        'description' => 'Leave out value when you can\'t measure progress.',
+                        'code' => <<<'BLADE'
+                            <x-gui::progress label="Preparing your export" />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['value', 'number', 'null', 'Progress so far. Leave it out for indeterminate.'],
+                    ['max', 'number', '100', ''],
+                    ['label', 'string', 'null', 'Shown above the bar and used as its accessible name.'],
+                    ['color', "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'", "'primary'", ''],
+                    ['show-value', 'bool', 'false', 'Show the percentage.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'Always give it a label, or an aria-label, so screen readers know what is progressing.',
+                ],
+            ],
+
+            'kbd' => [
+                'name' => 'Kbd',
+                'group' => 'Display',
+                'description' => 'A keyboard key, for shortcuts and instructions.',
+                'usage' => '<x-gui::kbd>⌘</x-gui::kbd> <x-gui::kbd>K</x-gui::kbd>',
+                'examples' => [
+                    [
+                        'title' => 'Shortcuts',
+                        'code' => <<<'BLADE'
+                            <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                                Press <x-gui::kbd>⌘</x-gui::kbd> <x-gui::kbd>K</x-gui::kbd> to search, or <x-gui::kbd>Esc</x-gui::kbd> to close.
+                            </p>
+                            BLADE,
+                    ],
+                ],
+                'props' => [],
+                'slots' => [
+                    ['default', 'The key.'],
+                ],
+            ],
+
             'skeleton' => [
                 'name' => 'Skeleton',
                 'group' => 'Display',
@@ -1276,6 +1332,72 @@ class Catalog
                     'Open with <button commandfor="id" command="show-modal">, close with command="close" or <x-gui::modal.close>.',
                     'From JavaScript: document.getElementById(\'id\').showModal() and .close().',
                     'From Livewire: $this->js("document.getElementById(\'id\').showModal()"). The dialog has wire:ignore.self, so re-renders don\'t close it.',
+                ],
+            ],
+
+            'drawer' => [
+                'name' => 'Drawer',
+                'group' => 'Overlays',
+                'description' => 'A panel that slides in from the side. The same native <dialog> as Modal, so focus trapping, Escape and the backdrop work without JavaScript.',
+                'usage' => <<<'BLADE'
+                    <x-gui::button commandfor="cart" command="show-modal">Cart</x-gui::button>
+
+                    <x-gui::drawer id="cart" title="Your cart">
+                        …
+                    </x-gui::drawer>
+                    BLADE,
+                'examples' => [
+                    [
+                        'title' => 'Cart',
+                        'code' => <<<'BLADE'
+                            <x-gui::button variant="outline" commandfor="cart" command="show-modal">Open cart</x-gui::button>
+
+                            <x-gui::drawer id="cart" title="Your cart" description="2 items">
+                                <ul class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                                    <li class="flex justify-between py-3"><span>GiraffeUI hoodie</span><span class="font-medium">$59</span></li>
+                                    <li class="flex justify-between py-3"><span>Sticker pack</span><span class="font-medium">$6</span></li>
+                                </ul>
+
+                                <x-slot:footer>
+                                    <x-gui::modal.close>Keep shopping</x-gui::modal.close>
+                                    <x-gui::button>Checkout · $65</x-gui::button>
+                                </x-slot:footer>
+                            </x-gui::drawer>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Navigation from the left',
+                        'code' => <<<'BLADE'
+                            <x-gui::button variant="ghost" color="secondary" commandfor="mobile-nav" command="show-modal">
+                                <x-slot:leading><x-gui::icon name="chevron-right" size="sm" /></x-slot:leading>
+                                Menu
+                            </x-gui::button>
+
+                            <x-gui::drawer id="mobile-nav" side="left" size="sm" title="GiraffeUI">
+                                <nav aria-label="Main" class="-mx-2 flex flex-col">
+                                    <a href="#" class="rounded-gui px-2 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800">Dashboard</a>
+                                    <a href="#" class="rounded-gui px-2 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800">Projects</a>
+                                    <a href="#" class="rounded-gui px-2 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800">Settings</a>
+                                </nav>
+                            </x-gui::drawer>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['id', 'string', 'required', 'Used by buttons to open and close it.'],
+                    ['side', "'right' | 'left'", "'right'", 'The edge it slides in from.'],
+                    ['title', 'string', 'null', 'Heading, linked with aria-labelledby.'],
+                    ['description', 'string', 'null', 'Linked with aria-describedby.'],
+                    ['size', "'sm' | 'md' | 'lg' | 'xl'", "'md'", 'Maximum width.'],
+                    ['dismissible', 'bool', 'true', 'Close button, Escape and backdrop clicks.'],
+                    ['open', 'bool', 'false', 'Open when the page loads.'],
+                ],
+                'slots' => [
+                    ['default', 'The body. Scrolls when it is tall.'],
+                    ['footer', 'Actions, pinned to the bottom.'],
+                ],
+                'notes' => [
+                    'Open with <button commandfor="id" command="show-modal">. <x-gui::modal.close> works inside drawers too.',
                 ],
             ],
 

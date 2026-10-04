@@ -71,3 +71,14 @@
         }
     }
 }
+
+/* Indeterminate progress: a bar sliding across its track. */
+@keyframes gui-indeterminate {
+    0% {
+        left: -33%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+

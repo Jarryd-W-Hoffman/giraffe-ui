@@ -1,0 +1,1 @@
+<kbd {{ $attributes->class('inline-flex h-5 min-w-5 items-center justify-center rounded border border-zinc-300 bg-zinc-50 px-1 font-sans text-xs font-medium text-zinc-700 shadow-[0_1px_0] shadow-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:shadow-zinc-700') }}>{{ $slot }}</kbd>

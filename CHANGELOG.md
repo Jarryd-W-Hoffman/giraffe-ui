@@ -6,7 +6,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 30 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 33 components and a catalog.
+
+### Drawer, Progress and Kbd
+
+#### Added
+- Drawer: a modal that slides in from the right or left. It's the same native `<dialog>` (focus trapping, Escape, backdrop, `command`/`commandfor`, `modal.close`, `wire:ignore.self`), full height, with a pinned footer.
+- Progress: determinate or indeterminate, with `role="progressbar"`, `aria-valuenow` (values clamped), a label used as the accessible name, theme colours, and an optional percentage. The indeterminate bar stops moving with reduced motion.
+- Kbd for keyboard keys.
 
 ### Icon
 

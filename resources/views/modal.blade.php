@@ -1,10 +1,16 @@
 @php
-    $sizes = [
-        'sm' => 'max-w-sm',
-        'md' => 'max-w-lg',
-        'lg' => 'max-w-2xl',
-        'xl' => 'max-w-4xl',
-    ];
+    $drawer = isset($side);
+
+    // Every class is written out in full so Tailwind can find it when scanning this file.
+    $sizes = $drawer
+        ? ['sm' => 'max-w-sm', 'md' => 'max-w-md', 'lg' => 'max-w-xl', 'xl' => 'max-w-3xl']
+        : ['sm' => 'max-w-sm', 'md' => 'max-w-lg', 'lg' => 'max-w-2xl', 'xl' => 'max-w-4xl'];
+
+    $layout = match (true) {
+        ! $drawer => 'm-auto w-[calc(100%-2rem)] rounded-gui border opacity-0 scale-95 open:opacity-100 open:scale-100 starting:open:opacity-0 starting:open:scale-95',
+        $side === 'left' => 'm-0 mr-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-r -translate-x-full open:translate-x-0 starting:open:-translate-x-full',
+        default => 'm-0 ml-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-l translate-x-full open:translate-x-0 starting:open:translate-x-full',
+    };
 @endphp
 
 {{--
@@ -19,15 +25,16 @@
     closedby="{{ $dismissible ? 'any' : 'none' }}"
     wire:ignore.self
     {{ $attributes->class([
-        'm-auto w-[calc(100%-2rem)] rounded-gui border border-zinc-200 bg-white p-0 text-zinc-900 shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100',
+        'border-zinc-200 bg-white p-0 text-zinc-900 shadow-xl dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100',
+        $layout,
         'backdrop:bg-zinc-950/50 backdrop:backdrop-blur-[2px]',
-        'opacity-0 scale-95 transition-all transition-discrete duration-150 open:opacity-100 open:scale-100 starting:open:opacity-0 starting:open:scale-95',
+        'transition-all transition-discrete duration-150',
         'backdrop:opacity-0 backdrop:transition-all backdrop:transition-discrete backdrop:duration-150 open:backdrop:opacity-100 starting:open:backdrop:opacity-0',
         'motion-reduce:transition-none motion-reduce:backdrop:transition-none',
         $sizes[$size] ?? $sizes['md'],
     ]) }}
 >
-    <div class="flex max-h-[calc(100dvh-2rem)] flex-col">
+    <div @class(['flex flex-col', 'h-full' => $drawer, 'max-h-[calc(100dvh-2rem)]' => ! $drawer])>
         @if ($title || $description || $dismissible)
             <div class="flex items-start gap-4 px-6 pt-6 pb-4">
                 <div class="min-w-0 flex-1 space-y-1.5">
