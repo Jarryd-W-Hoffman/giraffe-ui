@@ -6,7 +6,15 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 29 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 30 components and a catalog.
+
+### Icon
+
+#### Added
+- Icon: the Heroicons GiraffeUI uses (MIT), with `xs`/`sm`/`md`/`lg` sizes. Icons are hidden from screen readers unless given a `label`. Any other name goes to blade-icons when it's installed, so any icon set works. An unknown name without blade-icons gives an error listing the bundled icons.
+
+#### Changed
+- Components use the Icon component instead of copies of the same SVG markup. A pixel-by-pixel comparison of every catalog page in both themes, and of open overlays, shows no visual change.
 
 ### Breadcrumbs, skeletons and empty states
 

@@ -139,9 +139,7 @@
             ]) }}
     >
 
-    <svg class="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-zinc-500 dark:text-zinc-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path fill-rule="evenodd" d="M10.53 3.47a.75.75 0 0 0-1.06 0L6.22 6.72a.75.75 0 0 0 1.06 1.06L10 5.06l2.72 2.72a.75.75 0 1 0 1.06-1.06l-3.25-3.25Zm-4.31 9.81 3.25 3.25a.75.75 0 0 0 1.06 0l3.25-3.25a.75.75 0 1 0-1.06-1.06L10 14.94l-2.72-2.72a.75.75 0 0 0-1.06 1.06Z" clip-rule="evenodd" />
-    </svg>
+    <x-gui::icon name="chevron-up-down" size="sm" class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-zinc-500 dark:text-zinc-400" />
 
     {{-- A manual popover in the top layer, so the list isn't clipped by modals or scrolling containers. --}}
     <div
@@ -167,7 +165,7 @@
                     class="group/option flex cursor-pointer items-center justify-between gap-2 rounded-[calc(var(--radius-gui)-2px)] px-2.5 py-1.5 data-[active=true]:bg-zinc-100 dark:data-[active=true]:bg-zinc-800"
                 >
                     {{ $optionLabel }}
-                    <svg class="invisible size-4 shrink-0 text-gui-primary-text group-aria-selected/option:visible" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>
+                    <x-gui::icon name="check" size="sm" class="invisible text-gui-primary-text group-aria-selected/option:visible" />
                 </li>
             @endforeach
         </ul>
