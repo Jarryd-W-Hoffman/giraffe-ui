@@ -50,7 +50,7 @@ Then rebuild your CSS (`npm run dev` or `npm run build`).
 | Group | Components |
 |---|---|
 | Actions | [Button](docs/components/button.md) |
-| Forms | [Field](docs/components/field.md), [Input](docs/components/input.md), [Textarea](docs/components/textarea.md), [Select](docs/components/select.md), [Combobox](docs/components/combobox.md), [Checkbox](docs/components/checkbox.md), [Radio](docs/components/radio.md), [Switch](docs/components/switch.md), [Fieldset](docs/components/fieldset.md), [Label](docs/components/label.md) |
+| Forms | [Field](docs/components/field.md), [Input](docs/components/input.md), [Textarea](docs/components/textarea.md), [Select](docs/components/select.md), [Combobox](docs/components/combobox.md), [File upload](docs/components/file-upload.md), [Checkbox](docs/components/checkbox.md), [Radio](docs/components/radio.md), [Switch](docs/components/switch.md), [Fieldset](docs/components/fieldset.md), [Label](docs/components/label.md) |
 | Display | [Alert](docs/components/alert.md), [Icon](docs/components/icon.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md), [Spinner](docs/components/spinner.md), [Progress](docs/components/progress.md), [Kbd](docs/components/kbd.md), [Skeleton](docs/components/skeleton.md), [Empty state](docs/components/empty-state.md) |
 | Navigation | [Breadcrumbs](docs/components/breadcrumbs.md) |
 | Overlays | [Modal](docs/components/modal.md), [Drawer](docs/components/drawer.md), [Command palette](docs/components/command-palette.md), [Dropdown](docs/components/dropdown.md), [Popover](docs/components/popover.md), [Tooltip](docs/components/tooltip.md), [Toast](docs/components/toasts.md) |

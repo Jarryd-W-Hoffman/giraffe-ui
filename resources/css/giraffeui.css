@@ -72,6 +72,13 @@
     }
 }
 
+/* Hide Alpine-controlled parts (e.g. File upload's file list) until Alpine starts. */
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
 /* Indeterminate progress: a bar sliding across its track. */
 @keyframes gui-indeterminate {
     0% {

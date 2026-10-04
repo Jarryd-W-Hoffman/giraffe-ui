@@ -2,6 +2,7 @@
 
 @section('toc')
     <li><a href="#forms" class="hover:text-zinc-900 dark:hover:text-zinc-100">Forms and loading</a></li>
+    <li><a href="#uploads" class="hover:text-zinc-900 dark:hover:text-zinc-100">Uploads</a></li>
     <li><a href="#tables" class="hover:text-zinc-900 dark:hover:text-zinc-100">Tables</a></li>
     <li><a href="#tabs" class="hover:text-zinc-900 dark:hover:text-zinc-100">Tabs</a></li>
     <li><a href="#overlays" class="hover:text-zinc-900 dark:hover:text-zinc-100">Modals and menus</a></li>
@@ -77,6 +78,14 @@
     <div class="mt-4 space-y-3">
         @include('catalog::partials.code', ['code' => $form])
         @include('catalog::partials.code', ['code' => $save])
+    </div>
+
+    <h2 id="uploads" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Uploads</h2>
+    <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+        Put <code class="font-mono text-sm">wire:model</code> on a file upload in a component using <code class="font-mono text-sm">WithFileUploads</code>. It shows a progress bar while Livewire uploads, and validation errors appear under the field.
+    </p>
+    <div class="mt-4 rounded-xl border border-zinc-200 p-6 sm:p-8 dark:border-zinc-800">
+        <livewire:avatar-upload />
     </div>
 
     <h2 id="tables" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Tables</h2>
