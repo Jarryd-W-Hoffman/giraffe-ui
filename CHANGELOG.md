@@ -4,6 +4,18 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [Unreleased]
 
+### Phase 3: data
+
+#### Added
+- Table v2:
+  - **Sorting:** `sortable`, `sort` and `direction`. Sortable headings link to `?sort=…&direction=…` (dropping `page`) and set `aria-sort`.
+  - **Composed tables:** build one from `table.heading`, `table.row` and `table.cell` for custom cells. A composed heading puts `wire:click`/`x-on:click` on its sort button, for Livewire sorting.
+  - **Footer and pagination:** a `footer` slot, and automatic pagination when `rows` is a paginator.
+- Pagination: `<x-gui::pagination :paginator="$users" />` for length-aware and simple paginators, with a summary, an accessible current page, and page numbers that collapse on small screens. There's a `livewire` mode using `gotoPage`/`previousPage`/`nextPage`, and both views can be used with `->links()`, `Paginator::defaultView()` or Livewire's `paginationView()`.
+
+#### Changed
+- Table is now a class component, so composed headings can read the sort through a unique `@aware` key. The `columns` and `rows` API is unchanged.
+
 ### Phase 2b: popovers, menus, tooltips and toasts
 
 #### Added

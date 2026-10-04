@@ -41,4 +41,5 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 
 ## Data
 
-- [Table](table.md): Displays rows of data with headings and an empty state.
+- [Table](table.md): Rows of data, from an array or composed cell by cell, with sorting, an empty state and pagination.
+- [Pagination](pagination.md): Page links for any Laravel paginator, with a Livewire version.
