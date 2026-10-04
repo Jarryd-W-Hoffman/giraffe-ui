@@ -8,19 +8,19 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 35 components and a catalog.
 
-### File upload
-
-#### Added
-- File upload: a drop zone with a real `<input type="file">` stretched invisibly across it. Clicking and dropping are native, it works without JavaScript, and the field's label stays the only accessible name. Alpine adds a list of chosen files with sizes, and a progress bar from Livewire's upload events. It works in a Field (label, hint, errors), and `wire:model` goes on the input.
-- A Livewire upload demo in the catalog.
-- `[x-cloak]` is hidden in `giraffeui.css`.
-
 ### Textarea autosize and character count
 
 #### Added
 - Textarea `autosize`: grows with its content using CSS `field-sizing`, with no JavaScript. `rows` becomes the minimum height and `max-rows` caps it. Browsers without `field-sizing` keep the fixed height and the resize handle.
 - Textarea `counter`: a character count, against `maxlength` when there is one. The limit is part of the accessible description and the visible count is hidden from screen readers. A polite live region says how many characters are left once typing pauses. The count also follows values set by `wire:model`, `x-model`, scripts and form resets.
 - The catalog's textarea page has a playground, and the Livewire demo form has a bio with a counter.
+
+### File upload
+
+#### Added
+- File upload: a drop zone with a real `<input type="file">` stretched invisibly across it. Clicking and dropping are native, it works without JavaScript, and the field's label stays the only accessible name. Alpine adds a list of chosen files with sizes, and a progress bar from Livewire's upload events. It works in a Field (label, hint, errors), and `wire:model` goes on the input.
+- A Livewire upload demo in the catalog.
+- `[x-cloak]` is hidden in `giraffeui.css`.
 
 ### Command palette
 
