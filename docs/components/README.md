@@ -26,6 +26,8 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Badge](badge.md): A small label for status, counts or categories.
 - [Spinner](spinner.md): Shows that something is loading. Buttons use it for their loading state.
 - [Icon](icon.md): Heroicons that GiraffeUI ships with, or any icon from a blade-icons set.
+- [Progress](progress.md): Shows how far along a task is, or that it is working when you can't tell.
+- [Kbd](kbd.md): A keyboard key, for shortcuts and instructions.
 - [Skeleton](skeleton.md): A placeholder shaped like the content that is loading.
 - [Empty state](empty-state.md): What to show when there is nothing to show yet, with a way forward.
 - [Card](card.md): A surface for grouping content, with an optional header and footer.
@@ -38,6 +40,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 ## Overlays
 
 - [Modal](modal.md): A dialog over the page. Built on the native &lt;dialog&gt; element, so focus trapping, Escape and the backdrop work without JavaScript.
+- [Drawer](drawer.md): A panel that slides in from the side. The same native &lt;dialog&gt; as Modal, so focus trapping, Escape and the backdrop work without JavaScript.
 - [Dropdown](dropdown.md): A menu of actions. A native popover positioned with CSS anchor positioning, with the menu keyboard pattern added by Alpine.
 - [Popover](popover.md): Rich content in a floating panel. A native popover, so Escape and clicking outside close it without JavaScript.
 - [Tooltip](tooltip.md): A short label shown on hover and keyboard focus. Escape dismisses it, and you can hover over it.
