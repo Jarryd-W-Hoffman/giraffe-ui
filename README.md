@@ -7,7 +7,7 @@ Works great with Livewire, but never requires it.
 
 ## Requirements
 
-- PHP 8.3+
+- PHP 8.4+
 - Laravel 13
 - Tailwind CSS v4 (new Laravel apps already have it)
 

@@ -15,7 +15,7 @@ Phase 0: a rebuild on Tailwind CSS v4 and Laravel 13.
 - Tests (Pest + Testbench) and GitHub Actions CI, including a check that Tailwind finds every component class.
 
 ### Changed
-- Requires PHP 8.3+ and Laravel 13.
+- Requires PHP 8.4+ and Laravel 13.
 - Components are now anonymous Blade components. Usage is unchanged: `<x-gui::button>`, `<x-gui::table>`.
 - Button: `link` is now `href`; variants are `solid`, `outline` and `ghost`; sizes are `sm`, `md` and `lg`.
 - Button links no longer add `wire:navigate` automatically. Add it yourself if you want it.

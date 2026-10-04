@@ -26,7 +26,7 @@
 
     <h2 id="requirements" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Requirements</h2>
     <ul class="mt-3 list-disc space-y-1 pl-5 text-zinc-600 dark:text-zinc-400">
-        <li>PHP 8.3+</li>
+        <li>PHP 8.4+</li>
         <li>Laravel 13</li>
         <li>Tailwind CSS v4 (new Laravel apps already have it)</li>
     </ul>
