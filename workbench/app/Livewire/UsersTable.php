@@ -15,6 +15,9 @@ class UsersTable extends Component
     public string $search = '';
 
     #[Url]
+    public string $role = 'all';
+
+    #[Url]
     public string $sortBy = 'name';
 
     #[Url]
@@ -32,6 +35,11 @@ class UsersTable extends Component
         $this->resetPage();
     }
 
+    public function updatedRole(): void
+    {
+        $this->resetPage();
+    }
+
     public function users(): LengthAwarePaginator
     {
         // Stands in for an Eloquent query like User::where(...)->orderBy(...)->paginate(5).
@@ -41,6 +49,7 @@ class UsersTable extends Component
                 'name' => ['Ada Lovelace', 'Grace Hopper', 'Alan Turing', 'Katherine Johnson', 'Margaret Hamilton', 'Edsger Dijkstra', 'Barbara Liskov', 'Donald Knuth'][$i % 8].' '.$i,
                 'role' => ['Admin', 'Editor', 'Viewer'][$i % 3],
             ])
+            ->when($this->role !== 'all', fn ($users) => $users->where('role', ucfirst($this->role)))
             ->when($this->search, fn ($users) => $users->filter(fn ($user) => str_contains(strtolower($user['name']), strtolower($this->search))))
             ->sortBy($this->sortBy, SORT_NATURAL, $this->sortDirection === 'desc')
             ->values();
@@ -52,7 +61,10 @@ class UsersTable extends Component
     {
         return <<<'BLADE'
             <div class="space-y-4">
-                <x-gui::input type="search" wire:model.live.debounce.250ms="search" placeholder="Search people" aria-label="Search people" class="max-w-xs" />
+                <div class="flex flex-wrap items-center gap-3">
+                    <x-gui::input type="search" wire:model.live.debounce.250ms="search" placeholder="Search people" aria-label="Search people" class="max-w-xs" />
+                    <x-gui::segmented-control wire:model.live="role" label="Role" :options="['all' => 'All', 'admin' => 'Admins', 'editor' => 'Editors', 'viewer' => 'Viewers']" />
+                </div>
 
                 <x-gui::table :sort="$sortBy" :direction="$sortDirection">
                     <x-slot:head>

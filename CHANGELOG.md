@@ -6,7 +6,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 36 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 37 components and a catalog.
+
+### Radio cards and segmented control
+
+#### Added
+- Radio `variant="card"`: the whole bordered card is the label, so clicking anywhere on it picks the option. The checked, focused, invalid and disabled states show on the card. It's still a native radio, so Tab and arrow keys work as usual.
+- Segmented control: a row of options where one is always picked, built from visually hidden native radios, with no JavaScript. Tab reaches the group, arrow keys change the choice, and it submits like any radio group. It's a labelled `radiogroup` with sizes and a full-width option. `wire:model`, `x-model`, `disabled`, `required` and `form` go on every radio.
+- The catalog's Livewire users table filters by role with a segmented control and `wire:model.live`.
 
 ### Date picker
 

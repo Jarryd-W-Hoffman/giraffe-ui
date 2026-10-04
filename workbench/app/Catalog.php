@@ -720,14 +720,84 @@ class Catalog
                             </x-gui::fieldset>
                             BLADE,
                     ],
+                    [
+                        'title' => 'Cards',
+                        'description' => 'The whole card is the label, so clicking anywhere on it picks the option. They are still native radios: Tab reaches the group and arrow keys move through it.',
+                        'code' => <<<'BLADE'
+                            <x-gui::fieldset legend="Server size" hint="You can resize later." name="size">
+                                <div class="grid gap-3 sm:grid-cols-3">
+                                    <x-gui::radio variant="card" name="size" value="small" label="Small" description="1 CPU, 2 GB" />
+                                    <x-gui::radio variant="card" name="size" value="medium" label="Medium" description="2 CPUs, 4 GB" checked />
+                                    <x-gui::radio variant="card" name="size" value="large" label="Large" description="Sold out" disabled />
+                                </div>
+                            </x-gui::fieldset>
+                            BLADE,
+                    ],
                 ],
                 'props' => [
                     ['label', 'string', 'null', 'Label text. Or use the slot.'],
                     ['description', 'string', 'null', 'Help text, linked with aria-describedby.'],
                     ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
+                    ['variant', "'default' | 'card'", "'default'", 'card makes the whole bordered card the label.'],
                 ],
                 'slots' => [
                     ['default', 'The label, when it needs markup.'],
+                ],
+            ],
+
+            'segmented-control' => [
+                'name' => 'Segmented control',
+                'group' => 'Forms',
+                'description' => 'A row of options where one is always picked, like a view switcher. Native radios underneath, so no JavaScript.',
+                'preview' => 'narrow',
+                'usage' => '<x-gui::segmented-control name="view" label="View" :options="[\'list\' => \'List\', \'grid\' => \'Grid\']" value="list" />',
+                'playground' => [
+                    'selfClosing' => true,
+                    'template' => '<x-gui::segmented-control label="Billing" :options="[\'monthly\' => \'Monthly\', \'yearly\' => \'Yearly\', \'lifetime\' => \'Lifetime\']" value="monthly" :size="$size" :full="$full" :disabled="$disabled" :invalid="$invalid ?: null" />',
+                    'controls' => [
+                        ['name' => 'size', 'type' => 'select', 'options' => ['sm', 'md', 'lg'], 'default' => 'md'],
+                        ['name' => 'full', 'type' => 'boolean', 'default' => false],
+                        ['name' => 'disabled', 'type' => 'boolean', 'default' => false],
+                        ['name' => 'invalid', 'type' => 'boolean', 'default' => false],
+                    ],
+                ],
+                'examples' => [
+                    [
+                        'title' => 'In a form',
+                        'description' => 'Tab reaches the picked option, and arrow keys change it. It submits like any radio group.',
+                        'code' => <<<'BLADE'
+                            <x-gui::segmented-control name="billing" label="Billing period" :options="['monthly' => 'Monthly', 'yearly' => 'Yearly']" value="yearly" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Full width',
+                        'code' => <<<'BLADE'
+                            <x-gui::segmented-control name="theme" label="Theme" :options="['light' => 'Light', 'dark' => 'Dark', 'system' => 'System']" value="system" full />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'With a visible label',
+                        'description' => 'Point aria-labelledby at your own text instead of passing label.',
+                        'code' => <<<'BLADE'
+                            <div class="flex items-center gap-3">
+                                <span id="density-label" class="text-sm font-medium">Density</span>
+                                <x-gui::segmented-control name="density" aria-labelledby="density-label" size="sm" :options="['compact' => 'Compact', 'comfortable' => 'Comfortable']" value="comfortable" />
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['options', 'array', '[]', 'value => label pairs.'],
+                    ['name', 'string', 'null', 'The radios\' name. Defaults to the wire:model property.'],
+                    ['value', 'string', 'null', 'The picked value. Defaults to old input.'],
+                    ['label', 'string', 'null', 'The group\'s accessible name. Or use aria-labelledby.'],
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                    ['full', 'bool', 'false', 'Stretch to the container, with equal-width options.'],
+                    ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'wire:model, x-model, disabled, required and form go on every radio. Other attributes go on the group.',
                 ],
             ],
 
