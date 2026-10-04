@@ -7,7 +7,7 @@
 
 @php
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $attributes, $errors ?? null, $invalid);
-    $id = $control['attributes']['id'] ?? 'gui-file-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $id = $control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-file');
     $multiple = $attributes->has('multiple') && $attributes->get('multiple') !== false;
 @endphp
 

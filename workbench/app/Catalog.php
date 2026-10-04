@@ -846,7 +846,7 @@ class Catalog
             'segmented-control' => [
                 'name' => 'Segmented control',
                 'group' => 'Forms',
-                'description' => 'A row of options where one is always picked, like a view switcher. Native radios underneath, so no JavaScript.',
+                'description' => 'A row of options where one is picked, like a view switcher, or several, like a toggle group. Native radios or checkboxes underneath, so no JavaScript.',
                 'preview' => 'narrow',
                 'usage' => '<x-gui::segmented-control name="view" label="View" :options="[\'list\' => \'List\', \'grid\' => \'Grid\']" value="list" />',
                 'playground' => [
@@ -874,6 +874,13 @@ class Catalog
                             BLADE,
                     ],
                     [
+                        'title' => 'Several at once',
+                        'description' => 'With multiple, the options are checkboxes in a group: a toggle group. Each is a tab stop and Space toggles it. They submit as name[], and value takes an array.',
+                        'code' => <<<'BLADE'
+                            <x-gui::segmented-control name="days" label="Working days" multiple :options="['mon' => 'Mon', 'tue' => 'Tue', 'wed' => 'Wed', 'thu' => 'Thu', 'fri' => 'Fri', 'sat' => 'Sat', 'sun' => 'Sun']" :value="['mon', 'tue', 'wed', 'thu', 'fri']" size="sm" />
+                            BLADE,
+                    ],
+                    [
                         'title' => 'With a visible label',
                         'description' => 'Point aria-labelledby at your own text instead of passing label.',
                         'code' => <<<'BLADE'
@@ -891,11 +898,12 @@ class Catalog
                     ['label', 'string', 'null', 'The group\'s accessible name. Or use aria-labelledby.'],
                     ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
                     ['full', 'bool', 'false', 'Stretch to the container, with equal-width options.'],
+                    ['multiple', 'bool', 'false', 'Allow several: checkboxes named name[] in a group. value takes an array.'],
                     ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
                 ],
                 'slots' => [],
                 'notes' => [
-                    'wire:model, x-model, disabled, required and form go on every radio. Other attributes go on the group.',
+                    'wire:model, x-model, disabled, required and form go on every input. Other attributes go on the group. With multiple, required is left off, since it would make every box required.',
                 ],
             ],
 

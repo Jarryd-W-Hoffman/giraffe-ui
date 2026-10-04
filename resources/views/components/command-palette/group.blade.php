@@ -3,7 +3,7 @@
 ])
 
 @php
-    $headingId = 'gui-cmd-group-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $headingId = \JayAitch\GiraffeUI\Support\Id::make('gui-cmd-group');
 @endphp
 
 {{-- Hidden when none of its items match the search. --}}

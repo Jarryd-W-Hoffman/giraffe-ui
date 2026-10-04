@@ -12,7 +12,7 @@
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $attributes, $errors ?? null, $invalid);
     $value = ! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot) ? $slot : \JayAitch\GiraffeUI\Support\Form::value($attributes, $control['errorKey']);
 
-    $id = $control['attributes']['id'] ?? ($counter ? 'gui-textarea-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8)) : null);
+    $id = $control['attributes']['id'] ?? ($counter ? \JayAitch\GiraffeUI\Support\Id::make('gui-textarea') : null);
     $max = is_numeric($attributes->get('maxlength')) ? (int) $attributes->get('maxlength') : null;
 
     // Count the way the browser does: UTF-16 code units, with the slot's HTML entities decoded.

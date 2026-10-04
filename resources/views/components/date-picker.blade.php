@@ -12,7 +12,7 @@
 
 @php
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $attributes, $errors ?? null, $invalid);
-    $id = $control['attributes']['id'] ?? 'gui-date-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $id = $control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-date');
     $value = \JayAitch\GiraffeUI\Support\Form::value($attributes, $control['errorKey'], 'date');
     $value = $value instanceof \DateTimeInterface ? $value->format('Y-m-d') : $value;
     $disabled = $attributes->has('disabled') && $attributes->get('disabled') !== false;

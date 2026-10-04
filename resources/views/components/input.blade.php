@@ -21,7 +21,7 @@
 
     // With leading or trailing content, those parts are pinned to the input itself (anchor positioning), so width
     // classes on the input move them too.
-    $anchorId = ($hasLeading || $hasTrailing) ? ($control['attributes']['id'] ?? 'gui-input-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8))) : null;
+    $anchorId = ($hasLeading || $hasTrailing) ? ($control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-input')) : null;
 
     $input = $attributes
         ->except(['aria-describedby', 'value'])

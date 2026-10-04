@@ -6,7 +6,7 @@
 ])
 
 @php
-    $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Form::id($name, 'fieldset') ?? 'gui-'.\Illuminate\Support\Str::random(8);
+    $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Form::id($name, 'fieldset') ?? \JayAitch\GiraffeUI\Support\Id::make('gui');
     $message = \JayAitch\GiraffeUI\Support\Form::error(\JayAitch\GiraffeUI\Support\Form::errorKey($name), $error, $errors ?? null);
 @endphp
 

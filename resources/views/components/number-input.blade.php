@@ -9,7 +9,7 @@
 
 @php
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $attributes, $errors ?? null, $invalid);
-    $id = $control['attributes']['id'] ?? 'gui-number-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $id = $control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-number');
     $value = \JayAitch\GiraffeUI\Support\Form::value($attributes, $control['errorKey'], 'number');
     $disabled = $attributes->has('disabled') && $attributes->get('disabled') !== false;
 

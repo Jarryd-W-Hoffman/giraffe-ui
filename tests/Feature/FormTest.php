@@ -339,6 +339,38 @@ describe('segmented control', function () {
             ->and($html)->toMatch('/value="list"[^>]*checked/');
     });
 
+    it('allows several with multiple', function () {
+        $days = ['mon' => 'Mon', 'tue' => 'Tue', 'wed' => 'Wed'];
+        $html = (string) $this->blade('<x-gui::segmented-control name="days" label="Days" multiple required :options="$days" :value="[\'mon\', \'wed\']" />', ['days' => $days]);
+
+        expect(attr($html, 'div', 'role'))->toBe('group')
+            ->and(substr_count($html, 'type="checkbox"'))->toBe(3)
+            ->and(substr_count($html, 'name="days[]"'))->toBe(3)
+            ->and($html)->toMatch('/value="mon"[^>]*checked/')
+            ->toMatch('/value="wed"[^>]*checked/')
+            ->not->toMatch('/value="tue"[^>]*checked/')
+            ->not->toContain('required');
+    });
+
+    it('refills several from old input and flags item errors', function () {
+        withErrors(['days.1' => 'Not a day.']);
+        $this->app['session']->put('_old_input', ['days' => ['tue']]);
+        $this->app['request']->setLaravelSession($this->app['session']->driver());
+
+        $html = (string) $this->blade('<x-gui::segmented-control name="days" label="Days" multiple :options="[\'mon\' => \'Mon\', \'tue\' => \'Tue\']" />');
+
+        expect(attr($html, 'div', 'aria-invalid'))->toBe('true')
+            ->and($html)->toMatch('/value="tue"[^>]*checked/')
+            ->not->toMatch('/value="mon"[^>]*checked/');
+    });
+
+    it('binds several to a wire:model array', function () {
+        $html = (string) $this->blade('<x-gui::segmented-control wire:model.live="days" label="Days" multiple :options="[\'mon\' => \'Mon\', \'tue\' => \'Tue\']" />');
+
+        expect(substr_count($html, 'name="days[]"'))->toBe(2)
+            ->and(substr_count($html, 'wire:model.live="days"'))->toBe(2);
+    });
+
     it('gives unnamed radios a shared generated name', function () use ($options) {
         $html = (string) $this->blade('<x-gui::segmented-control label="View" :options="$options" full />', ['options' => $options]);
 

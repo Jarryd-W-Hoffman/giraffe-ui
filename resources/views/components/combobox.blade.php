@@ -16,7 +16,7 @@
 
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $inputAttributes, $errors ?? null, $invalid);
     $name = $control['name'];
-    $id = $control['attributes']['id'] ?? 'gui-combobox-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $id = $control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-combobox');
     $selected = $value ?? ($name && $binding->isEmpty() ? old($control['errorKey']) : null);
 
     $sizes = [

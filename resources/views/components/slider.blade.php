@@ -10,7 +10,7 @@
 
 @php
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $attributes, $errors ?? null, $invalid);
-    $id = $control['attributes']['id'] ?? 'gui-slider-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $id = $control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-slider');
     $value = \JayAitch\GiraffeUI\Support\Form::value($attributes, $control['errorKey'], 'range');
 
     // A range with no value sits halfway between min and max, which is what the browser does too.

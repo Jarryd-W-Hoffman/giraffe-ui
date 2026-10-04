@@ -7,7 +7,7 @@
 
 @php
     $name = $attributes->get('name');
-    $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Form::id($name, $attributes->get('value')) ?? 'gui-'.\Illuminate\Support\Str::random(8);
+    $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Form::id($name, $attributes->get('value')) ?? \JayAitch\GiraffeUI\Support\Id::make('gui');
     $errorKey = \JayAitch\GiraffeUI\Support\Form::errorKey($name, $attributes);
     $invalid ??= \JayAitch\GiraffeUI\Support\Form::error($errorKey, null, $errors ?? null) !== null;
     $hasLabel = $label !== null || ! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot);

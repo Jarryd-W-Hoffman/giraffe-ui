@@ -6,7 +6,7 @@
 ])
 
 @php
-    $id = 'gui-cmd-item-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(8));
+    $id = \JayAitch\GiraffeUI\Support\Id::make('gui-cmd-item');
     // Search the visible text plus any extra keywords.
     $search = \Illuminate\Support\Str::lower(trim(strip_tags((string) $slot).' '.$keywords));
     // Close the palette on click, then run the item's own x-on:click / @click, if any.

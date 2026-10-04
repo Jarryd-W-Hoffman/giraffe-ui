@@ -5,6 +5,7 @@ namespace JayAitch\GiraffeUI\Components;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
+use JayAitch\GiraffeUI\Support\Id;
 
 /**
  * Tabs following the WAI-ARIA tabs pattern. Needs Alpine (Livewire includes it).
@@ -27,7 +28,7 @@ class Tabs extends Component
     ) {
         $this->selected ??= array_key_first($tabs);
         $this->guiTabs = [
-            'id' => $id ?? 'gui-tabs-'.Str::lower(Str::random(8)),
+            'id' => $id ?? Id::make('gui-tabs'),
             'selected' => $this->selected,
         ];
     }

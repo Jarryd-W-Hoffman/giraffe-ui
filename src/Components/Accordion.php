@@ -3,8 +3,8 @@
 namespace JayAitch\GiraffeUI\Components;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Str;
 use Illuminate\View\Component;
+use JayAitch\GiraffeUI\Support\Id;
 
 /**
  * A group of <details> elements. With exclusive, they share a name so the browser keeps only one open.
@@ -18,7 +18,7 @@ class Accordion extends Component
 
     public function __construct(public bool $exclusive = false, ?string $name = null)
     {
-        $this->guiAccordion = ['name' => $exclusive ? ($name ?? 'gui-accordion-'.Str::lower(Str::random(8))) : null];
+        $this->guiAccordion = ['name' => $exclusive ? ($name ?? Id::make('gui-accordion')) : null];
     }
 
     public function render(): View
