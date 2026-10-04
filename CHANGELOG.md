@@ -17,6 +17,14 @@ The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 componen
 #### Fixed
 - Catalog: the props and slots tables can be scrolled with the keyboard on narrow screens.
 
+### Register and Forgot password examples
+
+#### Added
+- Catalog: two more full-page examples, linked from Sign in.
+  - Register: name, email, password and confirmation (each with a Show button) and a terms checkbox. It validates on the server, counts the problems in a summary, keeps everything but the passwords, and lands on the dashboard with a welcome toast.
+  - Forgot password: always confirms that a link was sent, without revealing whether the account exists, and keeps the email for a resend.
+- Icon: `arrow-left`.
+
 ### Sidebar layout and full-page examples
 
 #### Added

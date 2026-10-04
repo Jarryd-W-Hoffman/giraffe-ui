@@ -38,6 +38,8 @@ class Catalog
             'dashboard' => 'Dashboard',
             'settings' => 'Settings',
             'sign-in' => 'Sign in',
+            'register' => 'Register',
+            'forgot-password' => 'Forgot password',
             'not-found' => 'Not found',
         ];
     }
