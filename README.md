@@ -97,9 +97,17 @@ GiraffeUI.setTheme('dark'); // or 'light', or 'system'
 
 ```bash
 composer install
+npm install
 composer test        # Pest
 composer lint        # Pint
+composer catalog     # Build the catalog's CSS and serve it at http://localhost:8000/catalog
 ```
+
+### Catalog
+
+The catalog is a docs-style site, like shadcn/ui's, for browsing and trying every component. Each component page has a live playground (the real component, re-rendered on the server as you change props), examples with Preview/Code tabs, and an API reference. There's also a theme customiser that generates the `@theme` overrides.
+
+It runs on [Testbench Workbench](https://packages.tools/workbench) and lives in `workbench/`. It is not shipped with the package. To add a component, add an entry to `workbench/app/Catalog.php`. Example code is rendered as-is, so what you read is exactly what ran. While editing styles, run `npm run catalog:watch` in a second terminal.
 
 ## License
 

@@ -10,6 +10,7 @@ Phase 0: a rebuild on Tailwind CSS v4 and Laravel 13.
 - `resources/css/giraffeui.css`: one file to import, with `@theme` colour and radius tokens (`--color-gui-*`, `--radius-gui`).
 - `leading` and `trailing` slots on the button, for icons.
 - An empty state for the table (`No results.` by default, or an `empty` slot).
+- A component catalog (`composer catalog`) with live playgrounds, Preview/Code examples, API references, a theme customiser and dark mode.
 - Tests (Pest + Testbench) and GitHub Actions CI, including a check that Tailwind finds every component class.
 
 ### Changed

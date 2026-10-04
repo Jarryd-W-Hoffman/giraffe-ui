@@ -1,7 +1,15 @@
 {
     "name": "jayaitch/giraffeui",
     "description": "Free, accessible Blade + Alpine components for Laravel and Tailwind CSS v4. Livewire-friendly, never Livewire-required.",
-    "keywords": ["laravel", "blade", "components", "tailwindcss", "alpinejs", "livewire", "ui"],
+    "keywords": [
+        "laravel",
+        "blade",
+        "components",
+        "tailwindcss",
+        "alpinejs",
+        "livewire",
+        "ui"
+    ],
     "homepage": "https://github.com/Jarryd-W-Hoffman/GiraffeUI",
     "license": "MIT",
     "authors": [
@@ -28,13 +36,19 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "JayAitch\\GiraffeUI\\Tests\\": "tests/"
+            "JayAitch\\GiraffeUI\\Tests\\": "tests/",
+            "Workbench\\App\\": "workbench/app/"
         }
     },
     "scripts": {
         "test": "pest",
         "lint": "pint",
-        "lint:check": "pint --test"
+        "lint:check": "pint --test",
+        "catalog": [
+            "Composer\\Config::disableProcessTimeout",
+            "npm run catalog:css",
+            "@php vendor/bin/testbench serve --port=8000"
+        ]
     },
     "extra": {
         "laravel": {
