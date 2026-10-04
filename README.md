@@ -54,7 +54,7 @@ Then rebuild your CSS (`npm run dev` or `npm run build`).
 | Display | [Alert](docs/components/alert.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md) |
 | Overlays | [Modal](docs/components/modal.md), [Dropdown](docs/components/dropdown.md), [Popover](docs/components/popover.md), [Tooltip](docs/components/tooltip.md), [Toast](docs/components/toasts.md) |
 | Disclosure | [Accordion](docs/components/accordion.md), [Tabs](docs/components/tabs.md) |
-| Data | [Table](docs/components/table.md) |
+| Data | [Table](docs/components/table.md), [Pagination](docs/components/pagination.md) |
 
 ### Forms
 

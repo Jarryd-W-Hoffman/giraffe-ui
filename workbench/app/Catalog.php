@@ -2,6 +2,9 @@
 
 namespace Workbench\App;
 
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+
 /**
  * Everything the catalog shows, in one place.
  *
@@ -30,16 +33,44 @@ class Catalog
      */
     public static function data(): array
     {
+        $sort = in_array(request('sort'), ['name', 'email', 'role'], true) ? request('sort') : null;
+        $direction = request('direction') === 'desc' ? 'desc' : 'asc';
+
+        $people = collect(range(1, 47))->map(fn (int $i) => [
+            'id' => $i,
+            'name' => ['Ada', 'Grace', 'Alan', 'Katherine', 'Margaret', 'Edsger', 'Barbara', 'Donald'][$i % 8].' #'.$i,
+            'email' => 'user'.$i.'@example.com',
+            'role' => ['Admin', 'Editor', 'Viewer'][$i % 3],
+        ]);
+
         return [
             'roles' => ['admin' => 'Admin', 'editor' => 'Editor', 'viewer' => 'Viewer'],
             // A self-contained "photo" so the catalog never depends on an image host.
             'photo' => 'data:image/svg+xml,'.rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><linearGradient id="g" x2="1" y2="1"><stop offset="0" stop-color="#f472b6"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><rect width="96" height="96" fill="url(#g)"/><circle cx="48" cy="38" r="16" fill="#fff" fill-opacity=".85"/><path d="M16 96c4-20 18-30 32-30s28 10 32 30z" fill="#fff" fill-opacity=".85"/></svg>'),
-            'users' => [
-                ['name' => 'Ada Lovelace', 'email' => 'ada@example.com', 'role' => 'Admin', 'team' => ['name' => 'Engines']],
-                ['name' => 'Grace Hopper', 'email' => 'grace@example.com', 'role' => 'Editor', 'team' => ['name' => 'Compilers']],
-                ['name' => 'Alan Turing', 'email' => 'alan@example.com', 'role' => 'Viewer', 'team' => ['name' => 'Codebreaking']],
-                ['name' => 'Katherine Johnson', 'email' => 'katherine@example.com', 'role' => 'Editor', 'team' => ['name' => 'Trajectories']],
-            ],
+            'sort' => $sort,
+            'direction' => $direction,
+            'sortedUsers' => collect(self::users())->when($sort, fn ($users) => $users->sortBy($sort, SORT_NATURAL, $direction === 'desc'))->values()->all(),
+            'paginated' => new LengthAwarePaginator(
+                $people->forPage(Paginator::resolveCurrentPage(), 8)->values(),
+                $people->count(),
+                8,
+                null,
+                ['path' => Paginator::resolveCurrentPath()],
+            ),
+            'users' => self::users(),
+        ];
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public static function users(): array
+    {
+        return [
+            ['name' => 'Ada Lovelace', 'email' => 'ada@example.com', 'role' => 'Admin', 'team' => ['name' => 'Engines']],
+            ['name' => 'Grace Hopper', 'email' => 'grace@example.com', 'role' => 'Editor', 'team' => ['name' => 'Compilers']],
+            ['name' => 'Alan Turing', 'email' => 'alan@example.com', 'role' => 'Viewer', 'team' => ['name' => 'Codebreaking']],
+            ['name' => 'Katherine Johnson', 'email' => 'katherine@example.com', 'role' => 'Editor', 'team' => ['name' => 'Trajectories']],
         ];
     }
 
@@ -1249,25 +1280,68 @@ class Catalog
             'table' => [
                 'name' => 'Table',
                 'group' => 'Data',
-                'description' => 'Displays rows of data with headings and an empty state.',
+                'description' => 'Rows of data, from an array or composed cell by cell, with sorting, an empty state and pagination.',
                 'preview' => 'block',
                 'usage' => '<x-gui::table :columns="[\'name\', \'email\']" :rows="$users" />',
                 'examples' => [
                     [
-                        'title' => 'Basic',
-                        'description' => 'Pass a list of keys and they become headings automatically.',
+                        'title' => 'From data',
+                        'description' => 'Pass a list of keys and they become headings automatically. Keys are read with data_get, so team.name works.',
                         'code' => <<<'BLADE'
-                            <x-gui::table :columns="['name', 'email', 'role']" :rows="$users" />
+                            <x-gui::table :columns="['name' => 'Full name', 'email' => 'Email', 'team.name' => 'Team']" :rows="$users" />
                             BLADE,
                     ],
                     [
-                        'title' => 'Custom labels and nested keys',
-                        'description' => 'Use a key => label map. Keys are read with data_get, so team.name works.',
+                        'title' => 'Sorting',
+                        'description' => 'Sortable headings link to ?sort=…&direction=… and set aria-sort. Sort the rows yourself (here, the catalog does it like a controller would). Try it.',
                         'code' => <<<'BLADE'
                             <x-gui::table
-                                :columns="['name' => 'Full name', 'team.name' => 'Team', 'role' => 'Role']"
-                                :rows="$users"
+                                :columns="['name', 'email', 'role']"
+                                :rows="$sortedUsers"
+                                :sortable="['name', 'email', 'role']"
+                                :sort="$sort"
+                                :direction="$direction"
                             />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Custom cells',
+                        'description' => 'Compose the table for full control over each cell. With Livewire, put wire:click on a heading to sort with an action instead of a link.',
+                        'code' => <<<'BLADE'
+                            <x-gui::table>
+                                <x-slot:head>
+                                    <x-gui::table.heading>Member</x-gui::table.heading>
+                                    <x-gui::table.heading>Role</x-gui::table.heading>
+                                    <x-gui::table.heading><span class="sr-only">Actions</span></x-gui::table.heading>
+                                </x-slot:head>
+
+                                @foreach ($users as $user)
+                                    <x-gui::table.row>
+                                        <x-gui::table.cell>
+                                            <div class="flex items-center gap-3">
+                                                <x-gui::avatar :name="$user['name']" size="sm" />
+                                                <div>
+                                                    <p class="font-medium text-zinc-900 dark:text-zinc-100">{{ $user['name'] }}</p>
+                                                    <p class="text-zinc-500 dark:text-zinc-400">{{ $user['email'] }}</p>
+                                                </div>
+                                            </div>
+                                        </x-gui::table.cell>
+                                        <x-gui::table.cell>
+                                            <x-gui::badge :color="$user['role'] === 'Admin' ? 'primary' : 'secondary'">{{ $user['role'] }}</x-gui::badge>
+                                        </x-gui::table.cell>
+                                        <x-gui::table.cell class="text-right">
+                                            <x-gui::button variant="ghost" size="sm">Edit</x-gui::button>
+                                        </x-gui::table.cell>
+                                    </x-gui::table.row>
+                                @endforeach
+                            </x-gui::table>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Paginated',
+                        'description' => 'Pass a paginator as rows and the table adds pagination for you.',
+                        'code' => <<<'BLADE'
+                            <x-gui::table :columns="['id' => '#', 'name', 'email', 'role']" :rows="$paginated" />
                             BLADE,
                     ],
                     [
@@ -1280,11 +1354,48 @@ class Catalog
                     ],
                 ],
                 'props' => [
-                    ['columns', 'array', '[]', "A list of keys (['name', 'email']) or a key => label map."],
-                    ['rows', 'iterable', '[]', 'Arrays, objects, Eloquent models or a collection.'],
+                    ['columns', 'array', 'null', "A list of keys (['name', 'email']) or a key => label map. Leave it out to compose the table."],
+                    ['rows', 'iterable', '[]', 'Arrays, objects, models, a collection or a paginator.'],
+                    ['sortable', 'array', '[]', 'Column keys whose headings sort.'],
+                    ['sort', 'string', 'null', 'The column currently sorted.'],
+                    ['direction', "'asc' | 'desc'", "'asc'", 'The current sort direction.'],
+                    ['sortable (heading)', 'string', 'null', 'Makes a composed heading sortable by this key.'],
+                    ['wrap (cell)', 'bool', 'false', 'Let a cell\'s text wrap.'],
                 ],
                 'slots' => [
+                    ['head', 'Composed headings (table.heading).'],
+                    ['default', 'Composed rows (table.row with table.cell).'],
                     ['empty', 'Shown when there are no rows. Defaults to "No results."'],
+                    ['footer', 'Below the table. Defaults to pagination when rows is a paginator.'],
+                ],
+                'notes' => [
+                    'On a sortable heading, wire:click and x-on:click go on the sort button; class and other attributes go on the <th>.',
+                ],
+            ],
+
+            'pagination' => [
+                'name' => 'Pagination',
+                'group' => 'Data',
+                'description' => 'Page links for any Laravel paginator, with a Livewire version.',
+                'preview' => 'block',
+                'usage' => '<x-gui::pagination :paginator="$users" />',
+                'examples' => [
+                    [
+                        'title' => 'Links',
+                        'code' => <<<'BLADE'
+                            <x-gui::pagination :paginator="$paginated" />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['paginator', 'Paginator', 'required', 'A length-aware or simple paginator.'],
+                    ['livewire', 'bool', 'false', 'Use wire:click with Livewire\'s gotoPage, previousPage and nextPage instead of links.'],
+                    ['window', 'int', '2', 'Pages shown either side of the current one.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'Use it for every paginator: Paginator::defaultView(\'giraffeui::pagination.default\') in a service provider.',
+                    'In Livewire, return \'giraffeui::pagination.livewire\' from paginationView(), or pass livewire to the component.',
                 ],
             ],
         ];
