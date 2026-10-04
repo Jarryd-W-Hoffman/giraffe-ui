@@ -6,7 +6,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 35 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 36 components and a catalog.
+
+### Date picker
+
+#### Added
+- Date picker: a native `<input type="date">` with a calendar button. The input works without JavaScript, can be typed into, validates `min` and `max`, and submits `Y-m-d`. With Alpine, the button opens a calendar in a native popover, following the WAI-ARIA date picker dialog pattern: arrow keys move by day and week, Home and End go to the start and end of the week, Page Up and Page Down change the month (with Shift, the year), and Enter or Space picks. Picking fires `input` and `change`, so `wire:model` and `x-model` work. Days outside `min` and `max` are crossed out and can't be picked. Month and day names and the first day of the week follow the page's language, or `locale` and `week-start`, and the button labels can be translated.
+- Icons: `calendar` and `chevron-left`.
+- The Livewire demo form has a birthday, validated on the server.
 
 ### Textarea autosize and character count
 

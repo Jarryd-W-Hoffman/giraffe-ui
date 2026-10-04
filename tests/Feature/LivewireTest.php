@@ -30,6 +30,14 @@ describe('forms', function () {
             ->assertDispatched('toast', message: "Saved Ada Lovelace's profile.", color: 'success');
     });
 
+    it('validates the birthday from the date picker', function () {
+        Livewire::test(ProfileForm::class)
+            ->set('birthday', '2999-01-01')
+            ->call('save')
+            ->assertHasErrors(['birthday' => 'before'])
+            ->assertSeeHtml('Your birthday must be in the past.');
+    });
+
     it('does not refill wire:model inputs from old input', function () {
         $html = Livewire::test(ProfileForm::class)->html();
 

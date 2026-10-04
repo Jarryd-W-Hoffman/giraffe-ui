@@ -16,6 +16,9 @@ class ProfileForm extends Component
     #[Validate('required', message: 'Choose a country.')]
     public string $country = '';
 
+    #[Validate('nullable|date|before:today', message: ['before' => 'Your birthday must be in the past.'])]
+    public string $birthday = '';
+
     #[Validate('max:160')]
     public string $bio = 'I build things.';
 
@@ -43,6 +46,10 @@ class ProfileForm extends Component
 
                 <x-gui::field label="Country" name="country">
                     <x-gui::combobox wire:model="country" :options="\Workbench\App\Catalog::countries()" placeholder="Search countries" />
+                </x-gui::field>
+
+                <x-gui::field label="Birthday" name="birthday">
+                    <x-gui::date-picker wire:model="birthday" />
                 </x-gui::field>
 
                 <x-gui::field label="Bio" name="bio" hint="Shown on your profile.">
