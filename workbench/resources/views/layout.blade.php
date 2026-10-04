@@ -187,6 +187,17 @@
                 <span class="rounded-full border border-zinc-200 px-2 py-0.5 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">pre-1.0</span>
 
                 <nav class="ml-auto flex items-center gap-1">
+                    <button
+                        type="button"
+                        commandfor="catalog-search"
+                        command="show-modal"
+                        class="mr-1 flex cursor-pointer items-center gap-2 rounded-gui border border-zinc-200 px-2.5 py-1.5 text-sm text-zinc-600 hover:border-zinc-300 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-100"
+                    >
+                        <x-gui::icon name="magnifying-glass" size="sm" />
+                        <span>Search</span>
+                        <span class="hidden gap-0.5 sm:flex" aria-hidden="true"><x-gui::kbd>⌘</x-gui::kbd><x-gui::kbd>K</x-gui::kbd></span>
+                    </button>
+
                     <a href="https://github.com/Jarryd-W-Hoffman/GiraffeUI" class="hidden rounded-md px-3 py-1.5 text-sm text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 sm:block dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100">GitHub</a>
 
                     <button
@@ -259,6 +270,21 @@
                 </div>
             </main>
         </div>
+
+        <x-gui::command-palette id="catalog-search" placeholder="Search the catalog" label="Search the catalog">
+            @foreach (collect($nav)->groupBy('group') as $group => $items)
+                <x-gui::command-palette.group :heading="$group">
+                    @foreach ($items as $item)
+                        <x-gui::command-palette.item :href="'/catalog/'.$item['slug']" :keywords="$item['slug']">{{ $item['title'] }}</x-gui::command-palette.item>
+                    @endforeach
+                </x-gui::command-palette.group>
+            @endforeach
+            <x-gui::command-palette.group heading="Theme">
+                <x-gui::command-palette.item x-on:click="GiraffeUI.setTheme('light')" keywords="appearance">Light mode</x-gui::command-palette.item>
+                <x-gui::command-palette.item x-on:click="GiraffeUI.setTheme('dark')" keywords="appearance">Dark mode</x-gui::command-palette.item>
+                <x-gui::command-palette.item x-on:click="GiraffeUI.setTheme('system')" keywords="appearance os">System theme</x-gui::command-palette.item>
+            </x-gui::command-palette.group>
+        </x-gui::command-palette>
 
         <x-gui::toasts />
     </body>
