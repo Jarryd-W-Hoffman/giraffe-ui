@@ -1,8 +1,15 @@
 laravel: '@testbench'
 
 providers:
+  - Livewire\LivewireServiceProvider
   - JayAitch\GiraffeUI\GiraffeUIServiceProvider
   - Workbench\App\Providers\WorkbenchServiceProvider
+
+# The catalog runs on Testbench's bare app, which has no database tables. Livewire needs a cache and a session
+# that persist between requests, so keep both on disk.
+env:
+  - CACHE_STORE=file
+  - SESSION_DRIVER=file
 
 workbench:
   start: '/catalog'

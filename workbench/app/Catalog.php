@@ -23,6 +23,7 @@ class Catalog
             'introduction' => 'Introduction',
             'installation' => 'Installation',
             'theming' => 'Theming',
+            'livewire' => 'Livewire',
         ];
     }
 
@@ -183,6 +184,19 @@ class Catalog
                             BLADE,
                     ],
                     [
+                        'title' => 'Loading',
+                        'description' => 'With Livewire this is automatic: a button with wire:click, or a submit button in a wire:submit form, shows a spinner and ignores clicks while its request runs. Set loading yourself otherwise.',
+                        'code' => <<<'BLADE'
+                            <x-gui::button loading>Saving</x-gui::button>
+                            <x-gui::button loading variant="outline">
+                                <x-slot:leading>
+                                    <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" /></svg>
+                                </x-slot:leading>
+                                Creating
+                            </x-gui::button>
+                            BLADE,
+                    ],
+                    [
                         'title' => 'Full width',
                         'code' => <<<'BLADE'
                             <x-gui::button class="w-full">Continue</x-gui::button>
@@ -208,6 +222,7 @@ class Catalog
                     ['external', 'bool', 'false', 'With href, opens in a new tab with rel="noopener noreferrer".'],
                     ['type', "'button' | 'submit' | 'reset'", "'button'", 'Ignored for links.'],
                     ['disabled', 'bool', 'false', 'Disables a button, or removes the href from a link and sets aria-disabled.'],
+                    ['loading', 'bool', 'false', 'Shows a spinner in place of the leading icon and disables the button. Automatic for Livewire actions.'],
                 ],
                 'slots' => [
                     ['default', 'The label.'],
@@ -767,6 +782,41 @@ class Catalog
                 ],
                 'slots' => [
                     ['default', 'The label.'],
+                ],
+            ],
+
+            'spinner' => [
+                'name' => 'Spinner',
+                'group' => 'Display',
+                'description' => 'Shows that something is loading. Buttons use it for their loading state.',
+                'usage' => '<x-gui::spinner label="Loading results" />',
+                'examples' => [
+                    [
+                        'title' => 'Sizes',
+                        'code' => <<<'BLADE'
+                            <x-gui::spinner size="sm" />
+                            <x-gui::spinner />
+                            <x-gui::spinner size="lg" class="text-gui-primary-text" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Announced',
+                        'description' => 'Give it a label when it stands alone, so screen readers hear it. Without one it\'s decorative.',
+                        'code' => <<<'BLADE'
+                            <div class="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+                                <x-gui::spinner size="sm" label="Loading results" />
+                                Loading results…
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                    ['label', 'string', 'null', 'Announced as a status. Without it the spinner is aria-hidden.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'It inherits the text colour. With reduced motion it spins more slowly rather than stopping, since it is the only sign of progress.',
                 ],
             ],
 

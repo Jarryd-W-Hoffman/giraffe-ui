@@ -51,7 +51,7 @@ Then rebuild your CSS (`npm run dev` or `npm run build`).
 |---|---|
 | Actions | [Button](docs/components/button.md) |
 | Forms | [Field](docs/components/field.md), [Input](docs/components/input.md), [Textarea](docs/components/textarea.md), [Select](docs/components/select.md), [Checkbox](docs/components/checkbox.md), [Radio](docs/components/radio.md), [Switch](docs/components/switch.md), [Fieldset](docs/components/fieldset.md), [Label](docs/components/label.md) |
-| Display | [Alert](docs/components/alert.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md) |
+| Display | [Alert](docs/components/alert.md), [Avatar](docs/components/avatar.md), [Badge](docs/components/badge.md), [Card](docs/components/card.md), [Separator](docs/components/separator.md), [Spinner](docs/components/spinner.md) |
 | Overlays | [Modal](docs/components/modal.md), [Dropdown](docs/components/dropdown.md), [Popover](docs/components/popover.md), [Tooltip](docs/components/tooltip.md), [Toast](docs/components/toasts.md) |
 | Disclosure | [Accordion](docs/components/accordion.md), [Tabs](docs/components/tabs.md) |
 | Data | [Table](docs/components/table.md), [Pagination](docs/components/pagination.md) |
@@ -72,7 +72,7 @@ Wrap a control in a field to get a linked label, hint and error message. Errors 
 </form>
 ```
 
-The input gets `id`, `name`, `required`, `aria-invalid` and `aria-describedby` automatically, and is refilled with old input after a failed submission. With Livewire, put `wire:model` on the control and keep `name` on the field.
+The input gets `id`, `name`, `required`, `aria-invalid` and `aria-describedby` automatically, and is refilled with old input after a failed submission. With Livewire, put `wire:model` on the control and keep `name` on the field. Buttons that trigger Livewire requests show a loading spinner on their own.
 
 ### Interactivity
 

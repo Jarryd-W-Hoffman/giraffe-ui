@@ -3,13 +3,14 @@
 namespace JayAitch\GiraffeUI\Tests;
 
 use JayAitch\GiraffeUI\GiraffeUIServiceProvider;
+use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
     protected function getPackageProviders($app): array
     {
-        return [GiraffeUIServiceProvider::class];
+        return [LivewireServiceProvider::class, GiraffeUIServiceProvider::class];
     }
 
     protected function defineEnvironment($app): void

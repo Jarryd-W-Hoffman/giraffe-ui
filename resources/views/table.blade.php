@@ -25,7 +25,7 @@
                             <td colspan="{{ max($headings->count(), 1) }}" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">{{ $empty ?? 'No results.' }}</td>
                         </tr>
                     @endforelse
-                @elseif ($slot->isEmpty())
+                @elseif (\JayAitch\GiraffeUI\Support\Slot::isBlank($slot))
                     <tr>
                         {{-- Browsers clamp an oversized colspan to the table's real width. --}}
                         <td colspan="100" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">{{ $empty ?? 'No results.' }}</td>

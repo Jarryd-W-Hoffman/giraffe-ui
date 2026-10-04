@@ -7,7 +7,7 @@
 
 @php
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $attributes, $errors ?? null, $invalid);
-    $value = $slot->isNotEmpty() ? $slot : \JayAitch\GiraffeUI\Support\Form::value($attributes, $control['errorKey']);
+    $value = ! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot) ? $slot : \JayAitch\GiraffeUI\Support\Form::value($attributes, $control['errorKey']);
 @endphp
 
 <textarea {{ $attributes

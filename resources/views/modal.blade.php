@@ -53,7 +53,7 @@
             </div>
         @endif
 
-        @if ($slot->isNotEmpty())
+        @if (! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot))
             <div class="min-h-0 flex-1 overflow-y-auto px-6 pb-4 text-sm first:pt-6">{{ $slot }}</div>
         @endif
 

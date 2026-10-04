@@ -23,6 +23,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Alert](alert.md): A message that stands out from the page, with an icon, title and actions.
 - [Avatar](avatar.md): A profile image, with initials when there is no image.
 - [Badge](badge.md): A small label for status, counts or categories.
+- [Spinner](spinner.md): Shows that something is loading. Buttons use it for their loading state.
 - [Card](card.md): A surface for grouping content, with an optional header and footer.
 - [Separator](separator.md): A line that divides content, optionally with a label.
 

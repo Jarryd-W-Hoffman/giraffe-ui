@@ -155,6 +155,19 @@ it('installs Livewire with Composer when asked', function () {
         && $process->path === $this->basePath);
 });
 
+it('skips the Livewire question when the app already requires it', function () {
+    Process::fake();
+    writeCss("@import 'tailwindcss';\n");
+    File::put($this->basePath.'/composer.json', json_encode(['require' => ['livewire/livewire' => '^4.0']]));
+
+    $this->artisan('gui:install')
+        ->expectsOutputToContain('ALREADY INSTALLED')
+        ->expectsConfirmation(LAYOUT_QUESTION, 'no')
+        ->assertSuccessful();
+
+    Process::assertNothingRan();
+});
+
 it('reports a failed Livewire install', function () {
     Process::fake(['*' => Process::result(exitCode: 1)]);
     writeCss("@import 'tailwindcss';\n");

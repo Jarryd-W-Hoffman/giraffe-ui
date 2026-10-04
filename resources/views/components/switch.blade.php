@@ -5,7 +5,7 @@
 
 @php
     $id = $attributes->get('id') ?? \JayAitch\GiraffeUI\Support\Form::id($attributes->get('name'), $attributes->get('value')) ?? 'gui-'.\Illuminate\Support\Str::random(8);
-    $hasLabel = $label !== null || $slot->isNotEmpty();
+    $hasLabel = $label !== null || ! \JayAitch\GiraffeUI\Support\Slot::isBlank($slot);
 @endphp
 
 <div class="group flex gap-3 has-disabled:opacity-60">
