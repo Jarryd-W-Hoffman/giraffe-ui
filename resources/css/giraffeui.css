@@ -45,6 +45,9 @@
     --color-gui-info-foreground: var(--color-white);
     --color-gui-info-text: var(--color-sky-700);
 
+    /* Borders of inputs, selects and switch tracks. zinc-500 is the lightest shade with 3:1 contrast in both modes. */
+    --color-gui-input: var(--color-zinc-500);
+
     /* Corner radius used by every component. */
     --radius-gui: var(--radius-md);
 }

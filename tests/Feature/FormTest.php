@@ -1,0 +1,248 @@
+<?php
+
+describe('field', function () {
+    it('links the label, hint and error to the control', function () {
+        withErrors(['email' => 'The email field is required.']);
+
+        $html = (string) $this->blade('<x-gui::field label="Email" name="email" hint="We never share it."><x-gui::input type="email" /></x-gui::field>');
+
+        expect(attr($html, 'label', 'for'))->toBe('gui-email')
+            ->and(attr($html, 'input', 'id'))->toBe('gui-email')
+            ->and(attr($html, 'input', 'name'))->toBe('email')
+            ->and(attr($html, 'input', 'aria-invalid'))->toBe('true')
+            ->and(attr($html, 'input', 'aria-describedby'))->toBe('gui-email-hint gui-email-error')
+            ->and($html)->toContain('id="gui-email-hint"', 'We never share it.', 'id="gui-email-error"', 'The email field is required.');
+    });
+
+    it('is not invalid without errors', function () {
+        $html = (string) $this->blade('<x-gui::field label="Email" name="email"><x-gui::input /></x-gui::field>');
+
+        expect(attr($html, 'input', 'aria-invalid'))->toBeNull()
+            ->and(attr($html, 'input', 'aria-describedby'))->toBeNull()
+            ->and($html)->not->toContain('gui-email-error');
+    });
+
+    it('shows an explicit error', function () {
+        $html = (string) $this->blade('<x-gui::field label="Name" name="name" error="Too short."><x-gui::input /></x-gui::field>');
+
+        expect($html)->toContain('Too short.')
+            ->and(attr($html, 'input', 'aria-invalid'))->toBe('true');
+    });
+
+    it('marks the label and control as required', function () {
+        $html = (string) $this->blade('<x-gui::field label="Name" name="name" required><x-gui::input /></x-gui::field>');
+
+        expect(attr($html, 'input', 'required'))->not->toBeNull()
+            ->and($html)->toContain('aria-hidden="true"> *</span>');
+    });
+
+    it('turns array names into ids and error keys', function () {
+        withErrors(['address.city' => 'Pick a city.']);
+
+        $html = (string) $this->blade('<x-gui::field label="City" name="address[city]"><x-gui::input /></x-gui::field>');
+
+        expect(attr($html, 'input', 'id'))->toBe('gui-address-city')
+            ->and(attr($html, 'input', 'name'))->toBe('address[city]')
+            ->and($html)->toContain('Pick a city.');
+    });
+
+    it('lets the control override the field id and name', function () {
+        $html = (string) $this->blade('<x-gui::field label="Email" name="email"><x-gui::input id="custom" name="other" /></x-gui::field>');
+
+        expect(attr($html, 'input', 'id'))->toBe('custom')
+            ->and(attr($html, 'input', 'name'))->toBe('other');
+    });
+
+    it('does not pick up ids or names from other parent components', function () {
+        $html = (string) $this->blade('<x-gui::card id="settings" name="card"><x-gui::input /></x-gui::card>');
+
+        expect(attr($html, 'input', 'id'))->toBeNull()
+            ->and(attr($html, 'input', 'name'))->toBeNull();
+    });
+
+    it('works with select and textarea too', function (string $control) {
+        withErrors(['bio' => 'Required.']);
+
+        $html = (string) $this->blade("<x-gui::field label=\"Bio\" name=\"bio\" hint=\"Short.\"><x-gui::{$control} /></x-gui::field>");
+
+        expect(attr($html, $control, 'id'))->toBe('gui-bio')
+            ->and(attr($html, $control, 'aria-describedby'))->toBe('gui-bio-hint gui-bio-error');
+    })->with(['select', 'textarea']);
+});
+
+describe('input', function () {
+    it('renders a text input by default', function () {
+        $html = (string) $this->blade('<x-gui::input name="title" />');
+
+        expect(attr($html, 'input', 'type'))->toBe('text')
+            ->and(attr($html, 'input', 'id'))->toBe('gui-title')
+            ->and(classesOf($html, 'input'))->toContain('border-gui-input', 'h-10');
+    });
+
+    it('is invalid when its own name has an error', function () {
+        withErrors(['email' => 'Bad.']);
+
+        $html = (string) $this->blade('<x-gui::input name="email" />');
+
+        expect(attr($html, 'input', 'aria-invalid'))->toBe('true')
+            ->and(attr($html, 'input', 'aria-describedby'))->toBeNull();
+    });
+
+    it('uses wire:model as the error key when there is no name', function () {
+        withErrors(['form.email' => 'Bad.']);
+
+        $html = (string) $this->blade('<x-gui::input wire:model="form.email" />');
+
+        expect(attr($html, 'input', 'aria-invalid'))->toBe('true')
+            ->and(attr($html, 'input', 'value'))->toBeNull();
+    });
+
+    it('can be forced valid or invalid', function () {
+        withErrors(['a' => 'x']);
+
+        expect(attr((string) $this->blade('<x-gui::input :invalid="true" />'), 'input', 'aria-invalid'))->toBe('true')
+            ->and(attr((string) $this->blade('<x-gui::input name="a" :invalid="false" />'), 'input', 'aria-invalid'))->toBeNull();
+    });
+
+    it('keeps an explicit value and escapes it', function () {
+        $html = (string) $this->blade('<x-gui::input name="q" value="&quot;><script>" />');
+
+        expect($html)->not->toContain('<script>');
+    });
+
+    it('refills old input, except for passwords', function () {
+        $this->app['session']->put('_old_input', ['email' => 'ada@example.com', 'password' => 'secret']);
+        $this->app['request']->setLaravelSession($this->app['session']->driver());
+
+        expect(attr((string) $this->blade('<x-gui::input name="email" />'), 'input', 'value'))->toBe('ada@example.com')
+            ->and(attr((string) $this->blade('<x-gui::input type="password" name="password" />'), 'input', 'value'))->toBeNull();
+    });
+
+    it('wraps leading and trailing content', function () {
+        $html = (string) $this->blade('<x-gui::input><x-slot:leading><svg data-icon></svg></x-slot:leading></x-gui::input>');
+
+        expect($html)->toContain('data-icon')
+            ->and(classesOf($html, 'input'))->toContain('pl-9');
+    });
+
+    it('passes attributes through to the input', function () {
+        $html = (string) $this->blade('<x-gui::input wire:model.live="search" placeholder="Search" class="max-w-xs" />');
+
+        expect($html)->toContain('wire:model.live="search"', 'placeholder="Search"')
+            ->and(classesOf($html, 'input'))->toContain('max-w-xs');
+    });
+});
+
+describe('textarea', function () {
+    it('renders rows and slot content', function () {
+        $html = (string) $this->blade('<x-gui::textarea name="bio" rows="5">Hello &amp; welcome</x-gui::textarea>');
+
+        expect(attr($html, 'textarea', 'rows'))->toBe('5')
+            ->and($html)->toContain('>Hello &amp; welcome</textarea>');
+    });
+});
+
+describe('select', function () {
+    /**
+     * @return list<array{value: string, label: string, selected: bool, disabled: bool}>
+     */
+    function options(string $html): array
+    {
+        $dom = new DOMDocument;
+        @$dom->loadHTML('<?xml encoding="utf-8"?>'.$html, LIBXML_NOERROR);
+
+        return array_map(fn (DOMElement $option) => [
+            'value' => $option->getAttribute('value'),
+            'label' => trim($option->textContent),
+            'selected' => $option->hasAttribute('selected'),
+            'disabled' => $option->hasAttribute('disabled'),
+        ], iterator_to_array($dom->getElementsByTagName('option')));
+    }
+
+    it('renders options from an array and marks the value selected', function () {
+        $html = (string) $this->blade('<x-gui::select name="role" :options="[\'admin\' => \'Admin\', \'editor\' => \'Editor\']" value="editor" />');
+
+        expect(options($html))->toBe([
+            ['value' => 'admin', 'label' => 'Admin', 'selected' => false, 'disabled' => false],
+            ['value' => 'editor', 'label' => 'Editor', 'selected' => true, 'disabled' => false],
+        ])->and(attr($html, 'select', 'value'))->toBeNull();
+    });
+
+    it('adds a placeholder option selected when there is no value', function () {
+        $html = (string) $this->blade('<x-gui::select placeholder="Choose a role"><option value="a">A</option></x-gui::select>');
+
+        expect(options($html))->toBe([
+            ['value' => '', 'label' => 'Choose a role', 'selected' => true, 'disabled' => true],
+            ['value' => 'a', 'label' => 'A', 'selected' => false, 'disabled' => false],
+        ]);
+    });
+});
+
+describe('checkbox and radio', function () {
+    it('links the label and description', function (string $type) {
+        $html = (string) $this->blade("<x-gui::{$type} name=\"plan\" value=\"pro\" label=\"Pro\" description=\"For teams.\" />");
+
+        expect(attr($html, 'input', 'type'))->toBe($type)
+            ->and(attr($html, 'input', 'id'))->toBe('gui-plan-pro')
+            ->and(attr($html, 'label', 'for'))->toBe('gui-plan-pro')
+            ->and(attr($html, 'input', 'aria-describedby'))->toBe('gui-plan-pro-description')
+            ->and($html)->toContain('For teams.');
+    })->with(['checkbox', 'radio']);
+
+    it('gives every option in a group its own id', function () {
+        $html = (string) $this->blade('<x-gui::checkbox name="roles[]" value="admin" /><x-gui::checkbox name="roles[]" value="editor" />');
+
+        expect($html)->toContain('id="gui-roles-admin"', 'id="gui-roles-editor"');
+    });
+
+    it('is invalid when the group has an error', function () {
+        withErrors(['roles' => 'Pick one.']);
+
+        $html = (string) $this->blade('<x-gui::checkbox name="roles[]" value="admin" />');
+
+        expect(attr($html, 'input', 'aria-invalid'))->toBe('true');
+    });
+
+    it('uses the slot as the label', function () {
+        $html = (string) $this->blade('<x-gui::checkbox name="terms">I agree to the <a href="/terms">terms</a></x-gui::checkbox>');
+
+        expect($html)->toContain('<a href="/terms">terms</a></label>');
+    });
+
+    it('passes checked and wire:model through', function () {
+        $html = (string) $this->blade('<x-gui::checkbox wire:model="remember" checked />');
+
+        expect($html)->toContain('wire:model="remember"')
+            ->and(attr($html, 'input', 'checked'))->not->toBeNull();
+    });
+});
+
+describe('switch', function () {
+    it('is a checkbox with the switch role', function () {
+        $html = (string) $this->blade('<x-gui::switch name="notifications" label="Email me" description="Weekly digest." />');
+
+        expect(attr($html, 'input', 'type'))->toBe('checkbox')
+            ->and(attr($html, 'input', 'role'))->toBe('switch')
+            ->and(attr($html, 'label', 'for'))->toBe('gui-notifications')
+            ->and(attr($html, 'input', 'aria-describedby'))->toBe('gui-notifications-description');
+    });
+});
+
+describe('fieldset', function () {
+    it('renders a legend, hint and group error', function () {
+        withErrors(['plan' => 'Choose a plan.']);
+
+        $html = (string) $this->blade('<x-gui::fieldset legend="Plan" hint="Change any time." name="plan"><x-gui::radio name="plan" value="free" label="Free" /></x-gui::fieldset>');
+
+        expect($html)->toContain('<legend', 'Plan', 'Change any time.', 'Choose a plan.')
+            ->and(attr($html, 'fieldset', 'aria-describedby'))->toBe('gui-plan-fieldset-hint gui-plan-fieldset-error');
+    });
+});
+
+describe('label', function () {
+    it('shows a required marker hidden from screen readers', function () {
+        $html = (string) $this->blade('<x-gui::label for="x" required>Name</x-gui::label>');
+
+        expect($html)->toContain('for="x"', '<span class="text-gui-danger-text" aria-hidden="true"> *</span>');
+    });
+});

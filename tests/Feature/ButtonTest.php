@@ -1,15 +1,5 @@
 <?php
 
-/**
- * Get the class names on the first matching element, as an array.
- */
-function classesOf(string $html, string $tag): array
-{
-    preg_match('/<'.$tag.'\b[^>]*\bclass="([^"]*)"/s', $html, $matches);
-
-    return preg_split('/\s+/', trim($matches[1] ?? ''), -1, PREG_SPLIT_NO_EMPTY);
-}
-
 it('renders a button with type="button" by default', function () {
     $this->blade('<x-gui::button>Save</x-gui::button>')
         ->assertSee('<button', false)
