@@ -8,6 +8,8 @@ providers:
 # The catalog runs on Testbench's bare app, which has no database tables. Livewire needs a cache and a session
 # that persist between requests, so keep both on disk.
 env:
+  # A fixed key for the local catalog only. It protects nothing real.
+  - APP_KEY=base64:R2lyYWZmZVVJIGNhdGFsb2cga2V5LCBub3QgcmVhbCE=
   - CACHE_STORE=file
   - SESSION_DRIVER=file
 

@@ -16,6 +16,7 @@ composer catalog   # http://localhost:8000/catalog
 composer test      # Pest
 composer lint      # Pint
 composer docs      # if you changed workbench/app/Catalog.php
+npm run audit:a11y # with the catalog running: axe-core on every page, light and dark
 ```
 
 Then check your change in the catalog in light and dark mode, using only the keyboard.
