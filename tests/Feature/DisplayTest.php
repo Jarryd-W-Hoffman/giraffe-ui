@@ -89,3 +89,69 @@ describe('separator', function () {
         expect((string) $this->blade('<x-gui::separator orientation="vertical" />'))->toContain('role="separator"', 'aria-orientation="vertical"');
     });
 });
+
+describe('avatar group', function () {
+    $people = [['name' => 'Ada Lovelace'], ['name' => 'Grace Hopper', 'src' => '/grace.jpg'], ['name' => 'Alan Turing'], ['name' => 'Katherine Johnson']];
+
+    it('shows up to max and counts the rest', function () use ($people) {
+        $html = (string) $this->blade('<x-gui::avatar.group :avatars="$people" :max="2" label="Team" size="sm" />', ['people' => $people]);
+
+        expect(attr($html, 'div', 'role'))->toBe('group')
+            ->and(attr($html, 'div', 'aria-label'))->toBe('Team')
+            ->and($html)->toContain('aria-label="Ada Lovelace"', 'alt="Grace Hopper"', 'aria-label="2 more"', '>+2</span>')
+            ->not->toContain('Alan Turing')
+            ->and(substr_count($html, 'size-8'))->toBe(3)
+            ->and(classesOf($html, 'div'))->toContain('-space-x-1')->not->toContain('-space-x-2');
+    });
+
+    it('adds more to the slot and translates the count', function () {
+        $html = (string) $this->blade('<x-gui::avatar.group more="12" more-label=":count más"><x-gui::avatar name="Ada Lovelace" /></x-gui::avatar.group>');
+
+        expect($html)->toContain('aria-label="Ada Lovelace"', 'aria-label="12 más"', '+12')
+            ->and(attr($html, 'div', 'role'))->toBeNull();
+    });
+
+    it('has no count when everyone fits', function () use ($people) {
+        $html = (string) $this->blade('<x-gui::avatar.group :avatars="$people" />', ['people' => $people]);
+
+        expect($html)->not->toContain('more')
+            ->and(substr_count($html, 'role="img"'))->toBe(3);
+    });
+});
+
+describe('description list', function () {
+    it('renders terms and escaped details from an array, then the slot', function () {
+        $html = (string) $this->blade('<x-gui::description-list :items="[\'Name\' => \'Ada\', \'Note\' => \'<b>x</b>\']" class="mt-6"><x-gui::description-list.item term="Status"><em>Paid</em></x-gui::description-list.item></x-gui::description-list>');
+
+        expect(classesOf($html, 'dl'))->toContain('mt-6', 'divide-y')
+            ->and($html)->toMatch('/<dt[^>]*>Name<\/dt>\s*<dd[^>]*>Ada<\/dd>/')
+            ->toContain('&lt;b&gt;x&lt;/b&gt;', '<em>Paid</em>')
+            ->and(substr_count($html, '<dt'))->toBe(3)
+            ->and(strpos($html, 'Status'))->toBeGreaterThan(strpos($html, 'Note'));
+    });
+});
+
+describe('stat', function () {
+    it('shows a rise as good, with an arrow and hidden text', function () {
+        $html = (string) $this->blade('<x-gui::stat label="Revenue" value="$48,200" change="12%" trend="up" description="vs last month" />');
+
+        expect($html)->toContain('Revenue', '$48,200', '<span class="sr-only">Increased by</span>', 'vs last month', 'text-gui-success-text')
+            ->not->toContain('text-gui-danger-text');
+    });
+
+    it('inverts the colour when down is good', function () {
+        $up = (string) $this->blade('<x-gui::stat label="Churn" value="2%" change="1 pt" trend="up" invert />');
+        $down = (string) $this->blade('<x-gui::stat label="Latency" value="90 ms" change="10 ms" trend="down" invert decrease-label="Bajó" />');
+
+        expect($up)->toContain('text-gui-danger-text', 'Increased by')
+            ->and($down)->toContain('text-gui-success-text', '<span class="sr-only">Bajó</span>');
+    });
+
+    it('is neutral without a trend and plain without a change', function () {
+        $neutral = (string) $this->blade('<x-gui::stat label="Users" value="1,024" change="0" />');
+        $plain = (string) $this->blade('<x-gui::stat label="Users" value="1,024" />');
+
+        expect($neutral)->not->toContain('sr-only')->not->toContain('text-gui-success-text')
+            ->and($plain)->toMatch('/1,024<\/p>\s*<\/div>/');
+    });
+});
