@@ -73,7 +73,7 @@ describe('multiple', function () use ($countries) {
         $html = (string) $this->blade('<x-gui::field label="Countries" name="countries"><x-gui::combobox multiple :options="$countries" :value="[\'au\', \'gb\']" /></x-gui::field>', ['countries' => $countries]);
 
         expect($html)
-            ->toContain('name="countries[]" x-bind:value="chosen"', 'aria-multiselectable="true"', 'multiple: true', "Remove :label")
+            ->toContain('name="countries[]" x-bind:value="chosen"', 'aria-multiselectable="true"', 'multiple: true', 'Remove :label')
             ->toMatch('/data-value="au"\s+data-label="Australia"\s+aria-selected="true"/')
             ->toMatch('/data-value="nz"\s+data-label="New Zealand"\s+aria-selected="false"/')
             ->toMatch('/data-value="gb"\s+data-label="United Kingdom"\s+aria-selected="true"/')
