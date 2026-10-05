@@ -46,8 +46,8 @@
                             <x-gui::input :value="old('workspace', $data['workspace'] ?? null)" placeholder="Analytical Engines" />
                         </x-gui::field>
 
-                        <x-gui::field label="Web address" name="slug" hint="Your shop lives at acme.app/ followed by this. Lowercase letters, numbers and dashes." required>
-                            <x-gui::input :value="old('slug', $data['slug'] ?? null)" placeholder="analytical-engines" autocapitalize="none" spellcheck="false" />
+                        <x-gui::field label="Web address" name="slug" hint="Lowercase letters, numbers and dashes." required>
+                            <x-gui::input prefix="acme.app/" :value="old('slug', $data['slug'] ?? null)" placeholder="analytical-engines" autocapitalize="none" spellcheck="false" />
                         </x-gui::field>
                     @elseif ($step === 'team')
                         <x-gui::field label="Email addresses" name="invites" hint="One per line, or separated by commas.">

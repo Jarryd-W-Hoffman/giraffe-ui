@@ -35,6 +35,9 @@ return [
     'increased_by' => 'Increased by',
     'decreased_by' => 'Decreased by',
 
+    // Input
+    'show_password' => 'Show password',
+
     // Number input
     'increase' => 'Increase',
     'decrease' => 'Decrease',
