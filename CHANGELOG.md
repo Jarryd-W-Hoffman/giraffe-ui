@@ -8,6 +8,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Date picker in Firefox
+
+#### Fixed
+- Date picker: Firefox showed two calendar icons, its own (opening Firefox's picker) and ours. Firefox can't hide its icon, so once Alpine is running the input's right padding shrinks to centre it under our button, which now has a background matching the input (including disabled). Without JavaScript, Firefox's own picker works as before.
+
+#### Added
+- Browser behaviour tests run in Firefox too (`BROWSER=firefox npm run test:browser`), in CI as well, with a check that the date picker covers Firefox's icon.
+
 ### Proving Livewire is optional
 
 #### Added

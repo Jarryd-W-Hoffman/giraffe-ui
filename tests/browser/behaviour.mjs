@@ -1,10 +1,13 @@
 // Drives the Alpine-powered components in a real browser and fails on any console error or warning.
 // Runs against the catalog with or without Livewire (CI does both), to prove the components only need Alpine.
 // Needs the catalog running: `composer catalog`, or set CATALOG_URL. Exits 1 on any failure.
-import { chromium } from 'playwright';
+// BROWSER=firefox runs it in Firefox instead of Chromium.
+import { chromium, firefox } from 'playwright';
 
 const base = (process.env.CATALOG_URL ?? 'http://127.0.0.1:8000/catalog').replace(/\/$/, '');
-const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
+const browser = process.env.BROWSER === 'firefox'
+    ? await firefox.launch()
+    : await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const page = await context.newPage();
 
@@ -92,6 +95,20 @@ await check('date picker: the calendar picks a date', async () => {
     await calendar.locator('button', { hasText: /^15$/ }).first().click();
     expect((await page.locator('article input[type=date]').first().inputValue()).endsWith('-15'), 'the date was not set');
 });
+
+// Firefox can't hide its own picker icon (Chromium hides it with ::-webkit-calendar-picker-indicator), so the
+// date picker slides it under our button there. Check our button is what sits on top of it.
+if (process.env.BROWSER === 'firefox') {
+    await check("date picker: Firefox's own icon is covered by ours", async () => {
+        await visit('date-picker');
+        const covered = await page.locator('article input[type=date]').first().evaluate((input) => {
+            const box = input.getBoundingClientRect();
+            const hit = document.elementFromPoint(box.right - parseFloat(getComputedStyle(input).paddingRight) - 5, box.top + box.height / 2);
+            return hit?.closest('[aria-label="Choose date"]') !== null;
+        });
+        expect(covered, "Firefox's picker icon shows beside ours");
+    });
+}
 
 await check('number input: the buttons step the value', async () => {
     await visit('number-input');
