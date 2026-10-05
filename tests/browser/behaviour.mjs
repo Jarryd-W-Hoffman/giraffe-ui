@@ -201,6 +201,23 @@ if (slugs.includes('livewire')) {
     });
 }
 
+await check('combobox: multiple adds chips, keeps the list open and removes with Backspace', async () => {
+    await visit('combobox');
+    const input = page.getByPlaceholder('Add skills');
+    const root = input.locator('xpath=ancestor::div[@x-data][1]');
+    const values = () => root.locator('input[type=hidden]').evaluateAll((els) => els.map((el) => el.value).join(','));
+    await input.focus();
+    await page.keyboard.type('liv');
+    await page.keyboard.press('Enter');
+    expect((await values()) === 'laravel,tailwind,livewire', `after Enter: ${await values()}`);
+    expect((await input.getAttribute('aria-expanded')) === 'true', 'picking closed the list');
+    await page.keyboard.press('Escape');
+    await page.keyboard.press('Backspace');
+    expect((await values()) === 'laravel,tailwind', `after Backspace: ${await values()}`);
+    await root.getByRole('button', { name: 'Remove Laravel' }).click();
+    expect((await values()) === 'tailwind', `after removing Laravel: ${await values()}`);
+});
+
 await check('date picker: the calendar picks a date', async () => {
     await visit('date-picker');
     await page.locator('article [aria-label="Choose date"]').first().click();

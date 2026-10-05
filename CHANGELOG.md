@@ -8,6 +8,16 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Combobox: pick several
+
+#### Added
+- Combobox `multiple`: pick several options.
+  - Each choice shows as a chip with its own remove button, and Backspace in an empty search removes the last one.
+  - Picking toggles an option and keeps the list open (`aria-multiselectable`), and additions and removals are announced.
+  - It submits `name[]`, refills from old input, and `wire:model` / `x-model` bind an array.
+  - It works with `url`, and chips keep their labels when a search no longer includes them.
+- Translations: `remove`, `added`, `removed`.
+
 ### Input prefixes, suffixes and a password Show button
 
 #### Added

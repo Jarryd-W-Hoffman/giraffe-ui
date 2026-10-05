@@ -10,6 +10,7 @@
     'url' => null,
     'debounce' => 300,
     'searchingText' => null,
+    'multiple' => false,
 ])
 
 @php
@@ -27,7 +28,14 @@
 
     // With url, options come from the server as you type. These are the ones shown before any search.
     $initial = collect($options)->map(fn ($label, $value) => ['value' => (string) $value, 'label' => (string) $label])->values()->all();
-    $selectedLabel = $selected === null ? '' : (collect($initial)->firstWhere('value', (string) $selected)['label'] ?? '');
+    $labelOf = fn ($value) => collect($initial)->firstWhere('value', (string) $value)['label'] ?? '';
+
+    // With multiple, the value is a list, submitted as name[], and each choice shows as a removable chip.
+    if ($multiple) {
+        $selected = collect(is_iterable($selected) ? $selected : ($selected === null || $selected === '' ? [] : [$selected]))->map(fn ($value) => (string) $value)->values()->all();
+        $labels = collect($selected)->mapWithKeys(fn ($value) => [$value => $labelOf($value)])->filter()->all();
+    }
+    $selectedLabel = $multiple || $selected === null ? '' : $labelOf($selected);
 
     $sizes = [
         'sm' => 'h-8 pl-2.5 text-sm',
@@ -48,8 +56,12 @@
         query: '',
         // Only filter once the user types; reopening shows every option with the current one highlighted.
         filtering: false,
-        value: @js($selected === null ? '' : (string) $selected),
+        multiple: @js((bool) $multiple),
+        value: @js($multiple ? $selected : ($selected === null ? '' : (string) $selected)),
         active: null,
+        // With multiple, the labels of chosen options (they may not be among the current results), and what to announce.
+        labels: @js($multiple ? (object) $labels : (object) []),
+        announcement: '',
         // Searching on the server: the options to show, the query they're for, and the request in flight.
         url: @js($url),
         results: [],
@@ -64,11 +76,28 @@
         init() {
             this.results = this.initial();
             this.remember(this.value);
-            this.query = this.labelFor(this.value);
+            this.query = this.multiple ? '' : this.labelFor(this.value);
             this.$watch('value', (value) => {
                 this.remember(value);
-                if (! this.open) this.query = this.labelFor(value);
+                if (! this.open && ! this.multiple) this.query = this.labelFor(value);
             });
+        },
+        isSelected(value) {
+            return this.multiple ? this.value.includes(String(value)) : this.value === String(value);
+        },
+        // A chip's label: from the list if the option is showing, otherwise as remembered.
+        chipLabel(value) {
+            return this.options().find((option) => option.dataset.value === value)?.dataset.label ?? this.labels[value] ?? value;
+        },
+        remove(value) {
+            const label = this.chipLabel(value);
+            this.value = this.value.filter((each) => each !== value);
+            this.announcement = @js(__('giraffeui::ui.removed')).replace(':label', label);
+            this.changed();
+            this.$refs.text.focus();
+        },
+        changed() {
+            this.$nextTick(() => this.$el.dispatchEvent(new Event('change', { bubbles: true })));
         },
         // Read from a script tag rather than x-data, so a Livewire re-render that changes them doesn't reset the component.
         initial() {
@@ -76,8 +105,11 @@
         },
         // wire:model and x-model set the value from outside, so note its label while its option is in the list.
         remember(value) {
-            const option = this.options().find((option) => option.dataset.value === String(value));
-            if (option) this.selectedLabel = option.dataset.label;
+            for (const each of this.multiple ? value : [value]) {
+                const option = this.options().find((option) => option.dataset.value === String(each));
+                if (! option) continue;
+                this.multiple ? (this.labels[each] = option.dataset.label) : (this.selectedLabel = option.dataset.label);
+            }
         },
         options() {
             return [...this.$refs.listbox.querySelectorAll('[role=option]')];
@@ -97,7 +129,7 @@
             if (this.open) return;
             this.open = true;
             this.$refs.popup.showPopover?.();
-            this.active = this.options().find((option) => option.dataset.value === String(this.value))?.id ?? null;
+            this.active = this.options().find((option) => this.isSelected(option.dataset.value))?.id ?? null;
         },
         hide() {
             if (! this.open) return;
@@ -105,7 +137,7 @@
             this.filtering = false;
             this.$refs.popup.hidePopover?.();
             this.active = null;
-            this.query = this.labelFor(this.value);
+            this.query = this.multiple ? '' : this.labelFor(this.value);
             // Reopening shows the first options again, not the last search's results.
             if (this.url !== null) {
                 clearTimeout(this.timer);
@@ -134,6 +166,22 @@
         },
         choose(option) {
             if (! option || option.getAttribute('aria-disabled') === 'true') return;
+            // With multiple, picking toggles the option and the list stays open for the next one.
+            if (this.multiple) {
+                const value = option.dataset.value;
+                const adding = ! this.value.includes(value);
+                this.labels[value] = option.dataset.label;
+                this.value = adding ? [...this.value, value] : this.value.filter((each) => each !== value);
+                this.announcement = @js(__('giraffeui::ui.added')).replace(':label', option.dataset.label);
+                if (! adding) this.announcement = @js(__('giraffeui::ui.removed')).replace(':label', option.dataset.label);
+                if (this.filtering) {
+                    this.query = '';
+                    this.filtering = false;
+                    if (this.url !== null) this.find('');
+                }
+                this.active = option.id;
+                return this.changed();
+            }
             this.value = option.dataset.value;
             this.selectedLabel = option.dataset.label;
             this.hide();
@@ -194,19 +242,52 @@
     x-on:click.outside="hide()"
     {{ $binding }}
 >
-    @if ($name)
-        <input type="hidden" name="{{ $name }}" x-ref="hidden" x-bind:value="value" value="{{ $selected }}">
-    @else
-        <input type="hidden" x-ref="hidden" x-bind:value="value">
-    @endif
+    @if ($multiple)
+        {{-- One hidden input per chosen value, submitted as name[]. --}}
+        @if ($name)
+            <template x-for="chosen in value" x-bind:key="chosen">
+                <input type="hidden" name="{{ \Illuminate\Support\Str::finish($name, '[]') }}" x-bind:value="chosen">
+            </template>
+        @endif
 
-    <input
+        {{--
+            The bordered box holds the chips and the text input, and the list is anchored to it. Chips have their own
+            remove buttons, Backspace in an empty search removes the last one, and changes are announced.
+        --}}
+        <div
+            style="anchor-name: {{ \JayAitch\GiraffeUI\Support\Anchor::name($id) }}"
+            x-on:click.self="$refs.text.focus()"
+            @class([
+                'flex w-full min-w-0 flex-wrap items-center gap-1 rounded-gui border border-gui-input bg-white pr-9 text-zinc-900 shadow-xs transition-colors',
+                'has-[input:focus]:outline-2 has-[input:focus]:-outline-offset-1 has-[input:focus]:outline-gui-primary-text',
+                'has-aria-invalid:border-gui-danger-text has-disabled:cursor-not-allowed has-disabled:bg-zinc-100 dark:has-disabled:bg-zinc-800',
+                'dark:bg-zinc-900 dark:text-zinc-100',
+                ['sm' => 'min-h-8 py-0.5 pl-1 text-sm', 'md' => 'min-h-10 py-1 pl-1.5 text-sm', 'lg' => 'min-h-12 py-1.5 pl-2 text-base'][$size] ?? 'min-h-10 py-1 pl-1.5 text-sm',
+                $inputAttributes->get('class'),
+            ])
+        >
+            <template x-for="chosen in value" x-bind:key="chosen">
+                <span class="inline-flex max-w-full items-center gap-1 rounded-[calc(var(--radius-gui)-2px)] bg-zinc-100 py-0.5 pr-0.5 pl-2 text-sm text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
+                    <span class="truncate" x-text="chipLabel(chosen)"></span>
+                    <button
+                        type="button"
+                        x-on:click="remove(chosen)"
+                        x-bind:aria-label="@js(__('giraffeui::ui.remove')).replace(':label', chipLabel(chosen))"
+                        @disabled($inputAttributes->get('disabled'))
+                        class="flex size-5 cursor-pointer items-center justify-center rounded-sm text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
+                    >
+                        <x-gui::icon name="x-mark" size="xs" />
+                    </button>
+                </span>
+            </template>
+            <input
         type="text"
         role="combobox"
         autocomplete="off"
         aria-autocomplete="list"
         aria-controls="{{ $id }}-listbox"
         aria-expanded="false"
+        x-ref="text"
         x-bind:aria-expanded="open"
         x-bind:aria-activedescendant="active"
         x-model="query"
@@ -215,26 +296,63 @@
         x-on:keydown.down.prevent="$event.altKey ? show() : move(1)"
         x-on:keydown.up.prevent="move(-1)"
         x-on:keydown.enter="if (open) { $event.preventDefault(); enter(); }"
-        x-on:keydown.escape.prevent="open ? hide() : (value = '', query = '')"
         x-on:keydown.tab="hide()"
         x-on:blur="hide()"
         @if ($placeholder) placeholder="{{ $placeholder }}" @endif
-        {{ $inputAttributes
-            ->except(['aria-describedby', 'name', 'value', 'id'])
-            ->merge(array_diff_key($control['attributes'], ['name' => true]) + ['id' => $id])
-            ->class([
-                'block w-full min-w-0 rounded-gui border border-gui-input bg-white pr-9 text-zinc-900 shadow-xs transition-colors',
-                'placeholder:text-zinc-500 dark:placeholder:text-zinc-400',
-                'focus:outline-2 focus:-outline-offset-1 focus:outline-gui-primary-text',
-                'aria-invalid:border-gui-danger-text aria-invalid:focus:outline-gui-danger-text',
-                'disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-500 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400',
-                'dark:bg-zinc-900 dark:text-zinc-100 dark:scheme-dark',
-                $sizes[$size] ?? $sizes['md'],
-            ])
-            ->style('anchor-name: '.\JayAitch\GiraffeUI\Support\Anchor::name($id)) }}
-    >
+                x-on:keydown.escape.prevent="open ? hide() : (query = '')"
+                x-on:keydown.backspace="if (query === '' && value.length) { $event.preventDefault(); remove(value[value.length - 1]); }"
+                {{ $inputAttributes
+                    ->except(['aria-describedby', 'name', 'value', 'id', 'class'])
+                    ->merge(array_diff_key($control['attributes'], ['name' => true]) + ['id' => $id])
+                    ->class('h-7 min-w-24 flex-1 border-0 bg-transparent px-1 placeholder:text-zinc-500 focus:outline-none disabled:cursor-not-allowed dark:placeholder:text-zinc-400') }}
+            >
+        </div>
 
-    {{-- Pinned to the text input, so width classes on it move the icon and size the list too. --}}
+        <span class="sr-only" aria-live="polite" x-text="announcement"></span>
+    @else
+        @if ($name)
+            <input type="hidden" name="{{ $name }}" x-ref="hidden" x-bind:value="value" value="{{ $selected }}">
+        @else
+            <input type="hidden" x-ref="hidden" x-bind:value="value">
+        @endif
+
+        <input
+        type="text"
+        role="combobox"
+        autocomplete="off"
+        aria-autocomplete="list"
+        aria-controls="{{ $id }}-listbox"
+        aria-expanded="false"
+        x-ref="text"
+        x-bind:aria-expanded="open"
+        x-bind:aria-activedescendant="active"
+        x-model="query"
+        x-on:input="typed()"
+        x-on:click="open ? hide() : show()"
+        x-on:keydown.down.prevent="$event.altKey ? show() : move(1)"
+        x-on:keydown.up.prevent="move(-1)"
+        x-on:keydown.enter="if (open) { $event.preventDefault(); enter(); }"
+        x-on:keydown.tab="hide()"
+        x-on:blur="hide()"
+        @if ($placeholder) placeholder="{{ $placeholder }}" @endif
+            x-on:keydown.escape.prevent="open ? hide() : (value = '', query = '')"
+            {{ $inputAttributes
+                ->except(['aria-describedby', 'name', 'value', 'id'])
+                ->merge(array_diff_key($control['attributes'], ['name' => true]) + ['id' => $id])
+                ->class([
+                    'block w-full min-w-0 rounded-gui border border-gui-input bg-white pr-9 text-zinc-900 shadow-xs transition-colors',
+                    'placeholder:text-zinc-500 dark:placeholder:text-zinc-400',
+                    'focus:outline-2 focus:-outline-offset-1 focus:outline-gui-primary-text',
+                    'aria-invalid:border-gui-danger-text aria-invalid:focus:outline-gui-danger-text',
+                    'disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-500 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400',
+                    'dark:bg-zinc-900 dark:text-zinc-100 dark:scheme-dark',
+                    $sizes[$size] ?? $sizes['md'],
+                ])
+                ->style('anchor-name: '.\JayAitch\GiraffeUI\Support\Anchor::name($id)) }}
+        >
+    @endif
+
+    {{-- Pinned to the control, so width classes on it move the icon and size the list too. --}}
     <x-gui::icon name="chevron-up-down" size="sm" class="pointer-events-none absolute inset-y-0 right-0 my-auto mr-3 text-zinc-500 dark:text-zinc-400" :style="\JayAitch\GiraffeUI\Support\Anchor::pin($id, 'right')" />
 
     {{-- A manual popover in the top layer, so the list isn't clipped by modals or scrolling containers. --}}
@@ -248,7 +366,7 @@
         {{-- Above the list, so "Searching…" shows even when the list is scrolled. --}}
         <p x-show="open && (searching || visible().length === 0)" class="px-2.5 py-1.5 text-zinc-500 dark:text-zinc-400" role="status" x-text="searching ? @js($searchingText) : @js($empty)">{{ $empty }}</p>
         {{-- The previous results fade while a search runs. --}}
-        <ul id="{{ $id }}-listbox" role="listbox" x-ref="listbox" x-bind:aria-busy="searching" class="transition-opacity aria-busy:opacity-70">
+        <ul id="{{ $id }}-listbox" role="listbox" x-ref="listbox" @if ($multiple) aria-multiselectable="true" @endif x-bind:aria-busy="searching" class="transition-opacity aria-busy:opacity-70">
             @if ($url)
                 {{-- JSON_HEX_TAG escapes < and >, so labels can't close the script tag. --}}
                 <script type="application/json" x-ref="initial">{!! json_encode($initial, JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
@@ -258,7 +376,7 @@
                         role="option"
                         x-bind:data-value="option.value"
                         x-bind:data-label="option.label"
-                        x-bind:aria-selected="value === option.value"
+                        x-bind:aria-selected="isSelected(option.value)"
                         x-on:click="choose($el)"
                         x-on:mousemove="active = $el.id"
                         x-bind:data-active="active === $el.id"
@@ -275,8 +393,8 @@
                     role="option"
                     data-value="{{ $optionValue }}"
                     data-label="{{ $optionLabel }}"
-                    aria-selected="{{ (string) $optionValue === (string) $selected ? 'true' : 'false' }}"
-                    x-bind:aria-selected="value === @js((string) $optionValue)"
+                    aria-selected="{{ ($multiple ? in_array((string) $optionValue, $selected, true) : (string) $optionValue === (string) $selected) ? 'true' : 'false' }}"
+                    x-bind:aria-selected="isSelected(@js((string) $optionValue))"
                     x-show="matches($el)"
                     x-on:click="choose($el)"
                     x-on:mousemove="active = $el.id"

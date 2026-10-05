@@ -67,3 +67,32 @@ it("escapes labels so they can't close the initial options' script tag", functio
 
     expect($html)->not->toContain('</script><b>')->toContain('\u003C/script\u003E\u003Cb\u003Ex\u003C/b\u003E');
 });
+
+describe('multiple', function () use ($countries) {
+    it('submits name[] and marks every chosen option', function () use ($countries) {
+        $html = (string) $this->blade('<x-gui::field label="Countries" name="countries"><x-gui::combobox multiple :options="$countries" :value="[\'au\', \'gb\']" /></x-gui::field>', ['countries' => $countries]);
+
+        expect($html)
+            ->toContain('name="countries[]" x-bind:value="chosen"', 'aria-multiselectable="true"', 'multiple: true', "Remove :label")
+            ->toMatch('/data-value="au"\s+data-label="Australia"\s+aria-selected="true"/')
+            ->toMatch('/data-value="nz"\s+data-label="New Zealand"\s+aria-selected="false"/')
+            ->toMatch('/data-value="gb"\s+data-label="United Kingdom"\s+aria-selected="true"/')
+            ->toContain("value: JSON.parse('[\\u0022au\\u0022,\\u0022gb\\u0022]')");
+    });
+
+    it('refills from old input and binds an array with wire:model', function () use ($countries) {
+        session()->put('_old_input', ['countries' => ['nz']]);
+        request()->setLaravelSession(session()->driver());
+
+        expect((string) $this->blade('<x-gui::combobox multiple name="countries" :options="$countries" />', ['countries' => $countries]))
+            ->toMatch('/data-value="nz"\s+data-label="New Zealand"\s+aria-selected="true"/');
+
+        expect((string) $this->blade('<x-gui::combobox multiple wire:model="countries" :options="$countries" />', ['countries' => $countries]))
+            ->toContain('wire:model="countries"')->toMatch("/value: (\\[\\]|JSON\\.parse\\('\\[\\]'\\)),/")->not->toContain('$wire');
+    });
+
+    it('accepts a single value as a list of one', function () use ($countries) {
+        expect((string) $this->blade('<x-gui::combobox multiple :options="$countries" value="nz" />', ['countries' => $countries]))
+            ->toContain("value: JSON.parse('[\\u0022nz\\u0022]')");
+    });
+});

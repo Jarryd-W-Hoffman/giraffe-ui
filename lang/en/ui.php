@@ -20,6 +20,11 @@ return [
     'no_results_table' => 'No results.',
     'searching' => 'Searching…',
 
+    // Combobox with multiple. :label is the option's label.
+    'remove' => 'Remove :label',
+    'added' => ':label added',
+    'removed' => ':label removed',
+
     // Pagination. :first, :last and :total are numbers.
     'pagination' => 'Pagination',
     'showing' => 'Showing :first to :last of :total',
