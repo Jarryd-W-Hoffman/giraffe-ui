@@ -1,7 +1,7 @@
 laravel: '@testbench'
 
+# Livewire is registered by WorkbenchServiceProvider when it's installed; CI also runs the catalog without it.
 providers:
-  - Livewire\LivewireServiceProvider
   - JayAitch\GiraffeUI\GiraffeUIServiceProvider
   - Workbench\App\Providers\WorkbenchServiceProvider
 

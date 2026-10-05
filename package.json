@@ -4,10 +4,12 @@
     "scripts": {
         "catalog:css": "tailwindcss -i workbench/resources/css/catalog.css -o workbench/dist/catalog.css",
         "catalog:watch": "tailwindcss -i workbench/resources/css/catalog.css -o workbench/dist/catalog.css --watch",
-        "audit:a11y": "node tests/a11y/audit.mjs"
+        "audit:a11y": "node tests/a11y/audit.mjs",
+        "test:browser": "node tests/browser/behaviour.mjs"
     },
     "devDependencies": {
         "@tailwindcss/cli": "^4.3",
+        "alpinejs": "^3.17.4",
         "axe-core": "^4.10",
         "playwright": "^1.50",
         "tailwindcss": "^4.3"

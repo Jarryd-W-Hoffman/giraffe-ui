@@ -67,3 +67,8 @@
 </script>
 
 <link rel="stylesheet" href="/catalog/assets/catalog.css?v={{ time() }}">
+
+{{-- With Livewire, Alpine comes bundled in the script Livewire injects. Without it, load Alpine like any other app would. --}}
+@unless (\Workbench\App\Catalog::livewire())
+    <script defer src="/catalog/assets/alpine.js"></script>
+@endunless

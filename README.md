@@ -158,7 +158,11 @@ composer test        # Pest
 composer lint        # Pint
 composer catalog     # Build the catalog's CSS and serve it at http://localhost:8000/catalog
 composer docs        # Regenerate docs/components from the catalog
+npm run audit:a11y   # With the catalog running: axe-core on every page, light and dark
+npm run test:browser # With the catalog running: drives the Alpine components in Chrome
 ```
+
+CI runs everything twice: with Livewire, and with Livewire removed and Alpine loaded on its own, so GiraffeUI never comes to depend on Livewire.
 
 ### Catalog
 

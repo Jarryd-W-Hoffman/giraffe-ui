@@ -11,6 +11,8 @@ use Workbench\App\Livewire\SettingsTabs;
 use Workbench\App\Livewire\SignupWizard;
 use Workbench\App\Livewire\UsersTable;
 
+pest()->group('livewire');
+
 describe('forms', function () {
     it('shows validation errors in the field and marks the input invalid', function () {
         Livewire::test(ProfileForm::class)

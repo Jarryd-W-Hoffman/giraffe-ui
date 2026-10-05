@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         @include('catalog::partials.head')
-        {{-- Alpine comes from Livewire, which injects its script (with Alpine bundled) on every page. --}}
+        {{-- Alpine comes from Livewire's injected script, or from the head partial when Livewire isn't installed. --}}
     </head>
     {{-- x-data so Alpine directives anywhere on the page (x-on:click and so on) are live. --}}
     <body class="bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100" x-data>
