@@ -17,7 +17,7 @@ class Field extends Component
     /**
      * What the control inside this field needs to know.
      *
-     * @var array{id: ?string, name: ?string, hint: bool, error: ?string, required: bool}
+     * @var array{id: ?string, name: ?string, label: bool, hint: bool, error: ?string, required: bool}
      */
     public array $guiField;
 
@@ -34,6 +34,7 @@ class Field extends Component
         $this->guiField = [
             'id' => $this->id,
             'name' => $name,
+            'label' => $label !== null && $label !== '',
             'hint' => $hint !== null && $hint !== '',
             'error' => $error,
             'required' => $required,

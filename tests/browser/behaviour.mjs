@@ -239,6 +239,25 @@ await check("date picker: disabled dates and weekdays can't be picked or typed",
     expect(! (await input.evaluate((el) => el.checkValidity())), 'a typed Saturday passed validation');
 });
 
+await check('date picker: a range picks a start, then an end, and keeps the end after the start', async () => {
+    await visit('date-picker');
+    const start = page.locator('input[name="stay[start]"]');
+    const end = page.locator('input[name="stay[end]"]');
+    const group = start.locator('xpath=ancestor::*[@role="group"]');
+    await group.getByRole('button', { name: 'Choose dates' }).click();
+    await page.waitForFunction(() => document.activeElement?.dataset.date === '2026-10-12');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('Enter');
+    expect((await start.inputValue()) === '2026-10-14' && (await end.inputValue()) === '2026-10-17', `picked ${await start.inputValue()} to ${await end.inputValue()}`);
+    await end.fill('2026-10-10');
+    expect(! (await end.evaluate((el) => el.checkValidity())), 'an end before the start passed validation');
+});
+
 await check('number input: the buttons step the value', async () => {
     await visit('number-input');
     const input = page.locator('article input[type=number]').first();

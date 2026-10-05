@@ -4,7 +4,7 @@
 
 <div {{ $attributes->class('space-y-1.5') }}>
     @if ($label)
-        <x-gui::label :for="$id" :required="$required">{{ $label }}</x-gui::label>
+        <x-gui::label :for="$id" id="{{ $id }}-label" :required="$required">{{ $label }}</x-gui::label>
     @endif
 
     {{ $slot }}

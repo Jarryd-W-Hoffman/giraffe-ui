@@ -8,6 +8,17 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Date picker: date ranges
+
+#### Added
+- Date picker `range`: two native date inputs under one name.
+  - They submit `name[start]` and `name[end]`, refill from old input, and show errors at `name.start` and `name.end` under the control. `value` takes `['start' => …, 'end' => …]`, and `wire:model` or `x-model` on the picker binds `.start` and `.end`.
+  - In the calendar, the first pick is the start and the second the end. The days between are highlighted, with a preview as you point or move, and a line says which end is next.
+  - Picking a day before the start starts again from there. The end can't be before the start, and the browser checks that too.
+  - The inputs are named by the field's label (as a group) plus `start-label` and `end-label`.
+  - In Firefox, each input is clipped so its own picker icon doesn't show.
+- Field labels have an id (`{id}-label`), so grouped controls can be named by them.
+
 ### Date picker: disabled dates and weekdays
 
 #### Added

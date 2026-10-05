@@ -745,6 +745,15 @@ class Catalog
                             BLADE,
                     ],
                     [
+                        'title' => 'Date range',
+                        'description' => 'With range, there are two dates under one name: the form submits stay[start] and stay[end], and errors at stay.start and stay.end show under the control. In the calendar the first pick is the start and the second the end, with the days between highlighted as you point or move. The end can\'t be before the start, and the browser checks that too.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Stay" name="stay" hint="Check-in and check-out.">
+                                <x-gui::date-picker range :value="['start' => '2026-10-12', 'end' => '2026-10-16']" min="2026-10-05" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
                         'title' => 'Disabled dates and weekdays',
                         'description' => 'disabled-dates and disabled-weekdays (0 for Sunday to 6 for Saturday) can\'t be picked in the calendar, and a typed one fails the browser\'s validation with unavailable-message. Validate them on the server too.',
                         'code' => <<<'BLADE'
@@ -768,7 +777,10 @@ class Catalog
                     ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
                     ['locale', 'string | null', 'null', "For month and day names. Defaults to the page's lang attribute."],
                     ['week-start', 'int | null', 'null', '0 for Sunday to 6 for Saturday. Defaults to the locale\'s.'],
-                    ['button-label', 'string', "'Choose date'", 'The calendar button\'s accessible name.'],
+                    ['button-label', 'string', "'Choose date'", 'The calendar button\'s accessible name. \'Choose dates\' for a range.'],
+                    ['range', 'bool', 'false', 'Pick a start and an end: name[start] and name[end]. value takes [\'start\' => …, \'end\' => …]; wire:model="stay" binds stay.start and stay.end.'],
+                    ['start-label', 'string', "'Start date'", 'In a range, the first input\'s accessible name.'],
+                    ['end-label', 'string', "'End date'", 'In a range, the second input\'s accessible name.'],
                     ['previous-label', 'string', "'Previous month'", ''],
                     ['next-label', 'string', "'Next month'", ''],
                     ['disabled-dates', 'array', '[]', 'Y-m-d strings or DateTimeInterface objects that can\'t be picked.'],
