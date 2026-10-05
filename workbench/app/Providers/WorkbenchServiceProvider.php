@@ -13,6 +13,7 @@ use Workbench\App\Livewire\CustomersTable;
 use Workbench\App\Livewire\ProfileForm;
 use Workbench\App\Livewire\SettingsTabs;
 use Workbench\App\Livewire\SignupWizard;
+use Workbench\App\Livewire\TimezonePicker;
 use Workbench\App\Livewire\UsersTable;
 
 class WorkbenchServiceProvider extends ServiceProvider
@@ -50,6 +51,7 @@ class WorkbenchServiceProvider extends ServiceProvider
             Livewire::component('signup-wizard', SignupWizard::class);
             Livewire::component('avatar-upload', AvatarUpload::class);
             Livewire::component('customers-table', CustomersTable::class);
+            Livewire::component('timezone-picker', TimezonePicker::class);
 
             // Livewire bundles Alpine, so load its script on every catalog page instead of a second copy of Alpine.
             Livewire::forceAssetInjection();

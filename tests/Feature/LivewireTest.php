@@ -9,6 +9,7 @@ use Workbench\App\Livewire\CustomersTable;
 use Workbench\App\Livewire\ProfileForm;
 use Workbench\App\Livewire\SettingsTabs;
 use Workbench\App\Livewire\SignupWizard;
+use Workbench\App\Livewire\TimezonePicker;
 use Workbench\App\Livewire\UsersTable;
 
 pest()->group('livewire');
@@ -172,6 +173,22 @@ describe('customers table', function () {
 
         Livewire::test(CustomersTable::class)->set('deleted', ['cus_1001']);
     })->throws(CannotUpdateLockedPropertyException::class);
+});
+
+describe('timezone picker', function () {
+    it('binds the value with wire:model and searches through a plain route', function () {
+        Livewire::test(TimezonePicker::class)
+            ->assertSeeHtml('url: \'\\/catalog\\/api\\/timezones\'')
+            ->assertDontSeeHtml('$wire')
+            ->set('timezone', 'Asia/Tokyo')
+            ->tap(fn ($picker) => expect(array_key_first($picker->instance()->initialTimezones()))->toBe('Asia/Tokyo'))
+            ->call('save')
+            ->assertHasNoErrors()
+            ->assertDispatched('toast', message: 'Saved Asia/Tokyo.')
+            ->set('timezone', 'Mars/Olympus')
+            ->call('save')
+            ->assertHasErrors(['timezone' => 'timezone']);
+    });
 });
 
 describe('wizard', function () {

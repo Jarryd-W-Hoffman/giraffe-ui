@@ -131,3 +131,13 @@ it('switches the pricing example between monthly and yearly prices without JavaS
         ->assertSee('<th scope="row"', false)
         ->assertSee('aria-label="Not included"', false);
 });
+
+it('searches timezones for the combobox demo as a JSON list', function () {
+    $this->getJson('/catalog/api/timezones?q=tok')
+        ->assertOk()
+        ->assertJsonFragment(['value' => 'Asia/Tokyo', 'label' => 'Asia/Tokyo']);
+
+    $this->getJson('/catalog/api/timezones?q=new york')->assertJsonFragment(['value' => 'America/New_York', 'label' => 'America/New York']);
+    expect($this->getJson('/catalog/api/timezones')->json())->toHaveCount(20);
+    expect($this->getJson('/catalog/api/timezones?q=nowhere-at-all')->json())->toBe([]);
+});

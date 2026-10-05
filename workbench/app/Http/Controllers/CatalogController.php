@@ -2,6 +2,7 @@
 
 namespace Workbench\App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -132,6 +133,14 @@ class CatalogController
         abort_unless(is_file($path), 404, 'Run "npm run catalog:css" first.');
 
         return response(file_get_contents($path), 200, ['Content-Type' => 'text/css']);
+    }
+
+    /**
+     * The combobox's server-side search demo: up to 20 timezones matching ?q=, as JSON.
+     */
+    public function timezones(Request $request): JsonResponse
+    {
+        return response()->json(Catalog::timezones((string) $request->query('q', '')));
     }
 
     /**

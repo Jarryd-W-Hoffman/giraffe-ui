@@ -76,6 +76,8 @@ class Catalog
         return [
             'roles' => ['admin' => 'Admin', 'editor' => 'Editor', 'viewer' => 'Viewer'],
             'countries' => self::countries(),
+            // The first options the server-side search example shows, before anything is typed.
+            'timezones' => collect(self::timezones())->pluck('label', 'value')->all(),
             // A self-contained "photo" so the catalog never depends on an image host.
             'photo' => 'data:image/svg+xml,'.rawurlencode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><defs><linearGradient id="g" x2="1" y2="1"><stop offset="0" stop-color="#f472b6"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><rect width="96" height="96" fill="url(#g)"/><circle cx="48" cy="38" r="16" fill="#fff" fill-opacity=".85"/><path d="M16 96c4-20 18-30 32-30s28 10 32 30z" fill="#fff" fill-opacity=".85"/></svg>'),
             'sort' => $sort,
@@ -103,6 +105,23 @@ class Catalog
             ['name' => 'Alan Turing', 'email' => 'alan@example.com', 'role' => 'Viewer', 'team' => ['name' => 'Codebreaking']],
             ['name' => 'Katherine Johnson', 'email' => 'katherine@example.com', 'role' => 'Editor', 'team' => ['name' => 'Trajectories']],
         ];
+    }
+
+    /**
+     * Timezones whose name contains the search, for the combobox's server-side search demos.
+     *
+     * @return list<array{value: string, label: string}>
+     */
+    public static function timezones(string $search = '', int $limit = 20): array
+    {
+        $search = str_replace(' ', '_', strtolower(trim($search)));
+
+        return collect(\DateTimeZone::listIdentifiers())
+            ->when($search !== '', fn ($zones) => $zones->filter(fn (string $zone) => str_contains(strtolower($zone), $search)))
+            ->take($limit)
+            ->map(fn (string $zone) => ['value' => $zone, 'label' => str_replace('_', ' ', $zone)])
+            ->values()
+            ->all();
     }
 
     /**
@@ -521,7 +540,7 @@ class Catalog
             'combobox' => [
                 'name' => 'Combobox',
                 'group' => 'Forms',
-                'description' => 'A select you can type into to filter. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.',
+                'description' => 'A select you can type into to filter, in the browser or on the server. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.',
                 'preview' => 'narrow',
                 'usage' => '<x-gui::combobox name="country" :options="$countries" placeholder="Search countries" />',
                 'examples' => [
@@ -539,6 +558,15 @@ class Catalog
                         'code' => <<<'BLADE'
                             <x-gui::field label="Role" name="role">
                                 <x-gui::combobox :options="$roles" value="editor" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Searching on the server',
+                        'description' => 'For long lists, give url. Typing fetches url?q=… (after a short pause) and shows the options the server sends back, so only matches cross the wire. options are the ones shown before anything is typed. This searches PHP\'s 400+ timezones with an ordinary Laravel route: no Livewire needed.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Timezone" name="timezone" hint="Try Tokyo or America.">
+                                <x-gui::combobox url="/catalog/api/timezones" :options="$timezones" placeholder="Search timezones" />
                             </x-gui::field>
                             BLADE,
                     ],
@@ -567,11 +595,17 @@ class Catalog
                     ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
                     ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
                     ['empty', 'string', "'No results'", 'Shown when nothing matches.'],
+                    ['url', 'string', 'null', 'Search on the server: typing fetches url?q=… and shows the JSON it returns.'],
+                    ['debounce', 'int', '300', 'Milliseconds to wait after typing before searching.'],
+                    ['searching-text', 'string', "'Searching…'", 'Shown while a search runs.'],
                 ],
                 'slots' => [],
                 'notes' => [
                     'wire:model and x-model bind the value; other attributes go on the text input. The selected value fires a change event on the hidden input.',
-                    'Options are filtered in the browser. For very large lists, search on the server and pass fewer options.',
+                    'Without url, options are filtered in the browser.',
+                    'With url, return a JSON list of {"value", "label"} objects, e.g. Route::get(\'/timezones\', fn (Request $request) => Timezone::where(\'name\', \'like\', "%{$request->q}%")->limit(20)->get([\'id as value\', \'name as label\'])). A {"value": "label"} object works too, but JavaScript reorders numeric keys, so prefer the list.',
+                    'While searching, the list shows "Searching…" and is aria-busy. Enter straight after typing picks the first result once it arrives. A newer search cancels an older one. Closing the list goes back to options.',
+                    'The selected option keeps its label even when it isn\'t among the current results. In Livewire, wire:model binds the value as usual.',
                 ],
             ],
 

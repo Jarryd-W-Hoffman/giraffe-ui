@@ -87,6 +87,52 @@ await check('combobox: arrow keys and Enter pick an option', async () => {
     expect(await input.getAttribute('aria-expanded') === 'false', 'the listbox stayed open');
 });
 
+await check('combobox: searches on the server with url, without Livewire', async () => {
+    await visit('combobox');
+    const input = page.getByPlaceholder('Search timezones');
+    const root = input.locator('xpath=..');
+    const requests = [];
+    const track = (request) => request.url().includes('/api/timezones') && requests.push(request.url());
+    page.on('request', track);
+
+    // Typing quickly sends one request, and Enter straight after typing waits for it and picks the first result.
+    await input.focus();
+    await page.keyboard.type('tokyo');
+    await page.keyboard.press('Enter');
+    await page.waitForFunction((el) => el.querySelector('input[type=hidden]').value === 'Asia/Tokyo', await root.elementHandle(), { timeout: 3000 })
+        .catch(() => expect(false, 'Enter after typing did not pick Asia/Tokyo'));
+    expect(requests.length === 1 && requests[0].endsWith('q=tokyo'), `expected one request for "tokyo", got ${requests.join(', ')}`);
+    expect((await input.inputValue()) === 'Asia/Tokyo', 'the input does not show the choice');
+
+    // Reopening shows the first options again, and the choice keeps its label.
+    await page.keyboard.press('ArrowDown');
+    expect((await root.locator('[role=option]').count()) === 20, 'reopening did not show the first options');
+    await page.keyboard.press('Escape');
+    expect((await input.inputValue()) === 'Asia/Tokyo', 'the label was lost');
+
+    // No matches says so.
+    await input.fill('');
+    await page.keyboard.type('nowhere-at-all');
+    await root.getByRole('status').filter({ hasText: 'No results' }).waitFor({ timeout: 3000 });
+    await page.keyboard.press('Escape');
+    page.off('request', track);
+});
+
+if (slugs.includes('livewire')) {
+    await check('combobox: url search inside a Livewire form keeps its value through a save', async () => {
+        await visit('livewire');
+        const input = page.locator('#lw-timezone');
+        // It starts on Europe/London, so clear it first, as a person would.
+        await input.fill('');
+        await page.keyboard.type('tokyo');
+        await page.keyboard.press('Enter');
+        await page.waitForFunction(() => document.querySelector('#lw-timezone').value === 'Asia/Tokyo', null, { timeout: 3000 });
+        await page.getByRole('button', { name: 'Save timezone' }).click();
+        await page.locator('[x-text="toast.message"]', { hasText: 'Saved Asia/Tokyo.' }).waitFor();
+        expect((await input.inputValue()) === 'Asia/Tokyo', 'the label was lost after the round trip');
+    });
+}
+
 await check('date picker: the calendar picks a date', async () => {
     await visit('date-picker');
     await page.locator('article [aria-label="Choose date"]').first().click();

@@ -43,3 +43,27 @@ it('escapes option labels', function () {
 
     expect($html)->not->toContain('<b>bold</b>');
 });
+
+it('searches on the server with url, starting from options, without Livewire', function () use ($countries) {
+    $html = (string) $this->blade('<x-gui::combobox name="country" url="/countries" :options="$countries" value="nz" :debounce="150" />', ['countries' => $countries]);
+
+    // Options are rendered by Alpine from the server's results, starting with the given ones.
+    expect($html)
+        ->toContain('<template x-for="(option, index) in results"', 'x-bind:aria-busy="searching"', "url: '\\/countries'")
+        // Initial options live in a script tag, not x-data, so a Livewire re-render can't reset the component.
+        ->toContain('<script type="application/json" x-ref="initial">[{"value":"au","label":"Australia"},{"value":"nz","label":"New Zealand"},{"value":"gb","label":"United Kingdom"}]</script>', "selectedLabel: 'New Zealand'", "query === '' ? 0 : 150)")
+        ->not->toContain('data-value="au"', '$wire')
+        ->and(substr_count($html, 'role="option"'))->toBe(1);
+});
+
+it('filters in the browser when there is no url', function () use ($countries) {
+    $html = (string) $this->blade('<x-gui::combobox :options="$countries" />', ['countries' => $countries]);
+
+    expect($html)->toContain('url: null', 'data-value="au"')->not->toContain('<template x-for');
+});
+
+it("escapes labels so they can't close the initial options' script tag", function () {
+    $html = (string) $this->blade('<x-gui::combobox url="/x" :options="[\'a\' => \'</script><b>x</b>\']" />');
+
+    expect($html)->not->toContain('</script><b>')->toContain('\u003C/script\u003E\u003Cb\u003Ex\u003C/b\u003E');
+});

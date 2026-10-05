@@ -12,7 +12,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Input](input.md): A text input that works on its own or inside a field.
 - [Textarea](textarea.md): A multi-line text input.
 - [Select](select.md): A native select, styled to match the other controls.
-- [Combobox](combobox.md): A select you can type into to filter. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.
+- [Combobox](combobox.md): A select you can type into to filter, in the browser or on the server. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.
 - [Number input](number-input.md): A native number input with − and + buttons.
 - [Slider](slider.md): A native range input in the theme colour, with an optional value and tick marks.
 - [Date picker](date-picker.md): A native date input with a calendar. Follows the WAI-ARIA date picker dialog pattern.
