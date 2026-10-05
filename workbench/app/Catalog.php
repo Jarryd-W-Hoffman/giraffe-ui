@@ -51,6 +51,7 @@ class Catalog
             'sign-in' => 'Sign in',
             'register' => 'Register',
             'forgot-password' => 'Forgot password',
+            'onboarding' => 'Onboarding',
             'pricing' => 'Pricing',
             'not-found' => 'Not found',
         ]);

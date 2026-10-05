@@ -141,3 +141,56 @@ it('searches timezones for the combobox demo as a JSON list', function () {
     expect($this->getJson('/catalog/api/timezones')->json())->toHaveCount(20);
     expect($this->getJson('/catalog/api/timezones?q=nowhere-at-all')->json())->toBe([]);
 });
+
+describe('onboarding example', function () {
+    it('walks through every step with real form posts, then creates the workspace', function () {
+        $this->get('/catalog/examples/onboarding')->assertOk()->assertSee('Create your workspace')->assertSee('aria-current="step"', false);
+
+        $this->post('/catalog/examples/onboarding', ['step' => 'workspace', 'workspace' => 'Analytical Engines', 'slug' => 'analytical-engines'])
+            ->assertRedirect('/catalog/examples/onboarding?step=team');
+
+        $this->get('/catalog/examples/onboarding?step=team')
+            ->assertSee('Invite your team')
+            // The finished step links back; later ones don't.
+            ->assertSee('href="/catalog/examples/onboarding?step=workspace"', false)
+            ->assertDontSee('href="/catalog/examples/onboarding?step=preferences"', false);
+
+        $this->post('/catalog/examples/onboarding', ['step' => 'team', 'invites' => "grace@example.com, Grace@example.com\nalan@example.com", 'role' => 'admin'])
+            ->assertRedirect('/catalog/examples/onboarding?step=preferences');
+        $this->post('/catalog/examples/onboarding', ['step' => 'preferences', 'timezone' => 'Asia/Tokyo', 'digest' => '1'])
+            ->assertRedirect('/catalog/examples/onboarding?step=review');
+
+        $this->get('/catalog/examples/onboarding?step=review')
+            ->assertSee('acme.app/analytical-engines')
+            ->assertSee('grace@example.com, alan@example.com')
+            ->assertSee('Asia/Tokyo')
+            ->assertSee('Weekly summary');
+
+        $this->post('/catalog/examples/onboarding', ['step' => 'review'])
+            ->assertRedirect('/catalog/examples/dashboard')
+            ->assertSessionHas('toast', ['message' => 'Created the Analytical Engines workspace.', 'color' => 'success'])
+            ->assertSessionMissing('onboarding');
+    });
+
+    it('validates each step on the server and keeps what was typed', function () {
+        $this->from('/catalog/examples/onboarding')
+            ->post('/catalog/examples/onboarding', ['step' => 'workspace', 'workspace' => 'Acme', 'slug' => 'Not Valid!'])
+            ->assertSessionHasErrors(['slug' => 'Use lowercase letters, numbers and single dashes.'])
+            ->assertSessionHasInput('workspace', 'Acme');
+
+        $this->withSession(['onboarding' => ['workspace' => 'Acme', 'slug' => 'acme']])
+            ->post('/catalog/examples/onboarding', ['step' => 'team', 'invites' => 'grace@example.com, nope', 'role' => 'member'])
+            ->assertSessionHasErrors(['invites' => '"nope" isn\'t an email address.']);
+    });
+
+    it('never shows a step that has not been reached', function () {
+        $this->get('/catalog/examples/onboarding?step=review')->assertSee('Create your workspace')->assertDontSee('Check everything');
+
+        $this->withSession(['onboarding' => ['workspace' => 'Acme', 'slug' => 'acme']])
+            ->get('/catalog/examples/onboarding?step=review')
+            ->assertSee('Invite your team');
+
+        $this->post('/catalog/examples/onboarding', ['step' => 'review'])->assertStatus(409);
+        $this->post('/catalog/examples/onboarding', ['step' => 'nope'])->assertNotFound();
+    });
+});
