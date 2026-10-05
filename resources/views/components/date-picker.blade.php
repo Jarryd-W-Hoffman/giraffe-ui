@@ -18,10 +18,12 @@
     $disabled = $attributes->has('disabled') && $attributes->get('disabled') !== false;
     $anchor = \JayAitch\GiraffeUI\Support\Anchor::name($id);
 
+    // Firefox can't hide its own picker icon, so once Alpine is running the right padding shrinks to centre that
+    // icon under our button, which covers it. Chromium and Safari hide theirs instead.
     $sizes = [
-        'sm' => 'h-8 pl-2.5 pr-9 text-sm',
-        'md' => 'h-10 pl-3 pr-10 text-sm',
-        'lg' => 'h-12 pl-3.5 pr-11 text-base',
+        'sm' => 'h-8 pl-2.5 pr-9 text-sm data-enhanced:supports-[-moz-appearance:none]:pr-2',
+        'md' => 'h-10 pl-3 pr-10 text-sm data-enhanced:supports-[-moz-appearance:none]:pr-3',
+        'lg' => 'h-12 pl-3.5 pr-11 text-base data-enhanced:supports-[-moz-appearance:none]:pr-4',
     ];
 @endphp
 
@@ -175,14 +177,17 @@
                 'aria-invalid:border-gui-danger-text aria-invalid:focus:outline-gui-danger-text',
                 'disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-500 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400',
                 'dark:bg-zinc-900 dark:text-zinc-100 dark:scheme-dark',
-                // Our button replaces Chromium's picker icon, but only once Alpine is running.
+                // Our button replaces the browser's picker icon, but only once Alpine is running (see $sizes for Firefox).
                 'data-enhanced:[&::-webkit-calendar-picker-indicator]:hidden',
                 $sizes[$size] ?? $sizes['md'],
             ])
             ->style("anchor-name: {$anchor}") }}
     >
 
-    {{-- Pinned to the input with anchor positioning, so width classes on the input move it too. --}}
+    {{--
+        Pinned to the input with anchor positioning, so width classes on the input move it too.
+        Its background matches the input, so it covers Firefox's own picker icon.
+    --}}
     <button
         type="button"
         x-ref="trigger"
@@ -193,7 +198,7 @@
         aria-label="{{ $buttonLabel }}"
         aria-haspopup="dialog"
         @disabled($disabled)
-        class="absolute inset-y-1 right-1 flex aspect-square items-center justify-center rounded-[calc(var(--radius-gui)-2px)] text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text disabled:pointer-events-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+        class="absolute inset-y-1 right-1 flex aspect-square items-center justify-center rounded-[calc(var(--radius-gui)-2px)] bg-white text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text disabled:pointer-events-none disabled:bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:disabled:bg-zinc-800"
     >
         <x-gui::icon name="calendar" size="sm" />
     </button>
