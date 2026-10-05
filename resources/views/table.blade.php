@@ -1,21 +1,27 @@
 <div {{ $attributes->class('overflow-hidden rounded-gui border border-zinc-200 dark:border-zinc-800') }}>
     {{--
-        Wide tables scroll sideways. While they overflow, the scroller joins the tab order so keyboard users can
-        scroll it too (Chrome and Firefox do this themselves; Safari doesn't). It's relative so absolutely positioned
+        Wide tables scroll sideways, and with max-height tall ones scroll down under a sticky header. While they
+        overflow, the scroller joins the tab order so keyboard users can scroll it too (Chrome and Firefox do this
+        themselves; Safari doesn't). It's relative so absolutely positioned
         content, like sr-only text, is clipped by it instead of widening the page.
     --}}
     <div
         class="relative overflow-x-auto focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gui-primary-text"
         @if ($label) role="region" aria-label="{{ $label }}" @endif
         x-data
-        x-init="new ResizeObserver(() => $el.scrollWidth > $el.clientWidth ? $el.setAttribute('tabindex', '0') : $el.removeAttribute('tabindex')).observe($el.firstElementChild)"
+        x-init="new ResizeObserver(() => $el.scrollWidth > $el.clientWidth || $el.scrollHeight > $el.clientHeight ? $el.setAttribute('tabindex', '0') : $el.removeAttribute('tabindex')).observe($el.firstElementChild)"
+        @if ($maxHeight) style="max-height: {{ $maxHeight }}" @endif
     >
         <table class="min-w-full divide-y divide-zinc-200 text-sm text-zinc-700 dark:divide-zinc-800 dark:text-zinc-300">
-            <thead class="bg-zinc-50 dark:bg-zinc-900">
+            {{-- Sticky headers lose the row divider as they scroll, so a shadow draws it instead. --}}
+            <thead @class([
+                'bg-zinc-50 dark:bg-zinc-900',
+                'sticky top-0 z-10 shadow-[0_1px_0_var(--color-zinc-200)] dark:shadow-[0_1px_0_var(--color-zinc-800)]' => $maxHeight,
+            ])>
                 <tr>
                     @if ($headings)
                         @foreach ($headings as $key => $label)
-                            <x-gui::table.heading :sortable="in_array($key, $sortable, true) ? $key : null">{{ $label }}</x-gui::table.heading>
+                            <x-gui::table.heading :sortable="in_array($key, $sortable, true) ? $key : null" :align="$align[$key] ?? null">{{ $label }}</x-gui::table.heading>
                         @endforeach
                     @else
                         {{ $head ?? '' }}
@@ -27,7 +33,7 @@
                     @forelse ($rows as $row)
                         <tr>
                             @foreach ($headings as $key => $label)
-                                <x-gui::table.cell>{{ data_get($row, $key) }}</x-gui::table.cell>
+                                <x-gui::table.cell :align="$align[$key] ?? null">{{ data_get($row, $key) }}</x-gui::table.cell>
                             @endforeach
                         </tr>
                     @empty

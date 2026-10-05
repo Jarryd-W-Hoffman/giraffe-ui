@@ -2,6 +2,7 @@
 
 @props([
     'sortable' => null,
+    'align' => null,
 ])
 
 @php
@@ -14,12 +15,15 @@
     $cell = $attributes->except(array_keys($action->getAttributes()));
 
     $next = $sorted && $direction === 'asc' ? 'desc' : 'asc';
+
+    // Every class is written out in full so Tailwind can find it when scanning this file.
+    $alignments = ['left' => 'text-left', 'center' => 'text-center', 'right' => 'text-right'];
 @endphp
 
 <th
     scope="col"
     @if ($sorted) aria-sort="{{ $direction === 'asc' ? 'ascending' : 'descending' }}" @endif
-    {{ $cell->class('px-4 py-3 text-left text-xs font-medium tracking-wider whitespace-nowrap text-zinc-600 uppercase dark:text-zinc-400') }}
+    {{ $cell->class(['px-4 py-3 text-xs font-medium tracking-wider whitespace-nowrap text-zinc-600 uppercase dark:text-zinc-400', $alignments[$align] ?? 'text-left']) }}
 >
     @if ($sortable !== null)
         @php

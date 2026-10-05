@@ -47,10 +47,6 @@ class CustomersTable extends Component
     /** @var list<string> Ids of the selected customers, across pages. */
     public array $selected = [];
 
-    /** @var list<string> Ids on the current page, so the select-all checkbox can work in the browser. */
-    #[Locked]
-    public array $pageIds = [];
-
     /** @var list<string> Ids waiting for the delete confirmation. */
     #[Locked]
     public array $deleting = [];
@@ -202,8 +198,6 @@ class CustomersTable extends Component
 
     public function render(): string
     {
-        $this->pageIds = $this->rows->pluck('id')->all();
-
         return <<<'BLADE'
             @php
                 $rows = $this->rows;
@@ -264,15 +258,8 @@ class CustomersTable extends Component
 
                 <x-gui::table label="Customers" :sort="$sortBy" :direction="$sortDirection">
                     <x-slot:head>
-                        <x-gui::table.heading class="w-px">
-                            {{-- Selects or clears the current page. The browser works out checked and mixed from the server's ids. --}}
-                            <x-gui::checkbox
-                                aria-label="Select all customers on this page"
-                                x-effect="const on = $wire.pageIds.filter((id) => $wire.selected.includes(id)).length; $el.checked = on > 0 && on === $wire.pageIds.length; $el.indeterminate = on > 0 && on < $wire.pageIds.length"
-                                x-on:change="$wire.set('selected', $el.checked ? [...new Set([...$wire.selected, ...$wire.pageIds])] : $wire.selected.filter((id) => ! $wire.pageIds.includes(id)))"
-                                :disabled="$rows->isEmpty()"
-                            />
-                        </x-gui::table.heading>
+                        {{-- Ticks or clears this page's rows; wire:model on each row keeps $selected in step. --}}
+                        <x-gui::table.select-all label="Select all customers on this page" />
                         <x-gui::table.heading sortable="name" wire:click="sort('name')">Customer</x-gui::table.heading>
                         @if (in_array('plan', $columns, true))
                             <x-gui::table.heading>Plan</x-gui::table.heading>
@@ -281,7 +268,7 @@ class CustomersTable extends Component
                             <x-gui::table.heading>Status</x-gui::table.heading>
                         @endif
                         @if (in_array('mrr', $columns, true))
-                            <x-gui::table.heading sortable="mrr" wire:click="sort('mrr')" class="text-right">MRR</x-gui::table.heading>
+                            <x-gui::table.heading sortable="mrr" wire:click="sort('mrr')" align="right">MRR</x-gui::table.heading>
                         @endif
                         @if (in_array('joined', $columns, true))
                             <x-gui::table.heading sortable="joined" wire:click="sort('joined')" class="hidden md:table-cell">Joined</x-gui::table.heading>
@@ -290,10 +277,8 @@ class CustomersTable extends Component
                     </x-slot:head>
 
                     @foreach ($rows as $customer)
-                        <x-gui::table.row wire:key="{{ $customer['id'] }}" :class="in_array($customer['id'], $selected, true) ? 'bg-gui-primary/5' : null">
-                            <x-gui::table.cell>
-                                <x-gui::checkbox wire:model.live="selected" value="{{ $customer['id'] }}" aria-label="Select {{ $customer['name'] }}" />
-                            </x-gui::table.cell>
+                        <x-gui::table.row wire:key="{{ $customer['id'] }}">
+                            <x-gui::table.select wire:model.live="selected" value="{{ $customer['id'] }}" label="Select {{ $customer['name'] }}" />
                             <x-gui::table.cell>
                                 <div class="flex items-center gap-3">
                                     <x-gui::avatar :name="$customer['name']" size="sm" />
@@ -310,7 +295,7 @@ class CustomersTable extends Component
                                 <x-gui::table.cell><x-gui::badge size="sm" :color="$statusColors[$customer['status']]">{{ self::STATUSES[$customer['status']] }}</x-gui::badge></x-gui::table.cell>
                             @endif
                             @if (in_array('mrr', $columns, true))
-                                <x-gui::table.cell class="text-right tabular-nums">${{ number_format($customer['mrr']) }}</x-gui::table.cell>
+                                <x-gui::table.cell align="right" class="tabular-nums">${{ number_format($customer['mrr']) }}</x-gui::table.cell>
                             @endif
                             @if (in_array('joined', $columns, true))
                                 <x-gui::table.cell class="hidden md:table-cell">{{ \Illuminate\Support\Carbon::parse($customer['joined'])->format('j M Y') }}</x-gui::table.cell>

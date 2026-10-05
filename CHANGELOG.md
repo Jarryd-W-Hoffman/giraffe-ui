@@ -8,6 +8,20 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Table row selection, sticky header and alignment
+
+#### Added
+- `table.select` and `table.select-all`: row selection with real checkboxes.
+  - Rows submit as `name[]` in a plain form, or bind with `wire:model` or `x-model`.
+  - The header checkbox ticks or clears the page's rows, firing `input` and `change` on each so bindings follow (Livewire sends them in one request). It shows a mixed state when only some are ticked.
+  - It keeps up when rows change, and when `wire:model`, `x-model` or scripts tick rows without an event.
+  - Selected rows are highlighted with CSS `:has()`.
+- Table `max-height`: the table scrolls within it under a sticky header, and the scroller is keyboard focusable while it overflows in either direction.
+- `align` on `table.heading` and `table.cell` (`left`, `center`, `right`), and an `align` map for tables built from `columns`. Aligned headings drop the built-in `text-left` instead of needing `!`.
+
+#### Changed
+- The Customers example uses `table.select`, `table.select-all` and `align`, replacing its own selection code.
+
 ### Dropdown submenus, checkbox and radio items
 
 #### Added

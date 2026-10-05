@@ -15,7 +15,7 @@ use Illuminate\View\Component;
 class Table extends Component
 {
     /**
-     * @var array{sort: ?string, direction: string}
+     * @var array{sort: ?string, direction: string, align: array<string, string>}
      */
     public array $guiTable;
 
@@ -29,6 +29,8 @@ class Table extends Component
      * @param  iterable<mixed>  $rows
      * @param  array<int, string>  $sortable  Column keys that can be sorted.
      * @param  string|null  $label  Names the scrolling region for screen readers.
+     * @param  array<string, string>  $align  Column key => 'left' | 'center' | 'right', for tables built from columns.
+     * @param  string|null  $maxHeight  A CSS length. The table scrolls within it, with the header stuck to the top.
      */
     public function __construct(
         ?array $columns = null,
@@ -37,9 +39,11 @@ class Table extends Component
         public ?string $sort = null,
         public string $direction = 'asc',
         public ?string $label = null,
+        public array $align = [],
+        public ?string $maxHeight = null,
     ) {
         $this->direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
-        $this->guiTable = ['sort' => $sort, 'direction' => $this->direction];
+        $this->guiTable = ['sort' => $sort, 'direction' => $this->direction, 'align' => $align];
 
         $this->headings = $columns === null ? null : collect($columns)->mapWithKeys(fn ($label, $key) => is_int($key)
             ? [$label => Str::headline($label)]

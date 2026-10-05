@@ -106,7 +106,7 @@ describe('customers table', function () {
         $table = Livewire::test(CustomersTable::class);
 
         expect($table->instance()->rows()->total())->toBe(42)
-            ->and($table->get('pageIds'))->toHaveCount(10);
+            ->and($table->instance()->rows()->count())->toBe(10);
 
         $table->set('status', 'churned');
         expect($table->instance()->rows()->pluck('status')->unique()->all())->toBe(['churned']);

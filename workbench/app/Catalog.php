@@ -2513,6 +2513,63 @@ class Catalog
                             BLADE,
                     ],
                     [
+                        'title' => 'Selecting rows',
+                        'description' => 'table.select puts a real checkbox in a row, and table.select-all in the header ticks or clears them all, showing a mixed state when only some are ticked. Selected rows are highlighted with CSS. In a form, the ticked values submit as selected[]; with Livewire, put wire:model on each table.select.',
+                        'code' => <<<'BLADE'
+                            <form x-on:submit.prevent="GiraffeUI.toast(new FormData($el).getAll('selected[]').length + ' selected', { color: 'success' })" class="space-y-3">
+                                <x-gui::table label="Team members">
+                                    <x-slot:head>
+                                        <x-gui::table.select-all label="Select all members" />
+                                        <x-gui::table.heading>Name</x-gui::table.heading>
+                                        <x-gui::table.heading>Role</x-gui::table.heading>
+                                    </x-slot:head>
+
+                                    @foreach ($users as $user)
+                                        <x-gui::table.row>
+                                            <x-gui::table.select name="selected[]" :value="$user['email']" :label="'Select '.$user['name']" />
+                                            <x-gui::table.cell>{{ $user['name'] }}</x-gui::table.cell>
+                                            <x-gui::table.cell>{{ $user['role'] }}</x-gui::table.cell>
+                                        </x-gui::table.row>
+                                    @endforeach
+                                </x-gui::table>
+
+                                <x-gui::button type="submit" size="sm" variant="outline" color="secondary">Export selected</x-gui::button>
+                            </form>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Sticky header',
+                        'description' => 'With max-height, the table scrolls inside that height and the header stays at the top. The scroller is keyboard focusable while it overflows.',
+                        'code' => <<<'BLADE'
+                            <x-gui::table label="Orders" max-height="16rem">
+                                <x-slot:head>
+                                    <x-gui::table.heading>Order</x-gui::table.heading>
+                                    <x-gui::table.heading>Status</x-gui::table.heading>
+                                    <x-gui::table.heading align="right">Total</x-gui::table.heading>
+                                </x-slot:head>
+
+                                @foreach (range(1, 20) as $i)
+                                    <x-gui::table.row>
+                                        <x-gui::table.cell>#{{ 1000 + $i }}</x-gui::table.cell>
+                                        <x-gui::table.cell>{{ $i % 3 ? 'Paid' : 'Pending' }}</x-gui::table.cell>
+                                        <x-gui::table.cell align="right" class="tabular-nums">${{ number_format($i * 37.5, 2) }}</x-gui::table.cell>
+                                    </x-gui::table.row>
+                                @endforeach
+                            </x-gui::table>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Aligning columns',
+                        'description' => 'Give a table built from data an align map, or set align on a composed table.heading and table.cell. Right-align numbers so their digits line up.',
+                        'code' => <<<'BLADE'
+                            <x-gui::table
+                                :columns="['plan' => 'Plan', 'seats' => 'Seats', 'price' => 'Price']"
+                                :rows="[['plan' => 'Starter', 'seats' => 1, 'price' => '$29'], ['plan' => 'Pro', 'seats' => 10, 'price' => '$99'], ['plan' => 'Enterprise', 'seats' => 250, 'price' => '$1,499']]"
+                                :align="['seats' => 'center', 'price' => 'right']"
+                            />
+                            BLADE,
+                    ],
+                    [
                         'title' => 'Empty state',
                         'code' => <<<'BLADE'
                             <x-gui::table :columns="['name', 'email']" :rows="[]">
@@ -2528,8 +2585,13 @@ class Catalog
                     ['sort', 'string', 'null', 'The column currently sorted.'],
                     ['direction', "'asc' | 'desc'", "'asc'", 'The current sort direction.'],
                     ['label', 'string', 'null', 'Names the table\'s scrolling region for screen readers. While a wide table overflows, its scroller is keyboard focusable either way.'],
+                    ['align', 'array', '[]', "Column key => 'left' | 'center' | 'right', for tables built from columns."],
+                    ['max-height', 'string', 'null', 'A CSS length, e.g. 20rem. The table scrolls within it under a sticky header.'],
                     ['sortable (heading)', 'string', 'null', 'Makes a composed heading sortable by this key.'],
                     ['wrap (cell)', 'bool', 'false', 'Let a cell\'s text wrap.'],
+                    ['align (heading, cell)', "'left' | 'center' | 'right'", 'null', 'Text alignment, without fighting the built-in classes.'],
+                    ['label (select)', 'string', "'Select row'", 'The row checkbox\'s accessible name, e.g. "Select Ada Lovelace". Other attributes (name, value, checked, wire:model) go on the checkbox.'],
+                    ['label (select-all)', 'string', "'Select all rows'", 'The header checkbox\'s accessible name.'],
                 ],
                 'slots' => [
                     ['head', 'Composed headings (table.heading).'],
@@ -2539,6 +2601,8 @@ class Catalog
                 ],
                 'notes' => [
                     'On a sortable heading, wire:click and x-on:click go on the sort button; class and other attributes go on the <th>.',
+                    'table.select-all only counts the table.select checkboxes on the current page. It follows rows that change (pagination, Livewire updates) and checkboxes ticked by wire:model, x-model or scripts. Ticking it fires input and change on each row checkbox, so wire:model and x-model keep up; Livewire sends them in one request.',
+                    'A sticky header can only stick inside the table\'s own scroller, because the scroller that lets wide tables scroll sideways also contains vertical scrolling. That\'s why it comes with max-height.',
                 ],
             ],
 
