@@ -2,6 +2,8 @@
 
 namespace JayAitch\GiraffeUI\Tests;
 
+use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
+use BladeUI\Icons\BladeIconsServiceProvider;
 use JayAitch\GiraffeUI\GiraffeUIServiceProvider;
 use Livewire\LivewireServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -10,10 +12,13 @@ abstract class TestCase extends Orchestra
 {
     protected function getPackageProviders($app): array
     {
-        // CI also runs the tests without Livewire installed (minus the livewire group), to prove it's optional.
-        return class_exists(LivewireServiceProvider::class)
-            ? [LivewireServiceProvider::class, GiraffeUIServiceProvider::class]
-            : [GiraffeUIServiceProvider::class];
+        // Livewire and blade-icons are optional. CI also runs the tests without them (minus the groups that need them).
+        return array_values(array_filter([
+            class_exists(LivewireServiceProvider::class) ? LivewireServiceProvider::class : null,
+            class_exists(BladeIconsServiceProvider::class) ? BladeIconsServiceProvider::class : null,
+            class_exists(BladeHeroiconsServiceProvider::class) ? BladeHeroiconsServiceProvider::class : null,
+            GiraffeUIServiceProvider::class,
+        ]));
     }
 
     protected function defineEnvironment($app): void

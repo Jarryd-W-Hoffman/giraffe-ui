@@ -8,6 +8,15 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Icon with blade-icons
+
+#### Fixed
+- Icon: a blade-icons icon with a `label` was still hidden from screen readers, because icon sets like Heroicons ship `aria-hidden="true"` inside their SVG files. The component now drops the file's `aria-hidden` and decides itself: decorative icons get exactly one `aria-hidden="true"`, labelled ones get `role="img"` and `aria-label` only.
+
+#### Added
+- Tests for the blade-icons fallback, with `blade-ui-kit/blade-heroicons` as a dev dependency, and an "any blade-icons set" example on the Icon page when it's installed.
+- CI's "Without optional packages" job (formerly "Without Livewire") also removes blade-icons, so the Icon component's install hint is tested too.
+
 ### Date picker: date ranges
 
 #### Added

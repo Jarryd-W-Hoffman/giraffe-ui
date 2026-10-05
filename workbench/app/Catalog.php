@@ -1455,6 +1455,16 @@ class Catalog
                             <x-gui::icon name="check-circle" size="lg" class="text-gui-success-text" />
                             BLADE,
                     ],
+                    // Shown when blade-icons is installed (a dev dependency; CI also runs the catalog without it).
+                    ...(function_exists('svg') ? [[
+                        'title' => 'Any blade-icons set',
+                        'description' => 'With blade-ui-kit/blade-icons and a set installed, any of its names work, with the same sizes, colours and labels.',
+                        'code' => <<<'BLADE'
+                            <x-gui::icon name="heroicon-o-bell" />
+                            <x-gui::icon name="heroicon-s-rocket-launch" size="lg" class="text-gui-primary-text" />
+                            <x-gui::icon name="heroicon-o-sparkles" label="New" class="text-gui-warning-text" />
+                            BLADE,
+                    ]] : []),
                     [
                         'title' => 'Meaningful icons',
                         'description' => 'Icons are hidden from screen readers unless you give them a label. Label an icon when it carries meaning on its own.',

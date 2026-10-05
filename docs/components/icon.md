@@ -32,6 +32,16 @@ These come with GiraffeUI and are what its components use.
 <x-gui::icon name="check-circle" size="lg" class="text-gui-success-text" />
 ```
 
+## Any blade-icons set
+
+With blade-ui-kit/blade-icons and a set installed, any of its names work, with the same sizes, colours and labels.
+
+```blade
+<x-gui::icon name="heroicon-o-bell" />
+<x-gui::icon name="heroicon-s-rocket-launch" size="lg" class="text-gui-primary-text" />
+<x-gui::icon name="heroicon-o-sparkles" label="New" class="text-gui-warning-text" />
+```
+
 ## Meaningful icons
 
 Icons are hidden from screen readers unless you give them a label. Label an icon when it carries meaning on its own.
