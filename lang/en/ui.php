@@ -8,6 +8,7 @@ return [
     // Overlays and layout
     'close' => 'Close',
     'dismiss' => 'Dismiss',
+    'announcement' => 'Announcement',
     'navigation' => 'Navigation',
     'menu' => 'Menu',
     'open_navigation' => 'Open navigation',

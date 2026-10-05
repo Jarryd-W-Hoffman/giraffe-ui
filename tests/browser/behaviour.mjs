@@ -422,6 +422,18 @@ await check('navbar: on a small screen the links fold into a menu that Escape cl
     await page.setViewportSize({ width: 1280, height: 900 });
 });
 
+await check('banner: dismissing hides it, and remember keeps it hidden after a reload', async () => {
+    await visit('banner');
+    await page.evaluate(() => localStorage.removeItem('gui-banner:catalog-demo'));
+    await visit('banner');
+    const banner = page.locator('section[aria-label=Announcement]', { hasText: 'privacy policy' });
+    await banner.getByRole('button', { name: 'Dismiss' }).click();
+    expect(await banner.isHidden(), 'dismissing did not hide it');
+    await visit('banner');
+    expect(await banner.isHidden(), 'it came back after a reload');
+    await page.evaluate(() => localStorage.removeItem('gui-banner:catalog-demo'));
+});
+
 await check('flashed toast shows after a form post', async () => {
     await visit('examples/sign-in');
     await page.fill('input[name=email]', 'ada@example.com');

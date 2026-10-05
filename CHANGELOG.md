@@ -6,7 +6,16 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 46 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 47 components and a catalog.
+
+### Banner
+
+#### Added
+- Banner: a full-width notice for the top of a page, `solid` or `soft` in any colour, with an icon and an `action` slot. It's a labelled region (translatable "Announcement").
+  - `dismissible` adds a close button.
+  - `remember="key"` keeps a dismissed banner hidden on later visits in that browser, hidden before the page paints so it never flashes.
+  - Dismissing fires `banner-dismissed` (`detail: { key }`) for recording it server-side.
+- Translation: `announcement`.
 
 ### OTP input
 

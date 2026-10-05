@@ -32,6 +32,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Avatar group](avatar-group.md): Overlapping avatars, with a count of the ones not shown.
 - [Description list](description-list.md): Terms and their details, like the fields of a record. A real dl, in two columns from the sm breakpoint.
 - [Stat](stat.md): A headline number with a label and an optional change.
+- [Banner](banner.md): A full-width notice for the top of a page: an announcement, a warning or a reminder. It can be dismissed, and remember that it was.
 - [Badge](badge.md): A small label for status, counts or categories.
 - [Spinner](spinner.md): Shows that something is loading. Buttons use it for their loading state.
 - [Icon](icon.md): Heroicons that GiraffeUI ships with, or any icon from a blade-icons set.
