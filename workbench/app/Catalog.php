@@ -602,6 +602,24 @@ class Catalog
                             BLADE,
                     ],
                     [
+                        'title' => 'Picking several',
+                        'description' => 'With multiple, each choice becomes a chip and the list stays open for the next. Backspace in an empty search removes the last chip, and every chip has its own remove button. It submits skills[] (wire:model and x-model bind an array), and additions and removals are announced to screen readers.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Skills" name="skills" hint="Pick as many as you like.">
+                                <x-gui::combobox multiple :options="['php' => 'PHP', 'laravel' => 'Laravel', 'livewire' => 'Livewire', 'alpine' => 'Alpine.js', 'tailwind' => 'Tailwind CSS', 'mysql' => 'MySQL', 'redis' => 'Redis']" :value="['laravel', 'tailwind']" placeholder="Add skills" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Several, searched on the server',
+                        'description' => 'multiple works with url too. Chips keep their labels even when a search no longer includes them.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Offices" name="offices" hint="Try London, Tokyo or America.">
+                                <x-gui::combobox multiple url="/catalog/api/timezones" :options="$timezones" placeholder="Add timezones" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
                         'title' => 'In a modal',
                         'description' => 'The list is a top-layer popover, so it is never clipped by a modal or a scrolling container.',
                         'code' => <<<'BLADE'
@@ -626,6 +644,7 @@ class Catalog
                     ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
                     ['invalid', 'bool | null', 'null', 'Force the invalid state.'],
                     ['empty', 'string', "'No results'", 'Shown when nothing matches.'],
+                    ['multiple', 'bool', 'false', 'Pick several: chips, name[] and an array value.'],
                     ['url', 'string', 'null', 'Search on the server: typing fetches url?q=… and shows the JSON it returns.'],
                     ['debounce', 'int', '300', 'Milliseconds to wait after typing before searching.'],
                     ['searching-text', 'string', "'Searching…'", 'Shown while a search runs.'],

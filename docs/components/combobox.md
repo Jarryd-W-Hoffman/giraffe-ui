@@ -36,6 +36,26 @@ For long lists, give url. Typing fetches url?q=… (after a short pause) and sho
 </x-gui::field>
 ```
 
+## Picking several
+
+With multiple, each choice becomes a chip and the list stays open for the next. Backspace in an empty search removes the last chip, and every chip has its own remove button. It submits skills[] (wire:model and x-model bind an array), and additions and removals are announced to screen readers.
+
+```blade
+<x-gui::field label="Skills" name="skills" hint="Pick as many as you like.">
+    <x-gui::combobox multiple :options="['php' => 'PHP', 'laravel' => 'Laravel', 'livewire' => 'Livewire', 'alpine' => 'Alpine.js', 'tailwind' => 'Tailwind CSS', 'mysql' => 'MySQL', 'redis' => 'Redis']" :value="['laravel', 'tailwind']" placeholder="Add skills" />
+</x-gui::field>
+```
+
+## Several, searched on the server
+
+multiple works with url too. Chips keep their labels even when a search no longer includes them.
+
+```blade
+<x-gui::field label="Offices" name="offices" hint="Try London, Tokyo or America.">
+    <x-gui::combobox multiple url="/catalog/api/timezones" :options="$timezones" placeholder="Add timezones" />
+</x-gui::field>
+```
+
 ## In a modal
 
 The list is a top-layer popover, so it is never clipped by a modal or a scrolling container.
@@ -64,6 +84,7 @@ The list is a top-layer popover, so it is never clipped by a modal or a scrollin
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |  |
 | `invalid` | `bool \| null` | `null` | Force the invalid state. |
 | `empty` | `string` | `'No results'` | Shown when nothing matches. |
+| `multiple` | `bool` | `false` | Pick several: chips, name[] and an array value. |
 | `url` | `string` | `null` | Search on the server: typing fetches url?q=… and shows the JSON it returns. |
 | `debounce` | `int` | `300` | Milliseconds to wait after typing before searching. |
 | `searching-text` | `string` | `'Searching…'` | Shown while a search runs. |
