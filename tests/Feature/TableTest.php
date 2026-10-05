@@ -49,5 +49,11 @@ it('lets keyboard users scroll a wide table, and names the region when labelled'
 
     expect($plain)->toContain('x-init="new ResizeObserver(')
         ->not->toContain('role="region"')
-        ->and($labelled)->toMatch('/<div\s+class="overflow-x-auto[^"]*"\s+role="region" aria-label="Recent orders"/');
+        ->and($labelled)->toMatch('/<div\s+class="relative overflow-x-auto[^"]*"\s+role="region" aria-label="Recent orders"/');
+});
+
+it('clips sr-only text inside the scroller, so a wide table never widens the page', function () {
+    // sr-only is absolutely positioned; without a positioned scroller it escapes the overflow clip.
+    expect((string) $this->blade('<x-gui::table :columns="[\'name\']" :rows="[]" />'))
+        ->toMatch('/<div\s+class="relative overflow-x-auto/');
 });
