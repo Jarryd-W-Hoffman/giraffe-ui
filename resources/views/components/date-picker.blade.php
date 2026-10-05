@@ -8,6 +8,9 @@
     'buttonLabel' => 'Choose date',
     'previousLabel' => 'Previous month',
     'nextLabel' => 'Next month',
+    'disabledDates' => [],
+    'disabledWeekdays' => [],
+    'unavailableMessage' => "That date isn't available.",
 ])
 
 @php
@@ -17,6 +20,10 @@
     $value = $value instanceof \DateTimeInterface ? $value->format('Y-m-d') : $value;
     $disabled = $attributes->has('disabled') && $attributes->get('disabled') !== false;
     $anchor = \JayAitch\GiraffeUI\Support\Anchor::name($id);
+
+    // Dates and weekdays (0 Sunday to 6 Saturday) that can't be picked, on top of min and max.
+    $blockedDates = collect($disabledDates)->map(fn ($date) => $date instanceof \DateTimeInterface ? $date->format('Y-m-d') : (string) $date)->values()->all();
+    $blockedWeekdays = collect($disabledWeekdays)->map(fn ($day) => ((int) $day) % 7)->unique()->values()->all();
 
     // Firefox can't hide its own picker icon, so once Alpine is running the right padding shrinks to centre that
     // icon under our button, which covers it. Chromium and Safari hide theirs instead.
@@ -30,6 +37,8 @@
 {{--
     The control is a native date input: it works without JavaScript, types and validates like any date field, and
     submits Y-m-d. Alpine adds a button that opens a calendar (the WAI-ARIA date picker dialog pattern) in a popover.
+    Disabled dates and weekdays can't be picked in the calendar, and a typed one fails the browser's validation;
+    validate them on the server too.
 --}}
 <div
     class="relative"
@@ -38,8 +47,17 @@
         weekStart: @js($weekStart === null ? null : ((int) $weekStart) % 7),
         selected: '',
         focused: '',
+        blockedDates: @js($blockedDates),
+        blockedWeekdays: @js($blockedWeekdays),
 
         init() {
+            // A typed date that can't be picked fails validation, like one outside min and max.
+            // (The browser already reports dates outside min and max.)
+            const check = () => this.$refs.input.setCustomValidity(this.blocked(this.parse(this.$refs.input.value)) ? @js($unavailableMessage) : '');
+            this.$refs.input.addEventListener('input', check);
+            this.$refs.input.addEventListener('change', check);
+            check();
+
             this.locale ??= document.documentElement.lang || navigator.language;
             if (this.weekStart === null) {
                 try {
@@ -71,6 +89,13 @@
             const max = this.parse(this.$refs.input.max);
             return (min && date < min) || (max && date > max);
         },
+        // A disabled date or weekday.
+        blocked(date) {
+            return !! date && (this.blockedDates.includes(this.iso(date)) || this.blockedWeekdays.includes(date.getUTCDay()));
+        },
+        unavailable(date) {
+            return !! date && (this.outside(date) || this.blocked(date));
+        },
         clamp(date) {
             const min = this.parse(this.$refs.input.min);
             const max = this.parse(this.$refs.input.max);
@@ -101,7 +126,7 @@
             for (let day = 1; day <= days; day++) {
                 const date = new Date(Date.UTC(year, month, day));
                 const iso = this.iso(date);
-                cells.push({ key: iso, iso, day, label: this.format(date, { dateStyle: 'full' }), today: iso === today, disabled: this.outside(date) });
+                cells.push({ key: iso, iso, day, label: this.format(date, { dateStyle: 'full' }), today: iso === today, disabled: this.unavailable(date) });
             }
             while (cells.length % 7) cells.push({ key: 'after-' + cells.length });
 
@@ -154,7 +179,7 @@
         },
         choose(iso) {
             const date = this.parse(iso);
-            if (! date || this.outside(date)) return;
+            if (! date || this.unavailable(date)) return;
             const input = this.$refs.input;
             input.value = iso;
             input.dispatchEvent(new Event('input', { bubbles: true }));

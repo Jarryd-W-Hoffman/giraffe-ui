@@ -74,3 +74,13 @@ it('follows the page locale and week by default', function () {
 
     expect($html)->toContain('locale: null,', 'weekStart: null,');
 });
+
+it('passes disabled dates and weekdays to the calendar', function () {
+    $html = (string) $this->blade('<x-gui::date-picker :disabled-dates="[\'2026-12-25\', new DateTime(\'2027-01-01\')]" :disabled-weekdays="[0, 6, 7]" unavailable-message="Closed that day." />');
+
+    expect($html)
+        ->toContain("blockedDates: JSON.parse('[\\u00222026-12-25\\u0022,\\u00222027-01-01\\u0022]')")
+        // 7 is Sunday again, so it's folded into 0.
+        ->toContain("blockedWeekdays: JSON.parse('[0,6]')")
+        ->toContain("'Closed that day.'", 'setCustomValidity');
+});
