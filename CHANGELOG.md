@@ -8,6 +8,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Onboarding example
+
+#### Added
+- Catalog: an Onboarding full-page example. It's a four-step setup (workspace, team, preferences, review) built on the stepper and ordinary form posts, so it works without Livewire or even JavaScript.
+  - Each step validates on the server and keeps its answers in the session.
+  - Finished steps link back from the stepper, and the URL can't skip ahead.
+  - It uses the server-searching combobox for the timezone.
+
 ### Table row selection, sticky header and alignment
 
 #### Added

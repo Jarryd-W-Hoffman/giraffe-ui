@@ -327,6 +327,20 @@ await check('catalog playground re-renders the component', async () => {
     await page.waitForFunction((html) => document.querySelector('[x-ref=preview]').innerHTML !== html, before);
 });
 
+await check('onboarding: a multi-step form of plain posts, with the stepper', async () => {
+    await visit('examples/onboarding');
+    await page.locator('input[name=workspace]').fill('Analytical Engines');
+    await page.locator('input[name=slug]').focus();
+    await page.keyboard.type('Bad Slug');
+    await Promise.all([page.waitForNavigation(), page.keyboard.press('Enter')]);
+    await page.getByText('Use lowercase letters, numbers and single dashes.').waitFor();
+    await page.locator('input[name=slug]').fill('analytical-engines');
+    await Promise.all([page.waitForURL(/step=team/), page.getByRole('button', { name: 'Continue' }).click()]);
+    expect((await page.locator('[aria-current=step]').innerText()).includes('Team'), 'the stepper is not on Team');
+    await Promise.all([page.waitForURL(/step=workspace/), page.getByRole('link', { name: /Workspace/ }).click()]);
+    expect((await page.locator('input[name=slug]').inputValue()) === 'analytical-engines', 'going back lost what was entered');
+});
+
 await check('flashed toast shows after a form post', async () => {
     await visit('examples/sign-in');
     await page.fill('input[name=email]', 'ada@example.com');
