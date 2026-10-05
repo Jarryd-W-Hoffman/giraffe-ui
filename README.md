@@ -10,6 +10,8 @@ Works great with Livewire, but never requires it.
 - PHP 8.4+
 - Laravel 13
 - Tailwind CSS v4 (new Laravel apps already have it)
+- [Alpine](https://alpinejs.dev) for the interactive parts. Livewire includes it; Livewire itself is optional.
+- Current Chrome, Edge, Firefox or Safari (see [Browser support](#browser-support))
 
 ## Installation
 
@@ -22,7 +24,8 @@ The installer:
 
 1. adds GiraffeUI's CSS to `resources/css/app.css`, right after `@import "tailwindcss"`;
 2. offers to install Livewire (optional, off by default);
-3. offers to publish an app layout with dark mode at `resources/views/components/layouts/app.blade.php`. If you already have one, you can install it under another name, overwrite it, or skip.
+3. without Livewire, offers to start Alpine in `resources/js/app.js` and tells you to run `npm install alpinejs`;
+4. offers to publish an app layout with dark mode and toasts at `resources/views/components/layouts/app.blade.php`. If you already have one, you can install it under another name, overwrite it, or skip.
 
 It is safe to run again. It never runs npm or edits Tailwind config files.
 
@@ -36,6 +39,15 @@ Add one line to `resources/css/app.css`:
 ```
 
 Then rebuild your CSS (`npm run dev` or `npm run build`).
+
+Without Livewire, also start Alpine in `resources/js/app.js` (after `npm install alpinejs`):
+
+```js
+import Alpine from 'alpinejs';
+
+window.Alpine = Alpine;
+Alpine.start();
+```
 
 ## Usage
 
@@ -77,7 +89,7 @@ The input gets `id`, `name`, `required`, `aria-invalid` and `aria-describedby` a
 
 ### Interactivity
 
-GiraffeUI uses the platform first. Modal is a native `<dialog>`, Dropdown and Popover are native popovers positioned with CSS anchor positioning, and all three open with `command`/`commandfor` buttons. Accordion is native `<details>`. None of them needs JavaScript to open, close or position. Where the browser has no built-in behaviour (Tabs, menu arrow keys, tooltip Escape, toasts), GiraffeUI uses [Alpine](https://alpinejs.dev). Livewire includes Alpine; in other apps, install Alpine yourself.
+GiraffeUI uses the platform first. Modal is a native `<dialog>`, Dropdown and Popover are native popovers positioned with CSS anchor positioning, and all three open with `command`/`commandfor` buttons. Accordion is native `<details>`. None of them needs JavaScript to open, close or position. Where the browser has no built-in behaviour (Tabs, menu arrow keys, the combobox, the date picker's calendar, toasts), GiraffeUI uses [Alpine](https://alpinejs.dev). Livewire includes Alpine; in other apps, the installer can add it. Nothing in GiraffeUI calls Livewire: it works the same with or without it.
 
 ```blade
 <x-gui::button commandfor="confirm" command="show-modal">Delete</x-gui::button>
@@ -89,6 +101,10 @@ GiraffeUI uses the platform first. Modal is a native `<dialog>`, Dropdown and Po
     </x-slot:footer>
 </x-gui::modal>
 ```
+
+### Browser support
+
+GiraffeUI targets current versions of Chrome, Edge, Firefox and Safari. It builds on `<dialog>`, the popover API, CSS anchor positioning (Baseline since January 2026) and invoker commands (`command`/`commandfor`). Older browsers without them can't open modals, menus or popovers. Every change is tested in Chrome and Firefox; Safari isn't part of the automated tests yet.
 
 ## Conventions
 
@@ -159,7 +175,7 @@ composer lint        # Pint
 composer catalog     # Build the catalog's CSS and serve it at http://localhost:8000/catalog
 composer docs        # Regenerate docs/components from the catalog
 npm run audit:a11y   # With the catalog running: axe-core on every page, light and dark
-npm run test:browser # With the catalog running: drives the Alpine components in Chrome
+npm run test:browser # With the catalog running: drives the Alpine components in Chrome (BROWSER=firefox for Firefox)
 ```
 
 CI runs everything twice: with Livewire, and with Livewire removed and Alpine loaded on its own, so GiraffeUI never comes to depend on Livewire.

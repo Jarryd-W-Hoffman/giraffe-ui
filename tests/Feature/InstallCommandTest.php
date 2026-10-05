@@ -191,3 +191,77 @@ it('uses sensible defaults with --no-interaction', function () {
     expect(($this->css)())->toContain(InstallCommand::CSS_IMPORT)
         ->and(File::exists(($this->layout)()))->toBeTrue();
 });
+
+const ALPINE_QUESTION = 'Would you like to start Alpine in resources/js/app.js? GiraffeUI uses it for tabs, menus, the combobox and toasts.';
+
+function writeJs(string $js, ?array $package = null): void
+{
+    File::ensureDirectoryExists(base_path('resources/js'));
+    File::put(base_path('resources/js/app.js'), $js);
+
+    if ($package !== null) {
+        File::put(base_path('package.json'), json_encode($package));
+    }
+}
+
+it('starts Alpine in app.js without Livewire, and says to install it', function () {
+    writeCss("@import 'tailwindcss';\n");
+    writeJs("import './bootstrap';\n");
+
+    $this->artisan('gui:install')
+        ->expectsConfirmation(LIVEWIRE_QUESTION, 'no')
+        ->expectsConfirmation(ALPINE_QUESTION, 'yes')
+        ->expectsOutputToContain('npm install alpinejs')
+        ->expectsConfirmation(LAYOUT_QUESTION, 'no')
+        ->assertSuccessful();
+
+    expect(File::get(base_path('resources/js/app.js')))->toBe("import './bootstrap';\n\n".InstallCommand::ALPINE_SETUP."\n");
+
+    // Running it again leaves app.js alone.
+    $this->artisan('gui:install')
+        ->expectsConfirmation(LIVEWIRE_QUESTION, 'no')
+        ->expectsOutputToContain('ALREADY SET UP')
+        ->expectsConfirmation(LAYOUT_QUESTION, 'no')
+        ->assertSuccessful();
+
+    expect(substr_count(File::get(base_path('resources/js/app.js')), 'alpinejs'))->toBe(1);
+});
+
+it('skips the npm reminder when alpinejs is already a dependency', function () {
+    writeCss("@import 'tailwindcss';\n");
+    writeJs("import './bootstrap';\n", ['devDependencies' => ['alpinejs' => '^3.0']]);
+
+    $this->artisan('gui:install')
+        ->expectsConfirmation(LIVEWIRE_QUESTION, 'no')
+        ->expectsConfirmation(ALPINE_QUESTION, 'yes')
+        ->doesntExpectOutputToContain('npm install alpinejs')
+        ->expectsConfirmation(LAYOUT_QUESTION, 'no')
+        ->assertSuccessful();
+});
+
+it('leaves Alpine to Livewire when Livewire is installed', function () {
+    writeCss("@import 'tailwindcss';\n");
+    writeJs("import './bootstrap';\n");
+    File::put(base_path('composer.json'), json_encode(['require' => ['livewire/livewire' => '^4.0']]));
+
+    $this->artisan('gui:install')
+        ->expectsOutputToContain('INCLUDED WITH LIVEWIRE')
+        ->expectsConfirmation(LAYOUT_QUESTION, 'no')
+        ->assertSuccessful();
+
+    expect(File::get(base_path('resources/js/app.js')))->toBe("import './bootstrap';\n");
+});
+
+it('explains how to add Alpine when there is no app.js', function () {
+    writeCss("@import 'tailwindcss';\n");
+
+    $this->artisan('gui:install')
+        ->expectsConfirmation(LIVEWIRE_QUESTION, 'no')
+        ->expectsOutputToContain('npm install alpinejs')
+        ->expectsConfirmation(LAYOUT_QUESTION, 'no')
+        ->assertSuccessful();
+});
+
+it('publishes a layout that shows toasts', function () {
+    expect(File::get(__DIR__.'/../../stubs/layout.blade.php'))->toContain('<x-gui::toasts />');
+});

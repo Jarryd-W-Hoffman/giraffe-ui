@@ -34,6 +34,11 @@ class InstallCommand extends Command
     public const DARK_VARIANT = '@custom-variant dark (&:where(.dark, .dark *));';
 
     /**
+     * Starts Alpine in an app without Livewire (Livewire bundles Alpine and starts it itself).
+     */
+    public const ALPINE_SETUP = "import Alpine from 'alpinejs';\n\nwindow.Alpine = Alpine;\nAlpine.start();";
+
+    /**
      * Create a new command instance.
      */
     public function __construct(protected Filesystem $files)
@@ -52,6 +57,7 @@ class InstallCommand extends Command
 
         $this->installCss();
         $this->installLivewire();
+        $this->installAlpine();
         $this->publishLayout();
 
         $this->callSilently('view:clear');
@@ -126,6 +132,46 @@ class InstallCommand extends Command
         }
 
         $this->components->twoColumnDetail('Livewire', '<fg=green;options=bold>INSTALLED</>');
+    }
+
+    /**
+     * Tabs, menus, the combobox, toasts and other interactive parts need Alpine. Livewire includes it; without
+     * Livewire, offer to start it from resources/js/app.js. This never runs npm, so it says what to install.
+     */
+    protected function installAlpine(): void
+    {
+        if ($this->livewireInstalled()) {
+            $this->components->twoColumnDetail('Alpine', '<fg=yellow;options=bold>INCLUDED WITH LIVEWIRE</>');
+
+            return;
+        }
+
+        $path = base_path('resources/js/app.js');
+
+        if (! $this->files->exists($path)) {
+            $this->components->warn('GiraffeUI uses Alpine for tabs, menus, the combobox and toasts. Run "npm install alpinejs" and add this to your main JavaScript file:');
+            $this->line(collect(explode("\n", self::ALPINE_SETUP))->map(fn ($line) => '  '.$line)->implode("\n"));
+
+            return;
+        }
+
+        if (Str::contains($this->files->get($path), 'alpinejs')) {
+            $this->components->twoColumnDetail('Alpine', '<fg=yellow;options=bold>ALREADY SET UP</>');
+
+            return;
+        }
+
+        if (! $this->confirm('Would you like to start Alpine in resources/js/app.js? GiraffeUI uses it for tabs, menus, the combobox and toasts.', true)) {
+            return;
+        }
+
+        $this->files->put($path, rtrim($this->files->get($path))."\n\n".self::ALPINE_SETUP."\n");
+
+        $this->components->twoColumnDetail('Alpine in resources/js/app.js', '<fg=green;options=bold>ADDED</>');
+
+        if (! $this->packageRequires('alpinejs')) {
+            $this->components->warn('Now run "npm install alpinejs", then rebuild your assets.');
+        }
     }
 
     /**
@@ -205,6 +251,22 @@ class InstallCommand extends Command
         $composer = json_decode($this->files->get($path), true) ?: [];
 
         return isset($composer['require']['livewire/livewire']) || isset($composer['require-dev']['livewire/livewire']);
+    }
+
+    /**
+     * Whether the app's package.json lists an npm package.
+     */
+    protected function packageRequires(string $package): bool
+    {
+        $path = base_path('package.json');
+
+        if (! $this->files->exists($path)) {
+            return false;
+        }
+
+        $json = json_decode($this->files->get($path), true) ?: [];
+
+        return isset($json['dependencies'][$package]) || isset($json['devDependencies'][$package]);
     }
 
     /**

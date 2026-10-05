@@ -32,5 +32,8 @@
     </head>
     <body class="min-h-screen bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
         {{ $slot }}
+
+        {{-- Shows GiraffeUI.toast(...), $dispatch('toast', ...) and session()->flash('toast', ...). --}}
+        <x-gui::toasts />
     </body>
 </html>
