@@ -48,25 +48,23 @@
         ];
     @endphp
 
-    <header class="border-b border-zinc-200 dark:border-zinc-800">
-        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+    <x-gui::navbar sticky>
+        <x-slot:brand>
             <a href="#" class="flex items-center gap-2 font-semibold">
                 <span class="flex size-7 items-center justify-center rounded-gui bg-gui-primary text-sm text-gui-primary-foreground" aria-hidden="true">A</span>
                 Acme
             </a>
-            <nav aria-label="Main" class="hidden sm:block">
-                <ul class="flex items-center gap-6 text-sm font-medium text-zinc-600 dark:text-zinc-400">
-                    <li><a href="#" class="hover:text-zinc-900 dark:hover:text-zinc-100">Product</a></li>
-                    <li><a href="#" aria-current="page" class="text-zinc-900 dark:text-zinc-100">Pricing</a></li>
-                    <li><a href="/catalog/introduction" class="hover:text-zinc-900 dark:hover:text-zinc-100">Docs</a></li>
-                </ul>
-            </nav>
-            <div class="flex items-center gap-2">
-                <x-gui::button href="/catalog/examples/sign-in" variant="ghost" color="secondary" size="sm">Sign in</x-gui::button>
-                <x-gui::button href="/catalog/examples/register" size="sm">Start free trial</x-gui::button>
-            </div>
-        </div>
-    </header>
+        </x-slot:brand>
+
+        <x-gui::navbar.item href="#">Product</x-gui::navbar.item>
+        <x-gui::navbar.item href="#" current>Pricing</x-gui::navbar.item>
+        <x-gui::navbar.item href="/catalog/introduction">Docs</x-gui::navbar.item>
+
+        <x-slot:actions>
+            <x-gui::button href="/catalog/examples/sign-in" variant="ghost" color="secondary" size="sm">Sign in</x-gui::button>
+            <x-gui::button href="/catalog/examples/register" size="sm">Start free trial</x-gui::button>
+        </x-slot:actions>
+    </x-gui::navbar>
 
     <main>
         {{-- The billing switch is native radios; prices swap with :has(), so this works without JavaScript. --}}

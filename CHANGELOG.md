@@ -6,7 +6,19 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 45 components and a catalog.
+
+### Navbar
+
+#### Added
+- Navbar: a top bar with `brand`, links (`navbar.item`) and `actions` slots.
+  - Below the md breakpoint, the links fold into a menu: a native popover under the bar, so Escape and clicking outside close it and focus returns to the button, with no JavaScript.
+  - Actions stay in the bar at every size.
+  - Items mark the current page from the URL, or with `current`. `sticky` keeps it at the top over a blurred background.
+- Translation: `menu`.
+
+#### Changed
+- The Pricing example uses the Navbar instead of its own header.
 
 ### Combobox: pick several
 

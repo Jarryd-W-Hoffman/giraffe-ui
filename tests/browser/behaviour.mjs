@@ -392,6 +392,20 @@ await check('onboarding: a multi-step form of plain posts, with the stepper', as
     expect((await page.locator('input[name=slug]').inputValue()) === 'analytical-engines', 'going back lost what was entered');
 });
 
+await check('navbar: on a small screen the links fold into a menu that Escape closes', async () => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await visit('examples/pricing');
+    const button = page.locator('header').first().getByRole('button', { name: 'Menu' });
+    await button.focus();
+    await page.keyboard.press('Enter');
+    const menu = page.locator('[popover][id$=-menu]');
+    expect(await menu.evaluate((el) => el.matches(':popover-open')), 'the menu did not open');
+    expect((await menu.locator('[aria-current=page]').textContent()).trim() === 'Pricing', 'the current page is not marked');
+    await page.keyboard.press('Escape');
+    expect(await button.evaluate((el) => el === document.activeElement), 'focus did not return to the menu button');
+    await page.setViewportSize({ width: 1280, height: 900 });
+});
+
 await check('flashed toast shows after a form post', async () => {
     await visit('examples/sign-in');
     await page.fill('input[name=email]', 'ada@example.com');
