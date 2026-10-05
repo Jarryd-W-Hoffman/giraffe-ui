@@ -8,6 +8,18 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Installing without Livewire, and up-to-date guides
+
+#### Added
+- Installer: without Livewire, it offers to start Alpine in `resources/js/app.js` (once; it leaves an existing Alpine setup alone) and reminds you to run `npm install alpinejs` unless it's already a dependency. With Livewire, it notes that Alpine comes with it. It still never runs npm.
+- The published layout includes `<x-gui::toasts />`, so toasts work out of the box.
+
+#### Changed
+- Catalog guides:
+  - The Introduction lists every component and full-page example straight from the catalog, so it can't fall behind, and its outdated "forms are next" status is gone.
+  - Installation gains an Alpine section and a browser support section.
+  - The README matches both.
+
 ### Combobox server-side search
 
 #### Added
