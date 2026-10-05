@@ -9,6 +9,7 @@ return [
     'close' => 'Close',
     'dismiss' => 'Dismiss',
     'navigation' => 'Navigation',
+    'menu' => 'Menu',
     'open_navigation' => 'Open navigation',
     'main' => 'Main',
     'breadcrumb' => 'Breadcrumb',
