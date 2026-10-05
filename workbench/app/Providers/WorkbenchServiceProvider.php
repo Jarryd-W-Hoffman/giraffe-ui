@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Workbench\App\Console\GenerateDocs;
 use Workbench\App\Livewire\AvatarUpload;
+use Workbench\App\Livewire\CustomersTable;
 use Workbench\App\Livewire\ProfileForm;
 use Workbench\App\Livewire\SettingsTabs;
 use Workbench\App\Livewire\SignupWizard;
@@ -42,6 +43,7 @@ class WorkbenchServiceProvider extends ServiceProvider
             Livewire::component('settings-tabs', SettingsTabs::class);
             Livewire::component('signup-wizard', SignupWizard::class);
             Livewire::component('avatar-upload', AvatarUpload::class);
+            Livewire::component('customers-table', CustomersTable::class);
 
             // Livewire bundles Alpine, so load its script on every catalog page instead of a second copy of Alpine.
             Livewire::forceAssetInjection();

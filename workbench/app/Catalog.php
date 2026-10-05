@@ -36,6 +36,7 @@ class Catalog
     {
         return [
             'dashboard' => 'Dashboard',
+            'customers' => 'Customers',
             'settings' => 'Settings',
             'sign-in' => 'Sign in',
             'register' => 'Register',

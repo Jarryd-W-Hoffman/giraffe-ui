@@ -8,14 +8,19 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
-### Stepper
+### Customers example
 
 #### Added
-- Stepper: progress through a multi-step flow, such as a signup or checkout wizard. Pass `steps` (key => label, or label, description and href) and the `current` key, or compose `stepper.step` with a `status`. Steps are complete (a check mark), current (`aria-current="step"`), upcoming, or need attention (`invalid` keys). Horizontal or vertical; numbers come from a CSS counter. Complete steps with an `href` become links back, and composed steps with a click handler become buttons. Screen readers hear "completed" and "needs attention" after the label.
-- Catalog: a Livewire signup wizard on the Livewire page that validates one step at a time, lets people jump back to completed steps, moves focus to each step's heading, and re-checks every step before finishing.
+- Catalog: a Customers full-page example, linked from the sidebar. It's a Livewire data table with:
+  - Search, a status filter and a plan filter, all kept in the URL, with sortable columns and pagination.
+  - Row checkboxes and a select-all checkbox that shows a mixed state, plus a bar of bulk actions (mark churned, delete) for the selection, which is announced to screen readers.
+  - A menu of actions on each row. Deleting asks for confirmation in a modal, then moves focus to the page heading.
+  - An empty state that clears the filters.
+- Icon: `ellipsis-horizontal`.
 
 #### Fixed
-- Catalog: the props and slots tables can be scrolled with the keyboard on narrow screens.
+- Table: sr-only text inside a table that scrolls sideways, such as a visually hidden column heading, no longer widens the page on small screens. The scroller is now `relative`, so it clips absolutely positioned content.
+- Catalog: toasts on example pages no longer cover the "Back to the catalog" link.
 
 ### Register and Forgot password examples
 
@@ -24,6 +29,15 @@ The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 componen
   - Register: name, email, password and confirmation (each with a Show button) and a terms checkbox. It validates on the server, counts the problems in a summary, keeps everything but the passwords, and lands on the dashboard with a welcome toast.
   - Forgot password: always confirms that a link was sent, without revealing whether the account exists, and keeps the email for a resend.
 - Icon: `arrow-left`.
+
+### Stepper
+
+#### Added
+- Stepper: progress through a multi-step flow, such as a signup or checkout wizard. Pass `steps` (key => label, or label, description and href) and the `current` key, or compose `stepper.step` with a `status`. Steps are complete (a check mark), current (`aria-current="step"`), upcoming, or need attention (`invalid` keys). Horizontal or vertical; numbers come from a CSS counter. Complete steps with an `href` become links back, and composed steps with a click handler become buttons. Screen readers hear "completed" and "needs attention" after the label.
+- Catalog: a Livewire signup wizard on the Livewire page that validates one step at a time, lets people jump back to completed steps, moves focus to each step's heading, and re-checks every step before finishing.
+
+#### Fixed
+- Catalog: the props and slots tables can be scrolled with the keyboard on narrow screens.
 
 ### Sidebar layout and full-page examples
 

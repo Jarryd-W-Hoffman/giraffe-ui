@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
 use Workbench\App\Livewire\AvatarUpload;
+use Workbench\App\Livewire\CustomersTable;
 use Workbench\App\Livewire\ProfileForm;
 use Workbench\App\Livewire\SettingsTabs;
 use Workbench\App\Livewire\SignupWizard;
@@ -95,6 +96,80 @@ describe('tabs', function () {
             ->set('digestDays', [])
             ->assertSee('On the server: never');
     });
+});
+
+describe('customers table', function () {
+    it('filters, sorts and paginates', function () {
+        $table = Livewire::test(CustomersTable::class);
+
+        expect($table->instance()->rows()->total())->toBe(42)
+            ->and($table->get('pageIds'))->toHaveCount(10);
+
+        $table->set('status', 'churned');
+        expect($table->instance()->rows()->pluck('status')->unique()->all())->toBe(['churned']);
+
+        $table->set('status', 'all')->set('plan', 'enterprise')->call('sort', 'mrr')->call('sort', 'mrr');
+        $mrr = $table->instance()->rows()->pluck('mrr')->all();
+        expect($table->instance()->rows()->pluck('plan')->unique()->all())->toBe(['enterprise'])
+            ->and($mrr)->toBe(collect($mrr)->sortDesc()->values()->all());
+
+        $table->call('sort', 'evil')->assertSet('sortBy', 'mrr');
+    });
+
+    it('shows an empty state that clears the filters', function () {
+        Livewire::test(CustomersTable::class)
+            ->set('search', 'nobody-by-this-name')
+            ->assertSee('No customers found')
+            ->assertSee('Clear filters')
+            ->call('clearFilters')
+            ->assertSet('search', '')
+            ->assertDontSee('No customers found');
+    });
+
+    it('changes the status of one customer or the selection', function () {
+        $table = Livewire::test(CustomersTable::class)
+            ->call('setStatus', 'churned', 'cus_1001')
+            ->assertDispatched('toast', color: 'success');
+
+        expect($table->instance()->customers()->firstWhere('id', 'cus_1001')['status'])->toBe('churned');
+
+        $table->set('selected', ['cus_1002', 'cus_1003'])
+            ->call('setStatus', 'churned')
+            ->assertDispatched('toast', message: '2 customers marked churned.')
+            ->call('setStatus', 'deleted-ish', 'cus_1004');
+
+        expect($table->instance()->customers()->whereIn('id', ['cus_1002', 'cus_1003'])->pluck('status')->unique()->all())->toBe(['churned'])
+            ->and($table->instance()->customers()->firstWhere('id', 'cus_1004')['status'])->not->toBe('deleted-ish');
+    });
+
+    it('asks before deleting, then deletes and drops them from the selection', function () {
+        $table = Livewire::test(CustomersTable::class)
+            ->set('selected', ['cus_1001', 'cus_1002', 'cus_1003'])
+            ->call('confirmDelete', 'cus_1002')
+            ->assertSet('deleting', ['cus_1002'])
+            ->assertSee('Delete '.Livewire::test(CustomersTable::class)->instance()->customers()->firstWhere('id', 'cus_1002')['name'].'?')
+            ->call('delete')
+            ->assertSet('deleting', [])
+            ->assertSet('selected', ['cus_1001', 'cus_1003']);
+
+        expect($table->instance()->rows()->total())->toBe(41);
+
+        $table->call('confirmDelete')
+            ->assertSee('Delete 2 customers?')
+            ->call('delete')
+            ->assertDispatched('toast', message: '2 customers deleted.')
+            ->assertSet('selected', []);
+
+        expect($table->instance()->rows()->total())->toBe(39);
+    });
+
+    it('ignores unknown ids and locks its bookkeeping', function () {
+        Livewire::test(CustomersTable::class)
+            ->call('confirmDelete', 'cus_nope')
+            ->assertSet('deleting', []);
+
+        Livewire::test(CustomersTable::class)->set('deleted', ['cus_1001']);
+    })->throws(CannotUpdateLockedPropertyException::class);
 });
 
 describe('wizard', function () {
