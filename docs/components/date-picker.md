@@ -28,6 +28,16 @@ min and max are the native attributes, so the browser validates them too. Days o
 </x-gui::field>
 ```
 
+## Disabled dates and weekdays
+
+disabled-dates and disabled-weekdays (0 for Sunday to 6 for Saturday) can't be picked in the calendar, and a typed one fails the browser's validation with unavailable-message. Validate them on the server too.
+
+```blade
+<x-gui::field label="Collection date" name="collects_on" hint="Weekdays only, and not on public holidays.">
+    <x-gui::date-picker value="2026-12-23" :disabled-weekdays="[0, 6]" :disabled-dates="['2026-12-25', '2026-12-28', '2027-01-01']" />
+</x-gui::field>
+```
+
 ## Locale and first day of the week
 
 Month and day names come from the page's lang attribute, and the week starts where that locale starts it. Both can be set.
@@ -49,6 +59,9 @@ Month and day names come from the page's lang attribute, and the week starts whe
 | `button-label` | `string` | `'Choose date'` | The calendar button's accessible name. |
 | `previous-label` | `string` | `'Previous month'` |  |
 | `next-label` | `string` | `'Next month'` |  |
+| `disabled-dates` | `array` | `[]` | Y-m-d strings or DateTimeInterface objects that can't be picked. |
+| `disabled-weekdays` | `array` | `[]` | Weekdays that can't be picked: 0 for Sunday to 6 for Saturday. |
+| `unavailable-message` | `string` | `'That date isn\'t available.'` | The browser's validation message for a typed disabled date. |
 
 The value is the input's own: Y-m-d, from value, a DateTimeInterface or old input. wire:model, x-model, min, max and required go on the input.
 

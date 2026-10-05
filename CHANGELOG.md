@@ -8,6 +8,11 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Date picker: disabled dates and weekdays
+
+#### Added
+- Date picker `disabled-dates` (Y-m-d strings or dates) and `disabled-weekdays` (0 for Sunday to 6 for Saturday). The calendar crosses them out and won't pick them, and a typed one fails the browser's validation with `unavailable-message`. Validate them on the server too.
+
 ### Onboarding example
 
 #### Added

@@ -224,6 +224,21 @@ if (process.env.BROWSER === 'firefox') {
     });
 }
 
+await check("date picker: disabled dates and weekdays can't be picked or typed", async () => {
+    await visit('date-picker');
+    const input = page.locator('input[name=collects_on]');
+    const root = input.locator('xpath=..');
+    await root.locator('[aria-label="Choose date"]').click();
+    await page.waitForFunction(() => document.activeElement?.dataset.date === '2026-12-23');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('Enter');
+    expect((await input.inputValue()) === '2026-12-23', 'Enter picked a disabled date');
+    await page.keyboard.press('Escape');
+    await input.fill('2026-12-26');
+    expect(! (await input.evaluate((el) => el.checkValidity())), 'a typed Saturday passed validation');
+});
+
 await check('number input: the buttons step the value', async () => {
     await visit('number-input');
     const input = page.locator('article input[type=number]').first();
