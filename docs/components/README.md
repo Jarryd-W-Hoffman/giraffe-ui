@@ -15,6 +15,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Combobox](combobox.md): A select you can type into to filter, in the browser or on the server. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.
 - [Number input](number-input.md): A native number input with − and + buttons.
 - [Slider](slider.md): A native range input in the theme colour, with an optional value and tick marks.
+- [OTP input](otp-input.md): A one-time code or PIN, shown as one box per character. It is one real input underneath, so phone autofill, pasting and screen readers work as they would on any field.
 - [Date picker](date-picker.md): A native date input with a calendar. Follows the WAI-ARIA date picker dialog pattern.
 - [File upload](file-upload.md): A drop zone around a real file input, with the chosen files listed and Livewire upload progress.
 - [Checkbox](checkbox.md): A native checkbox with a label and optional description.

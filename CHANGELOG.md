@@ -6,7 +6,16 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 45 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 46 components and a catalog.
+
+### OTP input
+
+#### Added
+- OTP input: a one-time code or PIN shown as one box per character.
+  - It's a single real input underneath (`autocomplete="one-time-code"`, a numeric keyboard, `maxlength` and `pattern`). Phone autofill, pasting, one tab stop, one submitted value, `wire:model` and screen readers all work as on any field.
+  - Alpine draws the boxes, with the active one highlighted, and keeps only digits (or letters and digits with `alphanumeric`), up to `length`.
+  - `autosubmit` submits the form when the code is complete. Codes are never refilled from old input.
+  - Without JavaScript it's a plain text field.
 
 ### Navbar
 

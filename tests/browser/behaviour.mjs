@@ -275,6 +275,22 @@ await check('date picker: a range picks a start, then an end, and keeps the end 
     expect(! (await end.evaluate((el) => el.checkValidity())), 'an end before the start passed validation');
 });
 
+await check('otp input: keeps digits, takes a pasted code and submits when complete', async () => {
+    await visit('otp-input');
+    const code = page.locator('input[name=code]');
+    await code.focus();
+    await page.keyboard.type('1a2');
+    expect((await code.inputValue()) === '12', `typed 1a2, got ${await code.inputValue()}`);
+    await code.fill('');
+    await page.keyboard.insertText('98-76-54');
+    expect((await code.inputValue()) === '987654', `pasted 98-76-54, got ${await code.inputValue()}`);
+    const boxes = await code.locator('xpath=..').locator('[aria-hidden=true] span:first-child').allTextContents();
+    expect(boxes.join('') === '987654', `the boxes show ${boxes.join('')}`);
+    await page.locator('input[name=pin]').focus();
+    await page.keyboard.type('4321');
+    await page.locator('[x-text="toast.message"]', { hasText: 'Checking 4321' }).waitFor();
+});
+
 await check('number input: the buttons step the value', async () => {
     await visit('number-input');
     const input = page.locator('article input[type=number]').first();
