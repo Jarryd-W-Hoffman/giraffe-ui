@@ -102,6 +102,16 @@ GiraffeUI uses the platform first. Modal is a native `<dialog>`, Dropdown and Po
 </x-gui::modal>
 ```
 
+### Translations
+
+Built-in text such as "Close", "No results" or "Choose date" comes from Laravel's translator and follows your app's locale. To translate or reword it:
+
+```bash
+php artisan vendor:publish --tag=giraffeui-lang
+```
+
+Then copy `lang/vendor/giraffeui/en/ui.php` to your locale (e.g. `fr/ui.php`) and translate it. Props such as `button-label` still win when you pass them.
+
 ### Browser support
 
 GiraffeUI targets current versions of Chrome, Edge, Firefox and Safari. It builds on `<dialog>`, the popover API, CSS anchor positioning (Baseline since January 2026) and invoker commands (`command`/`commandfor`). Older browsers without them can't open modals, menus or popovers. Every change is tested in Chrome and Firefox; Safari isn't part of the automated tests yet.

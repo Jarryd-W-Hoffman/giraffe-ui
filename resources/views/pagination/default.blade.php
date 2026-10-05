@@ -9,21 +9,21 @@
 @endphp
 
 @if ($paginator->hasPages())
-    <nav role="navigation" aria-label="Pagination" class="flex flex-wrap items-center justify-between gap-3">
+    <nav role="navigation" aria-label="{{ __('giraffeui::ui.pagination') }}" class="flex flex-wrap items-center justify-between gap-3">
         @if (method_exists($paginator, 'total'))
             <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                Showing <span class="font-medium text-zinc-900 dark:text-zinc-100">{{ $paginator->firstItem() }}</span>
-                to <span class="font-medium text-zinc-900 dark:text-zinc-100">{{ $paginator->lastItem() }}</span>
-                of <span class="font-medium text-zinc-900 dark:text-zinc-100">{{ $paginator->total() }}</span>
+                {{-- The numbers are emphasised inside the translated sentence; everything is escaped first. --}}
+                @php($number = fn ($value) => '<span class="font-medium text-zinc-900 dark:text-zinc-100">'.e($value).'</span>')
+                {!! strtr(e(__('giraffeui::ui.showing')), [':first' => $number($paginator->firstItem()), ':last' => $number($paginator->lastItem()), ':total' => $number($paginator->total())]) !!}
             </p>
         @endif
 
         <ul class="flex flex-wrap items-center gap-1">
             <li>
                 @if ($paginator->onFirstPage())
-                    <span class="{{ $disabled }}" aria-disabled="true">Previous</span>
+                    <span class="{{ $disabled }}" aria-disabled="true">{{ __('giraffeui::ui.previous') }}</span>
                 @else
-                    <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="{{ $link }}">Previous</a>
+                    <a href="{{ $paginator->previousPageUrl() }}" rel="prev" class="{{ $link }}">{{ __('giraffeui::ui.previous') }}</a>
                 @endif
             </li>
 
@@ -49,9 +49,9 @@
 
             <li>
                 @if ($paginator->hasMorePages())
-                    <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="{{ $link }}">Next</a>
+                    <a href="{{ $paginator->nextPageUrl() }}" rel="next" class="{{ $link }}">{{ __('giraffeui::ui.next') }}</a>
                 @else
-                    <span class="{{ $disabled }}" aria-disabled="true">Next</span>
+                    <span class="{{ $disabled }}" aria-disabled="true">{{ __('giraffeui::ui.next') }}</span>
                 @endif
             </li>
         </ul>

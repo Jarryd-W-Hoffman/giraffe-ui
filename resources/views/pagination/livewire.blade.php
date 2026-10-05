@@ -10,21 +10,21 @@
 @endphp
 
 @if ($paginator->hasPages())
-    <nav wire:key="gui-pagination-{{ $paginator->getPageName() }}" role="navigation" aria-label="Pagination" class="flex flex-wrap items-center justify-between gap-3">
+    <nav wire:key="gui-pagination-{{ $paginator->getPageName() }}" role="navigation" aria-label="{{ __('giraffeui::ui.pagination') }}" class="flex flex-wrap items-center justify-between gap-3">
         @if (method_exists($paginator, 'total'))
             <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                Showing <span class="font-medium text-zinc-900 dark:text-zinc-100">{{ $paginator->firstItem() }}</span>
-                to <span class="font-medium text-zinc-900 dark:text-zinc-100">{{ $paginator->lastItem() }}</span>
-                of <span class="font-medium text-zinc-900 dark:text-zinc-100">{{ $paginator->total() }}</span>
+                {{-- The numbers are emphasised inside the translated sentence; everything is escaped first. --}}
+                @php($number = fn ($value) => '<span class="font-medium text-zinc-900 dark:text-zinc-100">'.e($value).'</span>')
+                {!! strtr(e(__('giraffeui::ui.showing')), [':first' => $number($paginator->firstItem()), ':last' => $number($paginator->lastItem()), ':total' => $number($paginator->total())]) !!}
             </p>
         @endif
 
         <ul class="flex flex-wrap items-center gap-1">
             <li>
                 @if ($paginator->onFirstPage())
-                    <span class="{{ $disabled }}" aria-disabled="true">Previous</span>
+                    <span class="{{ $disabled }}" aria-disabled="true">{{ __('giraffeui::ui.previous') }}</span>
                 @else
-                    <button type="button" wire:click="previousPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled" rel="prev" class="{{ $link }} cursor-pointer">Previous</button>
+                    <button type="button" wire:click="previousPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled" rel="prev" class="{{ $link }} cursor-pointer">{{ __('giraffeui::ui.previous') }}</button>
                 @endif
             </li>
 
@@ -50,9 +50,9 @@
 
             <li>
                 @if ($paginator->hasMorePages())
-                    <button type="button" wire:click="nextPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled" rel="next" class="{{ $link }} cursor-pointer">Next</button>
+                    <button type="button" wire:click="nextPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled" rel="next" class="{{ $link }} cursor-pointer">{{ __('giraffeui::ui.next') }}</button>
                 @else
-                    <span class="{{ $disabled }}" aria-disabled="true">Next</span>
+                    <span class="{{ $disabled }}" aria-disabled="true">{{ __('giraffeui::ui.next') }}</span>
                 @endif
             </li>
         </ul>

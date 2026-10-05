@@ -1,6 +1,10 @@
 @props([
-    'label' => 'Select all rows',
+    'label' => null,
 ])
+
+@php
+    $label ??= __('giraffeui::ui.select_all_rows');
+@endphp
 
 {{--
     A header checkbox for the table.select checkboxes in the body: checked when all are, mixed when some are.

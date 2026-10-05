@@ -29,7 +29,7 @@
     ];
 
     // Read out after the label, since the indicator's check mark and colours are hidden from screen readers.
-    $statusText = ['complete' => 'completed', 'error' => 'needs attention'][$status] ?? null;
+    $statusText = ['complete' => __('giraffeui::ui.step_completed'), 'error' => __('giraffeui::ui.step_needs_attention')][$status] ?? null;
 @endphp
 
 <li class="group/step relative flex-1 [counter-increment:gui-step] last:flex-none group-data-[orientation=vertical]/stepper:flex-none group-data-[orientation=vertical]/stepper:pb-8 group-data-[orientation=vertical]/stepper:last:pb-0">

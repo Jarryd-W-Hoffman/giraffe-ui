@@ -177,7 +177,7 @@ describe('textarea', function () {
 
         expect(attr($html, 'textarea', 'id'))->toStartWith('gui-textarea-')
             ->and(attr($html, 'textarea', 'aria-describedby'))->toBeNull()
-            ->and($html)->toContain('max: null', '<span x-text="length">0</span> characters')
+            ->and($html)->toContain('max: null', '<span x-text="say(\'character\', \'characters\', length)">0 characters</span>')
             ->not->toContain('Up to');
     });
 });

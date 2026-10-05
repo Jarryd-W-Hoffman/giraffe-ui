@@ -79,12 +79,15 @@
                 clearTimeout(this.timer);
                 this.timer = setTimeout(() => this.announcement = this.describe(), 1000);
             },
+            // Translated phrases, with :count filled in here.
+            phrases: @js(['character' => __('giraffeui::ui.character'), 'characters' => __('giraffeui::ui.characters'), 'character_left' => __('giraffeui::ui.character_left'), 'characters_left' => __('giraffeui::ui.characters_left')]),
+            say(one, other, count) {
+                return (count === 1 ? this.phrases[one] : this.phrases[other]).replace(':count', count);
+            },
             describe() {
-                if (this.max === null) {
-                    return this.length === 1 ? '1 character' : this.length + ' characters';
-                }
-                const left = this.max - this.length;
-                return left === 1 ? '1 character left' : left + ' characters left';
+                return this.max === null
+                    ? this.say('character', 'characters', this.length)
+                    : this.say('character_left', 'characters_left', this.max - this.length);
             },
         }"
         class="space-y-1.5"
@@ -93,10 +96,14 @@
 
         <div class="flex justify-end text-xs text-zinc-600 tabular-nums dark:text-zinc-400">
             @if ($max)
-                <span id="{{ $id }}-limit" class="sr-only">Up to {{ $max }} characters.</span>
+                <span id="{{ $id }}-limit" class="sr-only">{{ __('giraffeui::ui.up_to_characters', ['max' => $max]) }}</span>
             @endif
             <span aria-hidden="true" x-bind:class="max !== null && length >= max && 'font-medium text-gui-danger-text'">
-                <span x-text="length">{{ $length }}</span>{{ $max ? " / {$max}" : ' characters' }}
+                @if ($max)
+                    <span x-text="length">{{ $length }}</span> / {{ $max }}
+                @else
+                    <span x-text="say('character', 'characters', length)">{{ __($length === 1 ? 'giraffeui::ui.character' : 'giraffeui::ui.characters', ['count' => $length]) }}</span>
+                @endif
             </span>
             <span class="sr-only" aria-live="polite" x-text="announcement"></span>
         </div>

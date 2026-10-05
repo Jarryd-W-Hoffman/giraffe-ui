@@ -6,13 +6,16 @@
     'placeholder' => null,
     'size' => 'md',
     'invalid' => null,
-    'empty' => 'No results',
+    'empty' => null,
     'url' => null,
     'debounce' => 300,
-    'searchingText' => 'Searching…',
+    'searchingText' => null,
 ])
 
 @php
+    $empty ??= __('giraffeui::ui.no_results');
+    $searchingText ??= __('giraffeui::ui.searching');
+
     // wire:model and x-model bind the value on the root (x-modelable); everything else goes on the text input.
     $binding = $attributes->filter(fn ($v, $key) => str_starts_with($key, 'wire:model') || str_starts_with($key, 'x-model'));
     $inputAttributes = $attributes->except(array_keys($binding->getAttributes()));

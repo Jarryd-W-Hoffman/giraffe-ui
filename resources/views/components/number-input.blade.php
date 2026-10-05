@@ -3,11 +3,14 @@
 @props([
     'size' => 'md',
     'invalid' => null,
-    'decrementLabel' => 'Decrease',
-    'incrementLabel' => 'Increase',
+    'decrementLabel' => null,
+    'incrementLabel' => null,
 ])
 
 @php
+    $decrementLabel ??= __('giraffeui::ui.decrease');
+    $incrementLabel ??= __('giraffeui::ui.increase');
+
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $attributes, $errors ?? null, $invalid);
     $id = $control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-number');
     $value = \JayAitch\GiraffeUI\Support\Form::value($attributes, $control['errorKey'], 'number');

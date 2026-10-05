@@ -5,11 +5,14 @@
     'trend' => null,
     'invert' => false,
     'description' => null,
-    'increaseLabel' => 'Increased by',
-    'decreaseLabel' => 'Decreased by',
+    'increaseLabel' => null,
+    'decreaseLabel' => null,
 ])
 
 @php
+    $increaseLabel ??= __('giraffeui::ui.increased_by');
+    $decreaseLabel ??= __('giraffeui::ui.decreased_by');
+
     // Up is good unless invert is set (e.g. churn or response time). The arrow and hidden text carry the meaning, not just colour.
     $good = $trend === null ? null : (($trend === 'up') xor $invert);
 @endphp
