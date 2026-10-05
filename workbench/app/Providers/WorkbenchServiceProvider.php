@@ -2,6 +2,8 @@
 
 namespace Workbench\App\Providers;
 
+use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
+use BladeUI\Icons\BladeIconsServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
@@ -26,6 +28,13 @@ class WorkbenchServiceProvider extends ServiceProvider
     {
         if (Catalog::livewire()) {
             $this->app->register(LivewireServiceProvider::class);
+        }
+
+        // blade-icons is optional too, for the Icon page's "any blade-icons set" example.
+        foreach ([BladeIconsServiceProvider::class, BladeHeroiconsServiceProvider::class] as $provider) {
+            if (class_exists($provider)) {
+                $this->app->register($provider);
+            }
         }
 
         $this->app['config']->set('cache.default', 'file');

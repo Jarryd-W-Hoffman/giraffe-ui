@@ -123,7 +123,7 @@ jobs:
           BROWSER=firefox npm run test:browser
 
   without-livewire:
-    name: Without Livewire (Alpine only)
+    name: Without optional packages (no Livewire, no blade-icons)
     runs-on: ubuntu-latest
 
     steps:
@@ -138,12 +138,13 @@ jobs:
         with:
           node-version: 24
 
-      # Livewire is only a dev dependency. Remove it to prove the components need nothing but Alpine.
+      # Livewire and blade-icons are only dev dependencies. Remove them to prove the components need nothing but
+      # Alpine, and that the Icon component explains what to install.
       - run: composer install --no-interaction --prefer-dist
-      - run: composer remove --dev livewire/livewire --no-interaction
+      - run: composer remove --dev livewire/livewire blade-ui-kit/blade-heroicons --no-interaction
 
-      - name: Run the tests that don't need Livewire
-        run: vendor/bin/pest --exclude-group=livewire
+      - name: Run the tests that don't need them
+        run: vendor/bin/pest --exclude-group=livewire --exclude-group=blade-icons
 
       - run: npm install
       - run: npx playwright install --with-deps chromium

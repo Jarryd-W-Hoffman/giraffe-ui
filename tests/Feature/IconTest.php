@@ -32,3 +32,35 @@ it('bundles every icon the components use', function () {
         expect(Icons::has($name))->toBeTrue("Missing [{$name}]");
     }
 });
+
+describe('with blade-icons', function () {
+    it('renders any blade-icons icon with the same sizes and accessibility', function () {
+        $html = (string) $this->blade('<x-gui::icon name="heroicon-o-bell" size="sm" class="text-gui-primary-text" data-test="x" />');
+
+        expect($html)->toContain('<svg', 'size-4', 'shrink-0', 'text-gui-primary-text', 'data-test="x"', 'aria-hidden="true"')
+            ->not->toContain('role="img"');
+    });
+
+    it('is announced when labelled', function () {
+        $html = (string) $this->blade('<x-gui::icon name="heroicon-s-bell" label="Notifications" />');
+
+        expect($html)->toContain('role="img"', 'aria-label="Notifications"', 'size-5')->not->toContain('aria-hidden');
+    });
+
+    it('still uses the bundled icon when the name is one of its own', function () {
+        expect((string) $this->blade('<x-gui::icon name="check" />'))->toContain('d="'.Icons::path('check').'"');
+    });
+
+    it('lets blade-icons report an icon it does not have', function () {
+        expect(fn () => (string) $this->blade('<x-gui::icon name="heroicon-o-not-a-real-icon" />'))->toThrow(ViewException::class);
+    });
+})->group('blade-icons')->skip(fn () => ! function_exists('svg'), 'blade-icons is not installed');
+
+it('has exactly one aria-hidden on a decorative blade-icons icon, and none on a labelled one', function () {
+    $decorative = (string) $this->blade('<x-gui::icon name="heroicon-o-bell" />');
+    $labelled = (string) $this->blade('<x-gui::icon name="heroicon-o-bell" label="Bell" />');
+
+    expect(substr_count($decorative, 'aria-hidden'))->toBe(1)
+        ->and($decorative)->toMatch('/^<svg aria-hidden="true"/')
+        ->and($labelled)->not->toContain('aria-hidden');
+})->group('blade-icons')->skip(fn () => ! function_exists('svg'), 'blade-icons is not installed');
