@@ -118,3 +118,16 @@ it('links the auth examples to each other', function () {
     $this->get('/catalog/examples/register')->assertSee('href="/catalog/examples/sign-in"', false);
     $this->get('/catalog/examples/forgot-password')->assertSee('href="/catalog/examples/sign-in"', false);
 });
+
+it('switches the pricing example between monthly and yearly prices without JavaScript', function () {
+    $this->get('/catalog/examples/pricing')
+        ->assertOk()
+        ->assertSee('name="billing"', false)
+        ->assertSee('value="monthly"', false)
+        ->assertSee('group-has-[[value=yearly]:checked]/billing:hidden', false)
+        ->assertSee('$99')
+        ->assertSee('$79')
+        ->assertSee('commandfor="contact-sales"', false)
+        ->assertSee('<th scope="row"', false)
+        ->assertSee('aria-label="Not included"', false);
+});

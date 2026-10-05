@@ -8,6 +8,15 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Pricing example
+
+#### Added
+- Catalog: a Pricing full-page example, a marketing page with:
+  - A monthly/yearly switch that swaps the prices with CSS `:has()` on its native radios, so it needs no JavaScript.
+  - Three plan cards, with the popular one highlighted.
+  - A feature comparison table with row headers and labelled check and dash icons, and an FAQ accordion.
+  - A "Talk to sales" modal form (number input, textarea with a counter) that closes with a toast.
+
 ### Customers example
 
 #### Added
