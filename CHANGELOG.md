@@ -8,6 +8,17 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Combobox server-side search
+
+#### Added
+- Combobox `url`: searches on the server for long lists. Typing fetches `url?q=…` after a pause (`debounce`, 300 ms by default) and shows the JSON it returns: a list of `{"value", "label"}` objects (or a `{"value": "label"}` object).
+  - It works with any route and needs no Livewire. In a Livewire form, `wire:model` binds the value as usual.
+  - A newer search cancels an older one. The list fades and says "Searching…" (`searching-text`) while it waits, and is `aria-busy`.
+  - Enter straight after typing picks the first result once it arrives. Closing the list goes back to `options`.
+  - The selected option keeps its label even when it isn't among the current results.
+  - The initial options are kept out of `x-data`, so a Livewire re-render can't reset the component.
+- Catalog: a timezone search over PHP's 400+ timezones on the Combobox page (plain Blade) and in a Livewire form on the Livewire page, with browser tests for both.
+
 ### Date picker in Firefox
 
 #### Fixed

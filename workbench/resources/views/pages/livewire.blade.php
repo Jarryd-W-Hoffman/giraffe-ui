@@ -2,6 +2,7 @@
 
 @section('toc')
     <li><a href="#forms" class="hover:text-zinc-900 dark:hover:text-zinc-100">Forms and loading</a></li>
+    <li><a href="#search" class="hover:text-zinc-900 dark:hover:text-zinc-100">Searching on the server</a></li>
     <li><a href="#uploads" class="hover:text-zinc-900 dark:hover:text-zinc-100">Uploads</a></li>
     <li><a href="#tables" class="hover:text-zinc-900 dark:hover:text-zinc-100">Tables</a></li>
     <li><a href="#tabs" class="hover:text-zinc-900 dark:hover:text-zinc-100">Tabs</a></li>
@@ -31,6 +32,10 @@
                 $this->dispatch('toast', message: 'Saved', color: 'success');
             }
             PHP;
+
+        $search = <<<'BLADE'
+            <x-gui::combobox wire:model="timezone" url="/timezones" :options="$popularTimezones" />
+            BLADE;
 
         $table = <<<'BLADE'
             <x-gui::input type="search" wire:model.live.debounce.250ms="search" aria-label="Search" />
@@ -91,6 +96,17 @@
     <div class="mt-4 space-y-3">
         @include('catalog::partials.code', ['code' => $form])
         @include('catalog::partials.code', ['code' => $save])
+    </div>
+
+    <h2 id="search" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Searching on the server</h2>
+    <p class="mt-2 text-zinc-600 dark:text-zinc-400">
+        A combobox with <code class="font-mono text-sm">url</code> searches through an ordinary route that returns JSON, so it works the same with or without Livewire. In a Livewire form, <code class="font-mono text-sm">wire:model</code> binds the chosen value as usual. This demo searches PHP's 400+ timezones; see the <a href="/catalog/combobox" class="font-medium text-gui-primary-text hover:underline">combobox page</a> for the route.
+    </p>
+    <div class="mt-4 rounded-xl border border-zinc-200 p-6 sm:p-8 dark:border-zinc-800">
+        <livewire:timezone-picker />
+    </div>
+    <div class="mt-4">
+        @include('catalog::partials.code', ['code' => $search])
     </div>
 
     <h2 id="uploads" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Uploads</h2>

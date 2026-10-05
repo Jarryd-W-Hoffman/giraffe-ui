@@ -2,7 +2,7 @@
 
 _Generated from `workbench/app/Catalog.php`. Edit that file, then run `composer docs`._
 
-A select you can type into to filter. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.
+A select you can type into to filter, in the browser or on the server. Follows the WAI-ARIA combobox pattern. Needs Alpine, which Livewire includes.
 
 ```blade
 <x-gui::combobox name="country" :options="$countries" placeholder="Search countries" />
@@ -23,6 +23,16 @@ Type to filter. Arrow keys move through the list, Enter picks, Escape closes the
 ```blade
 <x-gui::field label="Role" name="role">
     <x-gui::combobox :options="$roles" value="editor" />
+</x-gui::field>
+```
+
+## Searching on the server
+
+For long lists, give url. Typing fetches url?q=… (after a short pause) and shows the options the server sends back, so only matches cross the wire. options are the ones shown before anything is typed. This searches PHP's 400+ timezones with an ordinary Laravel route: no Livewire needed.
+
+```blade
+<x-gui::field label="Timezone" name="timezone" hint="Try Tokyo or America.">
+    <x-gui::combobox url="/catalog/api/timezones" :options="$timezones" placeholder="Search timezones" />
 </x-gui::field>
 ```
 
@@ -54,9 +64,18 @@ The list is a top-layer popover, so it is never clipped by a modal or a scrollin
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |  |
 | `invalid` | `bool \| null` | `null` | Force the invalid state. |
 | `empty` | `string` | `'No results'` | Shown when nothing matches. |
+| `url` | `string` | `null` | Search on the server: typing fetches url?q=… and shows the JSON it returns. |
+| `debounce` | `int` | `300` | Milliseconds to wait after typing before searching. |
+| `searching-text` | `string` | `'Searching…'` | Shown while a search runs. |
 
 wire:model and x-model bind the value; other attributes go on the text input. The selected value fires a change event on the hidden input.
 
-Options are filtered in the browser. For very large lists, search on the server and pass fewer options.
+Without url, options are filtered in the browser.
+
+With url, return a JSON list of {"value", "label"} objects, e.g. Route::get('/timezones', fn (Request $request) =&gt; Timezone::where('name', 'like', "%{$request-&gt;q}%")-&gt;limit(20)-&gt;get(['id as value', 'name as label'])). A {"value": "label"} object works too, but JavaScript reorders numeric keys, so prefer the list.
+
+While searching, the list shows "Searching…" and is aria-busy. Enter straight after typing picks the first result once it arrives. A newer search cancels an older one. Closing the list goes back to options.
+
+The selected option keeps its label even when it isn't among the current results. In Livewire, wire:model binds the value as usual.
 
 Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
