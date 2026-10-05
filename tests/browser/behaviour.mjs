@@ -164,10 +164,11 @@ await check('combobox: searches on the server with url, without Livewire', async
 
     // Typing quickly sends one request, and Enter straight after typing waits for it and picks the first result.
     await input.focus();
-    await page.keyboard.type('tokyo');
+    // 30 ms between keys, well inside the 300 ms debounce, so only the whole word is searched.
+    await page.keyboard.type('tokyo', { delay: 30 });
     await page.keyboard.press('Enter');
     await page.waitForFunction((el) => el.querySelector('input[type=hidden]').value === 'Asia/Tokyo', await root.elementHandle(), SERVER)
-        .catch(() => expect(false, 'Enter after typing did not pick Asia/Tokyo'));
+        .catch(() => expect(false, `Enter after typing did not pick Asia/Tokyo (requests: ${requests.join(', ')})`));
     expect(requests.length === 1 && requests[0].endsWith('q=tokyo'), `expected one request for "tokyo", got ${requests.join(', ')}`);
     expect((await input.inputValue()) === 'Asia/Tokyo', 'the input does not show the choice');
 
@@ -281,9 +282,39 @@ await check('file upload: lists the chosen files', async () => {
 await check('table: a scroller that overflows joins the tab order', async () => {
     await page.setViewportSize({ width: 390, height: 900 });
     await visit('table');
-    const states = await page.$$eval('[x-init*=ResizeObserver]', (scrollers) => scrollers.map((el) => (el.scrollWidth > el.clientWidth) === (el.getAttribute('tabindex') === '0')));
+    const states = await page.$$eval('[x-init*=ResizeObserver]', (scrollers) => scrollers.map((el) => (el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight) === (el.getAttribute('tabindex') === '0')));
     await page.setViewportSize({ width: 1280, height: 900 });
     expect(states.length && states.every(Boolean), 'tabindex does not match overflow');
+});
+
+await check('table: select-all, a mixed state, highlighted rows and a plain form submit', async () => {
+    await visit('table');
+    const table = page.locator('table', { has: page.locator('[aria-label="Select all members"]') });
+    const all = table.locator('[aria-label="Select all members"]');
+    const rows = table.locator('tbody [data-gui-select]');
+    const header = () => all.evaluate((box) => (box.indeterminate ? 'mixed' : box.checked ? 'all' : 'none'));
+    await all.check();
+    expect((await rows.evaluateAll((boxes) => boxes.every((box) => box.checked))) && (await header()) === 'all', 'select-all did not tick every row');
+    expect((await table.locator('tbody tr:has([data-gui-select]:checked)').evaluateAll((trs) => trs.every((tr) => getComputedStyle(tr).backgroundColor !== 'rgba(0, 0, 0, 0)'))), 'selected rows are not highlighted');
+    await rows.first().uncheck();
+    expect((await header()) === 'mixed', 'unticking a row did not make the header mixed');
+    // A script setting checked (as wire:model or x-model would) is followed too.
+    await rows.evaluateAll((boxes) => boxes.forEach((box) => { box.checked = false; }));
+    expect((await header()) === 'none', 'the header did not follow checked being set by a script');
+    await rows.nth(1).check();
+    await table.locator('xpath=ancestor::form').getByRole('button', { name: 'Export selected' }).click();
+    await page.locator('[x-text="toast.message"]', { hasText: '1 selected' }).waitFor();
+});
+
+await check('table: max-height scrolls under a sticky header, and aligns columns', async () => {
+    await visit('table');
+    const scroller = page.locator('[style*="max-height: 16rem"]');
+    expect((await scroller.getAttribute('tabindex')) === '0', 'the tall scroller is not keyboard focusable');
+    await scroller.evaluate((el) => { el.scrollTop = 200; });
+    const offset = await scroller.evaluate((el) => el.querySelector('thead').getBoundingClientRect().top - el.getBoundingClientRect().top);
+    expect(Math.abs(offset) < 2, `the header scrolled away (${offset}px)`);
+    const price = page.locator('table', { has: page.getByText('$1,499') }).locator('td', { hasText: '$1,499' });
+    expect((await price.evaluate((td) => getComputedStyle(td).textAlign)) === 'right', 'the price column is not right-aligned');
 });
 
 await check('catalog playground re-renders the component', async () => {
