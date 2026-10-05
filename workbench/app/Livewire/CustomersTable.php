@@ -39,6 +39,11 @@ class CustomersTable extends Component
     #[Url]
     public string $sortDirection = 'asc';
 
+    public const COLUMNS = ['plan' => 'Plan', 'status' => 'Status', 'mrr' => 'MRR', 'joined' => 'Joined'];
+
+    /** @var list<string> The optional columns to show, toggled from the Columns menu. */
+    public array $columns = ['plan', 'status', 'mrr', 'joined'];
+
     /** @var list<string> Ids of the selected customers, across pages. */
     public array $selected = [];
 
@@ -222,6 +227,25 @@ class CustomersTable extends Component
                     @if ($filtered)
                         <x-gui::button variant="ghost" color="secondary" size="sm" wire:click="clearFilters">Clear filters</x-gui::button>
                     @endif
+
+                    {{-- Checkbox items are real checkboxes, so wire:model works on them and the menu stays open. --}}
+                    <div class="sm:ml-auto">
+                        <x-gui::dropdown id="customer-columns" position="bottom-end">
+                            <x-slot:trigger>
+                                <x-gui::button size="sm" variant="outline" color="secondary" commandfor="customer-columns" command="toggle-popover" aria-haspopup="menu">
+                                    Columns
+                                    <x-slot:trailing>
+                                        <x-gui::icon name="chevron-down" size="sm" />
+                                    </x-slot:trailing>
+                                </x-gui::button>
+                            </x-slot:trigger>
+                            <x-gui::dropdown.group heading="Show columns">
+                                @foreach (self::COLUMNS as $column => $label)
+                                    <x-gui::dropdown.checkbox wire:model.live="columns" value="{{ $column }}">{{ $label }}</x-gui::dropdown.checkbox>
+                                @endforeach
+                            </x-gui::dropdown.group>
+                        </x-gui::dropdown>
+                    </div>
                 </div>
 
                 {{-- Announces the selection, which otherwise only shows up visually in the bar below. --}}
@@ -250,10 +274,18 @@ class CustomersTable extends Component
                             />
                         </x-gui::table.heading>
                         <x-gui::table.heading sortable="name" wire:click="sort('name')">Customer</x-gui::table.heading>
-                        <x-gui::table.heading>Plan</x-gui::table.heading>
-                        <x-gui::table.heading>Status</x-gui::table.heading>
-                        <x-gui::table.heading sortable="mrr" wire:click="sort('mrr')" class="text-right">MRR</x-gui::table.heading>
-                        <x-gui::table.heading sortable="joined" wire:click="sort('joined')" class="hidden md:table-cell">Joined</x-gui::table.heading>
+                        @if (in_array('plan', $columns, true))
+                            <x-gui::table.heading>Plan</x-gui::table.heading>
+                        @endif
+                        @if (in_array('status', $columns, true))
+                            <x-gui::table.heading>Status</x-gui::table.heading>
+                        @endif
+                        @if (in_array('mrr', $columns, true))
+                            <x-gui::table.heading sortable="mrr" wire:click="sort('mrr')" class="text-right">MRR</x-gui::table.heading>
+                        @endif
+                        @if (in_array('joined', $columns, true))
+                            <x-gui::table.heading sortable="joined" wire:click="sort('joined')" class="hidden md:table-cell">Joined</x-gui::table.heading>
+                        @endif
                         <x-gui::table.heading><span class="sr-only">Actions</span></x-gui::table.heading>
                     </x-slot:head>
 
@@ -271,10 +303,18 @@ class CustomersTable extends Component
                                     </div>
                                 </div>
                             </x-gui::table.cell>
-                            <x-gui::table.cell>{{ self::PLANS[$customer['plan']] }}</x-gui::table.cell>
-                            <x-gui::table.cell><x-gui::badge size="sm" :color="$statusColors[$customer['status']]">{{ self::STATUSES[$customer['status']] }}</x-gui::badge></x-gui::table.cell>
-                            <x-gui::table.cell class="text-right tabular-nums">${{ number_format($customer['mrr']) }}</x-gui::table.cell>
-                            <x-gui::table.cell class="hidden md:table-cell">{{ \Illuminate\Support\Carbon::parse($customer['joined'])->format('j M Y') }}</x-gui::table.cell>
+                            @if (in_array('plan', $columns, true))
+                                <x-gui::table.cell>{{ self::PLANS[$customer['plan']] }}</x-gui::table.cell>
+                            @endif
+                            @if (in_array('status', $columns, true))
+                                <x-gui::table.cell><x-gui::badge size="sm" :color="$statusColors[$customer['status']]">{{ self::STATUSES[$customer['status']] }}</x-gui::badge></x-gui::table.cell>
+                            @endif
+                            @if (in_array('mrr', $columns, true))
+                                <x-gui::table.cell class="text-right tabular-nums">${{ number_format($customer['mrr']) }}</x-gui::table.cell>
+                            @endif
+                            @if (in_array('joined', $columns, true))
+                                <x-gui::table.cell class="hidden md:table-cell">{{ \Illuminate\Support\Carbon::parse($customer['joined'])->format('j M Y') }}</x-gui::table.cell>
+                            @endif
                             <x-gui::table.cell class="text-right leading-none">
                                 <x-gui::dropdown id="actions-{{ $customer['id'] }}" position="bottom-end">
                                     <x-slot:trigger>

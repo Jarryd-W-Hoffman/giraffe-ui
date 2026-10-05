@@ -11,6 +11,10 @@ const browser = process.env.BROWSER === 'firefox'
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const page = await context.newPage();
 
+// Waits that depend on the catalog server answering. testbench serve boots the app per request and handles one at
+// a time, so a response can take a couple of seconds when requests queue, especially in CI.
+const SERVER = { timeout: 10000 };
+
 const failures = [];
 let logs = [];
 
@@ -75,6 +79,69 @@ await check('dropdown: opens on the first item, arrow keys move, Escape returns 
     expect(await trigger.evaluate((element) => element === document.activeElement), 'focus did not return to the trigger');
 });
 
+const describeFocus = () => page.evaluate(() => {
+    const element = document.activeElement;
+    return (element.closest('label') ?? element).textContent.trim().replace(/\s+/g, ' ');
+});
+
+await check('dropdown: checkbox and radio items toggle and keep the menu open', async () => {
+    await visit('dropdown');
+    const menu = page.locator('#view-options');
+    await page.getByRole('button', { name: 'View' }).click();
+    await page.waitForFunction(() => document.activeElement?.getAttribute('role') === 'menuitemcheckbox');
+    const drafts = page.locator('#view-options input[value=drafts]');
+    await page.keyboard.press('Space');
+    expect(! (await drafts.isChecked()), 'Space did not toggle the checkbox');
+    expect(await menu.evaluate((el) => el.matches(':popover-open')), 'toggling closed the menu');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    const sort = () => page.$eval('#view-options input[name=sort]:checked', (radio) => radio.value);
+    expect((await sort()) === 'name', 'arrow keys changed the radio');
+    await page.keyboard.press('Space');
+    expect((await sort()) === 'updated', 'Space did not pick the radio');
+    await page.keyboard.press('Escape');
+});
+
+await check('dropdown: submenus open with ArrowRight and close with ArrowLeft and Escape', async () => {
+    await visit('dropdown');
+    await page.getByRole('button', { name: 'File' }).click();
+    await page.waitForFunction(() => document.activeElement?.getAttribute('role') === 'menuitem');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowRight');
+    await page.waitForFunction(() => document.activeElement?.textContent.trim() === 'Copy link', null, { timeout: 2000 })
+        .catch(() => expect(false, 'ArrowRight did not open the submenu on its first item'));
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => document.activeElement?.textContent.trim() === 'PDF', null, { timeout: 2000 })
+        .catch(() => expect(false, 'Enter did not open the nested submenu'));
+    await page.keyboard.press('ArrowLeft');
+    expect((await describeFocus()).startsWith('Export as'), 'ArrowLeft did not return to the submenu trigger');
+    await page.keyboard.press('Escape');
+    expect((await describeFocus()).startsWith('Share'), 'Escape did not return to the submenu trigger');
+    expect(await page.$eval('#file-menu', (el) => el.matches(':popover-open')), 'Escape in a submenu closed the whole menu');
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await page.locator('[x-text="toast.message"]', { hasText: 'Email drafted' }).waitFor();
+    expect(! (await page.$eval('#file-menu', (el) => el.matches(':popover-open'))), 'picking an item left the menu open');
+});
+
+if (slugs.includes('examples/customers')) {
+    await check('dropdown: checkbox items with wire:model keep the menu open through a Livewire update', async () => {
+        await visit('examples/customers');
+        await page.getByRole('button', { name: 'Columns' }).click();
+        await page.waitForFunction(() => document.activeElement?.getAttribute('role') === 'menuitemcheckbox');
+        await page.keyboard.press('Space');
+        await page.waitForFunction(() => ! [...document.querySelectorAll('thead th')].some((th) => th.textContent.trim() === 'Plan'), null, SERVER)
+            .catch(() => expect(false, 'the Plan column is still showing'));
+        expect(await page.$eval('#customer-columns', (el) => el.matches(':popover-open')), 'the update closed the menu');
+        expect((await describeFocus()) === 'Plan', 'focus left the checkbox');
+        await page.keyboard.press('Escape');
+    });
+}
+
 await check('combobox: arrow keys and Enter pick an option', async () => {
     await visit('combobox');
     const input = page.locator('article [role=combobox]').first();
@@ -99,7 +166,7 @@ await check('combobox: searches on the server with url, without Livewire', async
     await input.focus();
     await page.keyboard.type('tokyo');
     await page.keyboard.press('Enter');
-    await page.waitForFunction((el) => el.querySelector('input[type=hidden]').value === 'Asia/Tokyo', await root.elementHandle(), { timeout: 3000 })
+    await page.waitForFunction((el) => el.querySelector('input[type=hidden]').value === 'Asia/Tokyo', await root.elementHandle(), SERVER)
         .catch(() => expect(false, 'Enter after typing did not pick Asia/Tokyo'));
     expect(requests.length === 1 && requests[0].endsWith('q=tokyo'), `expected one request for "tokyo", got ${requests.join(', ')}`);
     expect((await input.inputValue()) === 'Asia/Tokyo', 'the input does not show the choice');
@@ -113,7 +180,7 @@ await check('combobox: searches on the server with url, without Livewire', async
     // No matches says so.
     await input.fill('');
     await page.keyboard.type('nowhere-at-all');
-    await root.getByRole('status').filter({ hasText: 'No results' }).waitFor({ timeout: 3000 });
+    await root.getByRole('status').filter({ hasText: 'No results' }).waitFor(SERVER);
     await page.keyboard.press('Escape');
     page.off('request', track);
 });
@@ -126,7 +193,7 @@ if (slugs.includes('livewire')) {
         await input.fill('');
         await page.keyboard.type('tokyo');
         await page.keyboard.press('Enter');
-        await page.waitForFunction(() => document.querySelector('#lw-timezone').value === 'Asia/Tokyo', null, { timeout: 3000 });
+        await page.waitForFunction(() => document.querySelector('#lw-timezone').value === 'Asia/Tokyo', null, SERVER);
         await page.getByRole('button', { name: 'Save timezone' }).click();
         await page.locator('[x-text="toast.message"]', { hasText: 'Saved Asia/Tokyo.' }).waitFor();
         expect((await input.inputValue()) === 'Asia/Tokyo', 'the label was lost after the round trip');

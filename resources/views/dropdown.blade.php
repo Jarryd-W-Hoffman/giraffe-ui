@@ -17,7 +17,9 @@
 
 {{--
     A native popover: Escape and clicking outside close it, and focus returns to the trigger.
-    Alpine adds the menu keyboard pattern: focus the first item on open, arrow keys, Home and End.
+    Alpine adds the menu keyboard pattern: focus the first item on open, arrow keys, Home and End. Submenus
+    (dropdown.submenu) are nested popovers, so the same keys work in whichever menu has focus, ArrowRight opens a
+    submenu and ArrowLeft closes it.
 --}}
 <div
     id="{{ $id }}"
@@ -25,17 +27,22 @@
     role="menu"
     style="position-anchor: {{ $anchor }}"
     x-data="{
-        items() {
-            return [...this.$el.querySelectorAll('[role=menuitem]:not([aria-disabled=true])')];
+        // The menu (this one or an open submenu) that an element belongs to.
+        menuOf(element) {
+            return element?.closest('[role=menu]') ?? this.$el;
+        },
+        items(menu = this.$el) {
+            return [...menu.querySelectorAll('[role^=menuitem]:not([aria-disabled=true]):not(:disabled)')]
+                .filter((item) => item.closest('[role=menu]') === menu);
         },
         move(step) {
-            const items = this.items();
+            const items = this.items(this.menuOf(document.activeElement));
             const current = items.indexOf(document.activeElement);
             const next = step === 'first' ? 0 : step === 'last' ? items.length - 1 : (current + step + items.length) % items.length;
             items[next]?.focus();
         },
     }"
-    x-on:toggle="$event.newState === 'open' && $nextTick(() => items()[0]?.focus())"
+    x-on:toggle="$event.target === $el && $event.newState === 'open' && $nextTick(() => items()[0]?.focus())"
     x-on:keydown.down.prevent="move(1)"
     x-on:keydown.up.prevent="move(-1)"
     x-on:keydown.home.prevent="move('first')"

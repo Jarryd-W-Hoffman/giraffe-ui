@@ -8,6 +8,21 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Dropdown submenus, checkbox and radio items
+
+#### Added
+- `dropdown.checkbox` and `dropdown.radio`: real checkboxes and radios with the `menuitemcheckbox`/`menuitemradio` roles. They toggle natively (Space, click, and Enter too), submit with `name`/`value`, and work with `wire:model` or `x-model`. Toggling leaves the menu open, even through a Livewire update. Arrow keys move through the menu instead of changing the checked radio.
+- `dropdown.group`: groups items under an optional `heading` that names the group for screen readers.
+- `dropdown.submenu`: a nested popover beside its item.
+  - Click, Enter, Space or ArrowRight open it on its first item. ArrowLeft or Escape close it and return focus to its item, without closing the parent menu.
+  - Hovering opens it, and moving away closes it after a moment.
+  - Submenus nest, picking an item closes every level, and on narrow screens they open below their item.
+- Customers example: a Columns menu of checkbox items that shows and hides table columns with `wire:model.live`.
+
+#### Changed
+- Dropdown keyboard handling works in whichever menu has focus, and counts checkbox and radio items.
+- Browser behaviour tests give server-dependent steps up to 10 seconds, since the catalog's dev server answers one request at a time.
+
 ### Installing without Livewire, and up-to-date guides
 
 #### Added
