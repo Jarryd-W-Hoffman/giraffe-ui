@@ -16,7 +16,10 @@
             <x-gui::sidebar.group>
                 <x-gui::sidebar.item href="/catalog/examples/dashboard" icon="home">Dashboard</x-gui::sidebar.item>
                 <x-gui::sidebar.item href="#" icon="folder" badge="3">Projects</x-gui::sidebar.item>
-                <x-gui::sidebar.item href="/catalog/examples/customers" icon="user">Customers</x-gui::sidebar.item>
+                @if (\Workbench\App\Catalog::livewire())
+                    {{-- The Customers page is a Livewire component, so it only exists when Livewire is installed. --}}
+                    <x-gui::sidebar.item href="/catalog/examples/customers" icon="user">Customers</x-gui::sidebar.item>
+                @endif
                 <x-gui::sidebar.item href="#" icon="calendar">Calendar</x-gui::sidebar.item>
                 <x-gui::sidebar.item href="/catalog/examples/settings" icon="cog-6-tooth">Settings</x-gui::sidebar.item>
             </x-gui::sidebar.group>

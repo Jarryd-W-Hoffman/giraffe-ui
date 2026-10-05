@@ -100,7 +100,7 @@
             });
         </script>
 
-        {{-- Alpine comes from Livewire, which injects its script (with Alpine bundled) on every page. --}}
+        {{-- Alpine comes from Livewire's injected script, or from the head partial when Livewire isn't installed. --}}
     </head>
     <body class="min-h-screen bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100" x-data="{ menu: false }">
         <header class="sticky top-0 z-30 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">

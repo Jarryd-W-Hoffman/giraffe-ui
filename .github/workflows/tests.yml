@@ -87,7 +87,7 @@ jobs:
           exit $status
 
   accessibility:
-    name: Accessibility (axe, WCAG 2.2 AA)
+    name: Accessibility and behaviour (with Livewire)
     runs-on: ubuntu-latest
 
     steps:
@@ -114,4 +114,45 @@ jobs:
           cat serve.log
           exit 1
 
+      - run: npm run audit:a11y
+      - run: npm run test:browser
+
+  without-livewire:
+    name: Without Livewire (Alpine only)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Livewire is only a dev dependency. Remove it to prove the components need nothing but Alpine.
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer remove --dev livewire/livewire --no-interaction
+
+      - name: Run the tests that don't need Livewire
+        run: vendor/bin/pest --exclude-group=livewire
+
+      - run: npm install
+      - run: npx playwright install --with-deps chromium
+      - run: npm run catalog:css
+
+      - name: Start the catalog
+        run: |
+          vendor/bin/testbench serve --port=8000 > serve.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf -o /dev/null http://127.0.0.1:8000/catalog/introduction && exit 0; sleep 1; done
+          cat serve.log
+          exit 1
+
+      - name: Alpine is loaded on its own
+        run: curl -sf http://127.0.0.1:8000/catalog/introduction | grep -q 'src="/catalog/assets/alpine.js"'
+
+      - run: npm run test:browser
       - run: npm run audit:a11y

@@ -4,6 +4,7 @@ namespace Workbench\App;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Livewire\Livewire;
 
 /**
  * Everything the catalog shows, in one place.
@@ -19,12 +20,21 @@ class Catalog
      */
     public static function guides(): array
     {
-        return [
+        return array_filter([
             'introduction' => 'Introduction',
             'installation' => 'Installation',
             'theming' => 'Theming',
-            'livewire' => 'Livewire',
-        ];
+            'livewire' => self::livewire() ? 'Livewire' : null,
+        ]);
+    }
+
+    /**
+     * Whether Livewire is installed. It's a dev dependency; CI also runs the catalog without it, to prove
+     * the components only need Alpine.
+     */
+    public static function livewire(): bool
+    {
+        return class_exists(Livewire::class);
     }
 
     /**
@@ -34,16 +44,16 @@ class Catalog
      */
     public static function examples(): array
     {
-        return [
+        return array_filter([
             'dashboard' => 'Dashboard',
-            'customers' => 'Customers',
+            'customers' => self::livewire() ? 'Customers' : null,
             'settings' => 'Settings',
             'sign-in' => 'Sign in',
             'register' => 'Register',
             'forgot-password' => 'Forgot password',
             'pricing' => 'Pricing',
             'not-found' => 'Not found',
-        ];
+        ]);
     }
 
     /**

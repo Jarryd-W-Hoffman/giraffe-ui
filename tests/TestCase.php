@@ -10,7 +10,10 @@ abstract class TestCase extends Orchestra
 {
     protected function getPackageProviders($app): array
     {
-        return [LivewireServiceProvider::class, GiraffeUIServiceProvider::class];
+        // CI also runs the tests without Livewire installed (minus the livewire group), to prove it's optional.
+        return class_exists(LivewireServiceProvider::class)
+            ? [LivewireServiceProvider::class, GiraffeUIServiceProvider::class]
+            : [GiraffeUIServiceProvider::class];
     }
 
     protected function defineEnvironment($app): void

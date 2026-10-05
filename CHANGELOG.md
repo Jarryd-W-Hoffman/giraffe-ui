@@ -8,6 +8,16 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Proving Livewire is optional
+
+#### Added
+- CI job "Without Livewire": removes Livewire, then runs the PHP tests that don't need it, the browser behaviour tests and the accessibility audit against a catalog that loads Alpine on its own.
+- Browser behaviour tests (`npm run test:browser`):
+  - They load every catalog page and fail on any console error or warning (Alpine reports expression errors as warnings).
+  - They drive tabs, dropdown, combobox, date picker, number input, slider, textarea counter, toasts, command palette, file upload, the table's keyboard scrolling, the catalog playground and a flashed toast after a form post.
+  - They run with Livewire as well.
+- Catalog: without Livewire, it loads Alpine from npm `alpinejs`, hides the Livewire guide and the Customers example, and registers Livewire's service provider only when it's installed.
+
 ### Pricing example
 
 #### Added

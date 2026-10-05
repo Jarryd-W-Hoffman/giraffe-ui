@@ -5,6 +5,8 @@ namespace Workbench\App\Providers;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
+use Livewire\LivewireServiceProvider;
+use Workbench\App\Catalog;
 use Workbench\App\Console\GenerateDocs;
 use Workbench\App\Livewire\AvatarUpload;
 use Workbench\App\Livewire\CustomersTable;
@@ -21,6 +23,10 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        if (Catalog::livewire()) {
+            $this->app->register(LivewireServiceProvider::class);
+        }
+
         $this->app['config']->set('cache.default', 'file');
         $this->app['config']->set('session.driver', 'file');
     }
@@ -37,7 +43,7 @@ class WorkbenchServiceProvider extends ServiceProvider
         Blade::anonymousComponentPath(__DIR__.'/../../resources/views/examples/components', 'example');
 
         // Livewire is a dev dependency, used to prove the components work with it.
-        if (class_exists(Livewire::class)) {
+        if (Catalog::livewire()) {
             Livewire::component('profile-form', ProfileForm::class);
             Livewire::component('users-table', UsersTable::class);
             Livewire::component('settings-tabs', SettingsTabs::class);

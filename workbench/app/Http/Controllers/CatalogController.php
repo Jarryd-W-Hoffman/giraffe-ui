@@ -135,6 +135,18 @@ class CatalogController
     }
 
     /**
+     * Alpine for the catalog when Livewire isn't installed (with Livewire, Alpine comes bundled in its script).
+     */
+    public function alpine(): Response
+    {
+        $path = __DIR__.'/../../../../node_modules/alpinejs/dist/cdn.min.js';
+
+        abort_unless(is_file($path), 404, 'Run "npm install" first.');
+
+        return response(file_get_contents($path), 200, ['Content-Type' => 'text/javascript']);
+    }
+
+    /**
      * Render a playground, accepting only values its controls allow.
      *
      * @param  array<string, mixed>  $playground

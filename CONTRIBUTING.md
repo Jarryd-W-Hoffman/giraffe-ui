@@ -16,8 +16,11 @@ composer catalog   # http://localhost:8000/catalog
 composer test      # Pest
 composer lint      # Pint
 composer docs      # if you changed workbench/app/Catalog.php
-npm run audit:a11y # with the catalog running: axe-core on every page, light and dark
+npm run audit:a11y   # with the catalog running: axe-core on every page, light and dark
+npm run test:browser # with the catalog running: drives the Alpine components, fails on console errors
 ```
+
+GiraffeUI must work without Livewire. CI removes it (`composer remove --dev livewire/livewire`) and runs the tests outside the `livewire` group, the browser tests and the audit again, with Alpine loaded on its own. Keep Livewire-only code in the catalog's Livewire demos, and check `class_exists` before using Livewire in `src/`.
 
 Then check your change in the catalog in light and dark mode, using only the keyboard.
 
