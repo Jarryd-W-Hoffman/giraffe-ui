@@ -8,6 +8,15 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Translations
+
+#### Added
+- Every piece of built-in text (labels such as "Close", "Choose date" and "Select all rows", messages such as "No results" and "The upload failed", counters, and the pagination sentence) now comes from Laravel's translator, so it follows the app's locale.
+  - Publish it with `php artisan vendor:publish --tag=giraffeui-lang` and translate `lang/vendor/giraffeui/{locale}/ui.php`.
+  - Props that set the same text still win.
+  - Translated text is escaped where it's mixed with markup (pagination, file upload).
+- A test checks that every key the components use is defined and every defined key is used.
+
 ### Icon with blade-icons
 
 #### Fixed

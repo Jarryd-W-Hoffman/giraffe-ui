@@ -38,13 +38,13 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="{{ max($headings->count(), 1) }}" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">{{ $empty ?? 'No results.' }}</td>
+                            <td colspan="{{ max($headings->count(), 1) }}" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">{{ $empty ?? __('giraffeui::ui.no_results_table') }}</td>
                         </tr>
                     @endforelse
                 @elseif (\JayAitch\GiraffeUI\Support\Slot::isBlank($slot))
                     <tr>
                         {{-- Browsers clamp an oversized colspan to the table's real width. --}}
-                        <td colspan="100" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">{{ $empty ?? 'No results.' }}</td>
+                        <td colspan="100" class="px-4 py-8 text-center text-zinc-500 dark:text-zinc-400">{{ $empty ?? __('giraffeui::ui.no_results_table') }}</td>
                     </tr>
                 @else
                     {{ $slot }}

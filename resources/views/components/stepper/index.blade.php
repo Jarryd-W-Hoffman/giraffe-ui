@@ -18,7 +18,7 @@
 @endphp
 
 {{-- A list of steps showing progress through a multi-step flow. Steps read their layout from data-orientation. --}}
-<nav {{ $attributes->merge(['aria-label' => 'Progress'])->class('w-full') }}>
+<nav {{ $attributes->merge(['aria-label' => __('giraffeui::ui.progress')])->class('w-full') }}>
     <ol data-orientation="{{ $vertical ? 'vertical' : 'horizontal' }}" @class([
         'group/stepper [counter-reset:gui-step]',
         'flex flex-col' => $vertical,

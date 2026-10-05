@@ -79,7 +79,7 @@
                 type="button"
                 class="-m-1 shrink-0 cursor-pointer rounded-gui p-1 text-zinc-500 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:text-zinc-100"
                 x-on:click="remove(toast.id)"
-                aria-label="Dismiss"
+                aria-label="{{ __('giraffeui::ui.dismiss') }}"
             >
                 <x-gui::icon name="x-mark" size="sm" />
             </button>

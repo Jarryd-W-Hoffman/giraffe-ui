@@ -1,6 +1,10 @@
 @props([
-    'label' => 'Select row',
+    'label' => null,
 ])
+
+@php
+    $label ??= __('giraffeui::ui.select_row');
+@endphp
 
 {{--
     A row's selection checkbox, in its own cell. It's a real checkbox: give it name="selected[]" and a value to submit

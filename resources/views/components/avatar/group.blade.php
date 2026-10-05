@@ -4,10 +4,12 @@
     'more' => 0,
     'size' => 'md',
     'label' => null,
-    'moreLabel' => ':count more',
+    'moreLabel' => null,
 ])
 
 @php
+    $moreLabel ??= __('giraffeui::ui.more');
+
     // From an array, show up to max and count the rest. In the slot, pass more yourself.
     $avatars = $avatars === null ? null : collect($avatars)->values();
     $shown = $avatars && $max ? $avatars->take((int) $max) : $avatars;

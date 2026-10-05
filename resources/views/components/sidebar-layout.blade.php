@@ -1,8 +1,13 @@
 @props([
     'drawerId' => 'gui-sidebar-drawer',
-    'drawerTitle' => 'Navigation',
-    'menuLabel' => 'Open navigation',
+    'drawerTitle' => null,
+    'menuLabel' => null,
 ])
+
+@php
+    $drawerTitle ??= __('giraffeui::ui.navigation');
+    $menuLabel ??= __('giraffeui::ui.open_navigation');
+@endphp
 
 {{--
     An application shell. From the lg breakpoint the sidebar is a sticky column; below it, a menu button opens the

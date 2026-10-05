@@ -6,22 +6,28 @@
     'locale' => null,
     'weekStart' => null,
     'buttonLabel' => null,
-    'previousLabel' => 'Previous month',
-    'nextLabel' => 'Next month',
+    'previousLabel' => null,
+    'nextLabel' => null,
     'disabledDates' => [],
     'disabledWeekdays' => [],
-    'unavailableMessage' => "That date isn't available.",
+    'unavailableMessage' => null,
     'range' => false,
-    'startLabel' => 'Start date',
-    'endLabel' => 'End date',
+    'startLabel' => null,
+    'endLabel' => null,
 ])
 
 @php
+    $previousLabel ??= __('giraffeui::ui.previous_month');
+    $nextLabel ??= __('giraffeui::ui.next_month');
+    $startLabel ??= __('giraffeui::ui.start_date');
+    $endLabel ??= __('giraffeui::ui.end_date');
+    $unavailableMessage ??= __('giraffeui::ui.date_unavailable');
+
     $control = \JayAitch\GiraffeUI\Support\Form::control($guiField, $attributes, $errors ?? null, $invalid);
     $id = $control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-date');
     $disabled = $attributes->has('disabled') && $attributes->get('disabled') !== false;
     $anchor = \JayAitch\GiraffeUI\Support\Anchor::name($id);
-    $buttonLabel ??= $range ? 'Choose dates' : 'Choose date';
+    $buttonLabel ??= __($range ? 'giraffeui::ui.choose_dates' : 'giraffeui::ui.choose_date');
     $date = fn ($value) => $value instanceof \DateTimeInterface ? $value->format('Y-m-d') : $value;
 
     // Dates and weekdays (0 Sunday to 6 Saturday) that can't be picked, on top of min and max.
@@ -415,7 +421,7 @@
 
         @if ($range)
             {{-- Says which end the next pick sets, for everyone and for screen readers. --}}
-            <p class="mb-2 text-center text-xs text-zinc-600 dark:text-zinc-400" aria-live="polite" x-text="picking === 'start' ? @js('Pick the '.\Illuminate\Support\Str::lower($startLabel)) : @js('Pick the '.\Illuminate\Support\Str::lower($endLabel))"></p>
+            <p class="mb-2 text-center text-xs text-zinc-600 dark:text-zinc-400" aria-live="polite" x-text="picking === 'start' ? @js(__('giraffeui::ui.pick_start')) : @js(__('giraffeui::ui.pick_end'))"></p>
         @endif
 
         <table role="grid" aria-labelledby="{{ $id }}-month" x-ref="grid" x-on:keydown="key($event)" x-on:mouseleave="hovered = ''" class="border-collapse">

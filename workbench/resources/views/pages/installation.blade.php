@@ -6,6 +6,7 @@
     <li><a href="#manual" class="hover:text-zinc-900 dark:hover:text-zinc-100">Manual setup</a></li>
     <li><a href="#alpine" class="hover:text-zinc-900 dark:hover:text-zinc-100">Alpine</a></li>
     <li><a href="#layout" class="hover:text-zinc-900 dark:hover:text-zinc-100">Layout</a></li>
+    <li><a href="#translations" class="hover:text-zinc-900 dark:hover:text-zinc-100">Translations</a></li>
     <li><a href="#browsers" class="hover:text-zinc-900 dark:hover:text-zinc-100">Browser support</a></li>
 @endsection
 
@@ -23,6 +24,16 @@
             window.Alpine = Alpine;
             Alpine.start();
             JS;
+
+        $translations = <<<'PHP'
+            // lang/vendor/giraffeui/fr/ui.php
+            return [
+                'close' => 'Fermer',
+                'choose_date' => 'Choisir une date',
+                'showing' => 'Affichage de :first à :last sur :total',
+                // …
+            ];
+            PHP;
 
         $layout = <<<'BLADE'
             <x-layouts.app title="Dashboard">
@@ -82,6 +93,18 @@
     </div>
     <p class="mt-3 text-zinc-600 dark:text-zinc-400">
         It sets the theme before the page paints (so dark mode never flashes), loads your CSS and JavaScript with Vite, and includes <code class="font-mono text-sm">&lt;x-gui::toasts /&gt;</code>, so <a href="/catalog/toasts" class="font-medium text-gui-primary-text hover:underline">toasts</a> work anywhere.
+    </p>
+
+    <h2 id="translations" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Translations</h2>
+    <p class="mt-3 text-zinc-600 dark:text-zinc-400">
+        The text GiraffeUI shows or announces on its own, like "Close", "No results" or "Choose date", comes from Laravel's translator, so it follows your app's locale. Publish the English file, then copy it for each language you support:
+    </p>
+    <div class="mt-4 space-y-3">
+        @include('catalog::partials.code', ['code' => 'php artisan vendor:publish --tag=giraffeui-lang'])
+        @include('catalog::partials.code', ['code' => $translations])
+    </div>
+    <p class="mt-3 text-zinc-600 dark:text-zinc-400">
+        Props still win when you pass them, e.g. <code class="font-mono text-sm">button-label</code> on a date picker. Month and day names in the date picker come from the browser, in the page's language.
     </p>
 
     <h2 id="browsers" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Browser support</h2>

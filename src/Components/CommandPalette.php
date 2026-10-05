@@ -20,10 +20,13 @@ class CommandPalette extends Component
     public function __construct(
         public string $id = 'command-palette',
         public ?string $shortcut = 'k',
-        public string $placeholder = 'Search…',
-        public string $empty = 'No results',
-        public string $label = 'Command palette',
+        public ?string $placeholder = null,
+        public ?string $empty = null,
+        public ?string $label = null,
     ) {
+        $this->placeholder ??= __('giraffeui::ui.search');
+        $this->empty ??= __('giraffeui::ui.no_results');
+        $this->label ??= __('giraffeui::ui.command_palette');
         $this->guiCommandPalette = ['id' => $id];
     }
 

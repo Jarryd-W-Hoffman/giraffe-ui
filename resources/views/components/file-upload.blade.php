@@ -42,7 +42,8 @@
     >
         <x-gui::icon name="folder" size="lg" class="text-zinc-500 dark:text-zinc-400" />
         <span class="text-sm text-zinc-700 dark:text-zinc-300" aria-hidden="true">
-            <span class="font-medium text-gui-primary-text">Choose {{ $multiple ? 'files' : 'a file' }}</span> or drag {{ $multiple ? 'them' : 'it' }} here
+            {{-- :choose is the highlighted part, escaped like the rest. --}}
+            {!! str_replace(':choose', '<span class="font-medium text-gui-primary-text">'.e(__($multiple ? 'giraffeui::ui.choose_files' : 'giraffeui::ui.choose_file')).'</span>', e(__($multiple ? 'giraffeui::ui.drop_files' : 'giraffeui::ui.drop_file'))) !!}
         </span>
         @if ($hint)
             <span id="{{ $id }}-zone-hint" class="text-xs text-zinc-600 dark:text-zinc-400">{{ $hint }}</span>
@@ -64,7 +65,7 @@
         >
     </div>
 
-    <ul x-show="files.length" x-cloak class="divide-y divide-zinc-200 rounded-gui border border-zinc-200 text-sm dark:divide-zinc-800 dark:border-zinc-800" aria-label="Chosen files">
+    <ul x-show="files.length" x-cloak class="divide-y divide-zinc-200 rounded-gui border border-zinc-200 text-sm dark:divide-zinc-800 dark:border-zinc-800" aria-label="{{ __('giraffeui::ui.chosen_files') }}">
         <template x-for="file in files" x-bind:key="file.name">
             <li class="flex items-center justify-between gap-3 px-3 py-2">
                 <span class="min-w-0 truncate text-zinc-900 dark:text-zinc-100" x-text="file.name"></span>
@@ -74,10 +75,10 @@
     </ul>
 
     <div x-show="progress !== null" x-cloak>
-        <div role="progressbar" aria-label="Uploading" aria-valuemin="0" aria-valuemax="100" x-bind:aria-valuenow="progress" class="h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+        <div role="progressbar" aria-label="{{ __('giraffeui::ui.uploading') }}" aria-valuemin="0" aria-valuemax="100" x-bind:aria-valuenow="progress" class="h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
             <div class="h-full rounded-full bg-gui-primary transition-[width] motion-reduce:transition-none" x-bind:style="`width: ${progress}%`"></div>
         </div>
     </div>
 
-    <p x-show="failed" x-cloak role="alert" class="text-sm font-medium text-gui-danger-text">The upload failed. Please try again.</p>
+    <p x-show="failed" x-cloak role="alert" class="text-sm font-medium text-gui-danger-text">{{ __('giraffeui::ui.upload_failed') }}</p>
 </div>

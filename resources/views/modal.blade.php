@@ -51,7 +51,7 @@
                         type="button"
                         commandfor="{{ $id }}"
                         command="close"
-                        aria-label="Close"
+                        aria-label="{{ __('giraffeui::ui.close') }}"
                         class="-mt-1 -mr-2 shrink-0 cursor-pointer rounded-gui p-1.5 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
                     >
                         <x-gui::icon name="x-mark" />
