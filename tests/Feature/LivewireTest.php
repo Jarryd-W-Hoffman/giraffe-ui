@@ -166,6 +166,16 @@ describe('customers table', function () {
         expect($table->instance()->rows()->total())->toBe(39);
     });
 
+    it('shows only the columns ticked in the Columns menu', function () {
+        Livewire::test(CustomersTable::class)
+            ->assertSeeHtml('role="menuitemcheckbox"')
+            ->assertSeeHtml('wire:model.live="columns"')
+            ->assertSeeHtml("wire:click=\"sort('joined')\"")
+            ->set('columns', ['plan', 'status'])
+            ->assertDontSeeHtml("wire:click=\"sort('joined')\"")
+            ->assertDontSeeHtml("wire:click=\"sort('mrr')\"");
+    });
+
     it('ignores unknown ids and locks its bookkeeping', function () {
         Livewire::test(CustomersTable::class)
             ->call('confirmDelete', 'cus_nope')
