@@ -37,5 +37,5 @@ it('nests submenus as popovers whose items close the whole menu', function () {
 
 it('scopes keyboard navigation to the menu that has focus', function () {
     expect((string) $this->blade('<x-gui::dropdown id="x"><x-gui::dropdown.item>A</x-gui::dropdown.item></x-gui::dropdown>'))
-        ->toContain("[role^=menuitem]:not([aria-disabled=true]):not(:disabled)", "item.closest('[role=menu]') === menu");
+        ->toContain('[role^=menuitem]:not([aria-disabled=true]):not(:disabled)', "item.closest('[role=menu]') === menu");
 });
