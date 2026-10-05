@@ -84,3 +84,38 @@ it('passes disabled dates and weekdays to the calendar', function () {
         ->toContain("blockedWeekdays: JSON.parse('[0,6]')")
         ->toContain("'Closed that day.'", 'setCustomValidity');
 });
+
+describe('range', function () {
+    it('renders two dates under one name, labelled by the field', function () {
+        $html = (string) $this->blade('<x-gui::field label="Stay" name="stay" required><x-gui::date-picker range :value="[\'start\' => \'2026-10-12\', \'end\' => new DateTime(\'2026-10-16\')]" min="2026-10-05" /></x-gui::field>');
+
+        expect($html)
+            ->toMatch('/<label[^>]*for="gui-stay"[^>]*id="gui-stay-label"|<label[^>]*id="gui-stay-label"[^>]*for="gui-stay"/')
+            ->toMatch('/role="group"\s+aria-labelledby="gui-stay-label"/')
+            ->toMatch('/id="gui-stay"\s+name="stay\[start\]"\s+value="2026-10-12"\s+aria-label="Start date"/')
+            ->toMatch('/id="gui-stay-end"\s+name="stay\[end\]"\s+value="2026-10-16"\s+aria-label="End date"/')
+            ->toContain('aria-label="Choose dates"')
+            ->and(substr_count($html, 'min="2026-10-05"'))->toBe(2)
+            ->and(substr_count($html, 'required="required"'))->toBe(2);
+    });
+
+    it('splits wire:model and x-model into start and end', function () {
+        $html = (string) $this->blade('<x-gui::date-picker range wire:model.live="stay" />');
+
+        expect($html)->toContain('wire:model.live="stay.start"', 'wire:model.live="stay.end"')
+            ->not->toContain('wire:model.live="stay"');
+    });
+
+    it('refills old input and shows each date\'s error under the control', function () {
+        session()->put('_old_input', ['stay' => ['start' => '2026-10-20', 'end' => '2026-10-18']]);
+        request()->setLaravelSession(session()->driver());
+        withErrors(['stay.end' => 'Check-out must be after check-in.']);
+
+        $html = (string) $this->blade('<x-gui::date-picker range name="stay" />');
+
+        expect($html)
+            ->toMatch('/name="stay\[start\]"\s+value="2026-10-20"/')
+            ->toMatch('/name="stay\[end\]"\s+value="2026-10-18"\s+aria-label="End date"\s+aria-invalid="true"\s+aria-describedby="[^"]*-end-error"/')
+            ->toContain('Check-out must be after check-in.');
+    });
+});
