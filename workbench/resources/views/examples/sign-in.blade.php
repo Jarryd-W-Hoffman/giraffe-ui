@@ -19,7 +19,7 @@
             </x-gui::field>
 
             <x-gui::field label="Password" name="password" hint="Any 8 characters will do here." required>
-                <x-example::password-input autocomplete="current-password" />
+                <x-gui::input type="password" viewable autocomplete="current-password" />
             </x-gui::field>
 
             <div class="flex items-center justify-between gap-4">

@@ -23,11 +23,11 @@
             </x-gui::field>
 
             <x-gui::field label="Password" name="password" hint="At least 8 characters, with a number." required>
-                <x-example::password-input autocomplete="new-password" />
+                <x-gui::input type="password" viewable autocomplete="new-password" />
             </x-gui::field>
 
             <x-gui::field label="Confirm password" name="password_confirmation" required>
-                <x-example::password-input autocomplete="new-password" />
+                <x-gui::input type="password" viewable autocomplete="new-password" />
             </x-gui::field>
 
             <x-gui::fieldset name="terms">

@@ -8,6 +8,16 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 44 components and a catalog.
 
+### Input prefixes, suffixes and a password Show button
+
+#### Added
+- Input `prefix` and `suffix`: text attached to either side, sharing the input's border, such as `acme.app/`, `$` or `kg`. Screen readers hear it through `aria-describedby`.
+- Input `viewable` for `type="password"`: a Show button (eye icon) that toggles the password and reports its state with `aria-pressed`. It switches back to hidden when the form submits, so the browser never saves the password as text. `show-label` (translatable) names it.
+- Icons: `eye`, `eye-slash`.
+
+#### Changed
+- The Sign in and Register examples use `viewable` instead of their own Show button, and Onboarding's web address uses `prefix`.
+
 ### Translations
 
 #### Added

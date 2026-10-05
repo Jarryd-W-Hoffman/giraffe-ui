@@ -389,3 +389,32 @@ describe('label', function () {
         expect($html)->toContain('for="x"', '<span class="text-gui-danger-text" aria-hidden="true"> *</span>');
     });
 });
+
+describe('input addons', function () {
+    it('attaches a prefix and suffix that screen readers hear after the label', function () {
+        $html = (string) $this->blade('<x-gui::field label="Price" name="price" hint="Before tax."><x-gui::input prefix="$" suffix="USD" /></x-gui::field>');
+
+        expect($html)
+            ->toMatch('/<span id="gui-price-prefix"[^>]*rounded-l-gui[^>]*>\$<\/span>/')
+            ->toMatch('/<span id="gui-price-suffix"[^>]*rounded-r-gui[^>]*>USD<\/span>/')
+            ->and(attr($html, 'input', 'aria-describedby'))->toBe('gui-price-prefix gui-price-hint gui-price-suffix')
+            ->and(classesOf($html, 'input'))->toContain('rounded-l-none', 'rounded-r-none');
+    });
+
+    it('adds a Show button to a viewable password, and only to a password', function () {
+        $html = (string) $this->blade('<x-gui::input type="password" viewable aria-label="Password" />');
+
+        expect($html)
+            ->toContain('x-data="{ shown: false }"', 'aria-pressed="false"', 'aria-label="Show password"', 'x-ref="input"', "\$refs.input.type = 'password'")
+            ->and(classesOf($html, 'input'))->toContain('pr-9')
+            ->and((string) $this->blade('<x-gui::input viewable aria-label="Name" />'))->not->toContain('Show password');
+    });
+
+    it('lets the Show button be renamed or translated', function () {
+        app('translator')->addLines(['ui.show_password' => 'Afficher le mot de passe'], 'fr', 'giraffeui');
+        app()->setLocale('fr');
+
+        expect((string) $this->blade('<x-gui::input type="password" viewable aria-label="Mot de passe" />'))->toContain('aria-label="Afficher le mot de passe"')
+            ->and((string) $this->blade('<x-gui::input type="password" viewable show-label="Reveal" aria-label="P" />'))->toContain('aria-label="Reveal"');
+    });
+});
