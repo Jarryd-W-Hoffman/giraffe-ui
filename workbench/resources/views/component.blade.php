@@ -57,7 +57,7 @@
                             <div>
                                 <label for="{{ $id }}" class="mb-1 block text-sm font-medium">{{ $control['name'] }}</label>
                                 @if ($control['type'] === 'select')
-                                    <select id="{{ $id }}" x-model="state.{{ $control['name'] }}" class="w-full rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-950">
+                                    <select id="{{ $id }}" x-model="state.{{ $control['name'] }}" class="w-full rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-950 dark:scheme-dark">
                                         @foreach ($control['options'] as $option)
                                             <option value="{{ $option }}">{{ $option }}</option>
                                         @endforeach

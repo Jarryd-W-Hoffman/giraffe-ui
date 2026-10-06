@@ -114,7 +114,7 @@ Then copy `lang/vendor/giraffeui/en/ui.php` to your locale (e.g. `fr/ui.php`) an
 
 ### Browser support
 
-GiraffeUI targets current versions of Chrome, Edge, Firefox and Safari. It builds on `<dialog>`, the popover API, CSS anchor positioning (Baseline since January 2026) and invoker commands (`command`/`commandfor`). Older browsers without them can't open modals, menus or popovers. Every change is tested in Chrome and Firefox; Safari isn't part of the automated tests yet.
+GiraffeUI targets current versions of Chrome, Edge, Firefox and Safari. It builds on `<dialog>`, the popover API, CSS anchor positioning (Baseline since January 2026) and invoker commands (`command`/`commandfor`). Older browsers without them can't open modals, menus or popovers. Every change is tested automatically in Chromium, Firefox and WebKit (the engine behind Safari).
 
 ## Conventions
 
@@ -185,7 +185,7 @@ composer lint        # Pint
 composer catalog     # Build the catalog's CSS and serve it at http://localhost:8000/catalog
 composer docs        # Regenerate docs/components from the catalog
 npm run audit:a11y   # With the catalog running: axe-core on every page, light and dark
-npm run test:browser # With the catalog running: drives the Alpine components in Chrome (BROWSER=firefox for Firefox)
+npm run test:browser # With the catalog running: drives the Alpine components in Chrome (BROWSER=firefox or webkit)
 ```
 
 CI runs everything twice: with Livewire, and with Livewire removed and Alpine loaded on its own, so GiraffeUI never comes to depend on Livewire.

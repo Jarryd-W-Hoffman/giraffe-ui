@@ -20,6 +20,13 @@ npm run audit:a11y   # with the catalog running: axe-core on every page, light a
 npm run test:browser # with the catalog running: drives the Alpine components, fails on console errors
 ```
 
+Both scripts take `BROWSER=firefox` or `BROWSER=webkit` (Safari's engine). WebKit needs system libraries; if you can't install them, run it in Playwright's image against your local catalog:
+
+```bash
+docker run --rm --network host -v "$PWD":/work -w /work -e BROWSER=webkit \
+    mcr.microsoft.com/playwright:v1.63.0-noble node tests/browser/behaviour.mjs
+```
+
 GiraffeUI must work without Livewire. CI removes it (`composer remove --dev livewire/livewire`) and runs the tests outside the `livewire` group, the browser tests and the audit again, with Alpine loaded on its own. Keep Livewire-only code in the catalog's Livewire demos, and check `class_exists` before using Livewire in `src/`.
 
 Then check your change in the catalog in light and dark mode, using only the keyboard.
