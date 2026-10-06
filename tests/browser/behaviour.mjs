@@ -449,6 +449,17 @@ await check('banner: dismissing hides it, and remember keeps it hidden after a r
     await page.evaluate(() => localStorage.removeItem('gui-banner:catalog-demo'));
 });
 
+await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
+    await visit('theme-switcher');
+    const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));
+    await page.locator('article [role=radiogroup]').first().locator('label', { hasText: 'Dark' }).click();
+    expect((await state()) === 'true,dark,true', `after Dark: ${await state()}`);
+    await page.locator('header [aria-label="Dark mode"]').click();
+    expect((await state()) === 'false,light,false', `after the toggle: ${await state()}`);
+    expect((await page.locator('article [role=radiogroup] input:checked').first().getAttribute('value')) === 'light', 'the radios did not follow the toggle');
+    await page.evaluate(() => window.GiraffeUI.setTheme('system'));
+});
+
 await check('flashed toast shows after a form post', async () => {
     await visit('examples/sign-in');
     await page.fill('input[name=email]', 'ada@example.com');

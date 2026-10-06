@@ -85,6 +85,13 @@ return [
     'stars' => ':count stars',
     'rated' => 'Rated :value out of :max',
 
+    // Theme switcher
+    'theme' => 'Theme',
+    'light' => 'Light',
+    'dark' => 'Dark',
+    'system' => 'System',
+    'dark_mode' => 'Dark mode',
+
     // Avatar group. :count is a number.
     'more' => ':count more',
 ];

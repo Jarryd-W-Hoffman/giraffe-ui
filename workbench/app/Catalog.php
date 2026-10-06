@@ -2562,6 +2562,43 @@ class Catalog
                 ],
             ],
 
+            'theme-switcher' => [
+                'name' => 'Theme switcher',
+                'group' => 'Actions',
+                'description' => 'Light, dark or the system\'s setting, remembered in this browser. Every switcher on the page stays in sync.',
+                'usage' => '<x-gui::theme-switcher />',
+                'examples' => [
+                    [
+                        'title' => 'Light, dark or system',
+                        'description' => 'Native radios: one tab stop, and arrow keys switch. System follows the operating system, even as it changes. Try it: it switches this page.',
+                        'code' => <<<'BLADE'
+                            <x-gui::theme-switcher />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Icons only, or one toggle button',
+                        'description' => 'Without labels, each icon is still named for screen readers. The toggle switches between light and dark and reports its state with aria-pressed; the catalog\'s header uses it.',
+                        'code' => <<<'BLADE'
+                            <div class="flex items-center gap-4">
+                                <x-gui::theme-switcher :labels="false" size="sm" />
+                                <x-gui::theme-switcher variant="toggle" />
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['variant', "'segmented' | 'toggle'", "'segmented'", 'Three choices, or a single light/dark button.'],
+                    ['labels', 'bool', 'true', 'Show the words next to the icons (segmented).'],
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                    ['label', 'string', "'Theme' / 'Dark mode'", 'The accessible name (translatable).'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'It calls GiraffeUI.setTheme() from the published layout, which also applies the saved theme before the page paints. Without that layout it defines setTheme itself, but put the layout\'s head script in yours to avoid a flash on load.',
+                    'The choice is stored in localStorage as theme (light or dark; system clears it), and the page gets a dark class, matching Tailwind\'s class-based dark mode set up by the installer.',
+                ],
+            ],
+
             'tooltip' => [
                 'name' => 'Tooltip',
                 'group' => 'Overlays',

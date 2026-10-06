@@ -6,7 +6,18 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 48 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 49 components and a catalog.
+
+### Theme switcher
+
+#### Added
+- Theme switcher: Light / Dark / System as native radios (icons and optional labels), or `variant="toggle"`, a single button with `aria-pressed`.
+  - It saves the choice through the layout's `GiraffeUI.setTheme()`, defining it if the layout doesn't, and follows the OS while on System.
+  - Every switcher on the page stays in sync, however the theme changed.
+- Icons: `sun`, `moon`, `computer-desktop`. Translations: `theme`, `light`, `dark`, `system`, `dark_mode`.
+
+#### Changed
+- The Settings example and the catalog header use it instead of their own switchers.
 
 ### Rating
 
