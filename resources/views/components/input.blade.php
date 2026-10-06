@@ -8,6 +8,7 @@
     'suffix' => null,
     'viewable' => false,
     'showLabel' => null,
+    'copyable' => false,
 ])
 
 @php
@@ -30,7 +31,9 @@
     $viewable = $viewable && $type === 'password';
     $showLabel ??= __('giraffeui::ui.show_password');
     $hasLeading = isset($leading);
-    $hasTrailing = isset($trailing) || $viewable;
+    // Or a Copy button, for keys and links people copy rather than type.
+    $copyable = $copyable && ! $viewable;
+    $hasTrailing = isset($trailing) || $viewable || $copyable;
     $hasPrefix = $prefix !== null && $prefix !== '';
     $hasSuffix = $suffix !== null && $suffix !== '';
 
@@ -40,6 +43,7 @@
         ? ($control['attributes']['id'] ?? \JayAitch\GiraffeUI\Support\Id::make('gui-input'))
         : ($control['attributes']['id'] ?? null);
     $anchorId = ($hasLeading || $hasTrailing) ? $id : null;
+    $copyTarget = '[id="'.$id.'"]';
     $describedBy = \JayAitch\GiraffeUI\Support\Form::describedBy(
         $hasPrefix ? "{$id}-prefix" : null,
         $control['attributes']['aria-describedby'] ?? null,
@@ -98,6 +102,10 @@
                     <x-gui::icon name="eye" size="sm" x-show="! shown" />
                     <x-gui::icon name="eye-slash" size="sm" x-show="shown" x-cloak />
                 </button>
+            </div>
+        @elseif ($copyable)
+            <div class="absolute inset-y-0 right-0 flex items-center pr-1" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right', '0.25rem') }}">
+                <x-gui::copy-button :target="$copyTarget" :size="$size === 'lg' ? 'sm' : 'xs'" />
             </div>
         @elseif ($hasTrailing)
             <div class="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-500 dark:text-zinc-400" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right') }}">{{ $trailing }}</div>

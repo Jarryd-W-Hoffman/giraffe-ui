@@ -64,6 +64,16 @@ viewable adds a button that shows and hides the password. It goes back to hidden
 </x-gui::field>
 ```
 
+## With a Copy button
+
+copyable adds a Copy button, for keys and links people copy rather than type. It confirms with a check.
+
+```blade
+<x-gui::field label="API key" name="api_key" hint="Keep it secret: it can read and write your data.">
+    <x-gui::input value="sk_live_4eC39HqLyjWDarjtT1zdp7dc" readonly copyable class="font-mono" />
+</x-gui::field>
+```
+
 ## Disabled
 
 ```blade
@@ -87,6 +97,7 @@ viewable adds a button that shows and hides the password. It goes back to hidden
 | `suffix` | `string` | `null` | Text attached after the input, e.g. a unit. |
 | `viewable` | `bool` | `false` | For type="password": a button to show and hide it. It replaces the trailing slot. |
 | `show-label` | `string` | `'Show password'` | The Show button's accessible name (translatable). |
+| `copyable` | `bool` | `false` | A Copy button that copies the value. It replaces the trailing slot. |
 
 Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 

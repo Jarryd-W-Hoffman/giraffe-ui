@@ -45,6 +45,11 @@ return [
     // Input
     'show_password' => 'Show password',
 
+    // Copy button
+    'copy' => 'Copy',
+    'copied' => 'Copied',
+    'copy_failed' => 'Couldn\'t copy',
+
     // Number input
     'increase' => 'Increase',
     'decrease' => 'Decrease',

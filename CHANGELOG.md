@@ -6,7 +6,16 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 54 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 55 components and a catalog.
+
+### Copy button
+
+#### Added
+- Copy button: copies `value`, or the text of a `target` (an input's value, or an element's text), and confirms with a check, a "Copied" label and a status message for screen readers.
+  - Icon only by default; with a label, it takes the Button's variant, color and size.
+  - Falls back to the older copy command where the Clipboard API isn't available (plain HTTP), and dispatches a `copied` event with the text.
+- Input: `copyable` puts a Copy button inside the field.
+- Icon: `document-duplicate`. Translations: `copy`, `copied`, `copy_failed`.
 
 ### Charts
 
