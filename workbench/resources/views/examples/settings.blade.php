@@ -78,14 +78,7 @@
 
                 <x-gui::tabs.panel name="account" class="space-y-6">
                     <x-gui::card title="Appearance" description="This one works: it changes the theme of this page.">
-                        <x-gui::segmented-control
-                            name="theme"
-                            label="Theme"
-                            :options="['light' => 'Light', 'dark' => 'Dark', 'system' => 'System']"
-                            value="system"
-                            x-on:change="GiraffeUI.setTheme($event.target.value)"
-                            x-init="let saved = null; try { saved = localStorage.getItem('theme'); } catch (e) {} $el.querySelector(`input[value='${saved ?? 'system'}']`).checked = true"
-                        />
+                        <x-gui::theme-switcher />
                     </x-gui::card>
 
                     <x-gui::card title="Danger zone" class="border-gui-danger-text/40!">

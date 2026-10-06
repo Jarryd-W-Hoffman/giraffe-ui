@@ -5,6 +5,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 ## Actions
 
 - [Button](button.md): Displays a button, or a link that looks like one.
+- [Theme switcher](theme-switcher.md): Light, dark or the system's setting, remembered in this browser. Every switcher on the page stays in sync.
 
 ## Forms
 
