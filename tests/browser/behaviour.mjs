@@ -515,6 +515,28 @@ await check('right to left: arrows follow the reading direction, and drawers ope
     await page.setViewportSize({ width: 1280, height: 900 });
 });
 
+await check('scatter and heatmap: arrow keys read out a point, and a cell', async () => {
+    await visit('scatter-chart');
+    const scatter = page.locator('article figure').first();
+    await scatter.locator('[aria-roledescription=chart]').focus();
+    await page.keyboard.press('ArrowRight');
+    const scatterLive = scatter.locator('[aria-live]');
+    await page.waitForFunction((el) => el.textContent !== '', await scatterLive.elementHandle());
+    expect((await scatterLive.textContent()) === 'Referrals, Spend $800, Signups 71', `scatter read: ${await scatterLive.textContent()}`);
+
+    await visit('heatmap');
+    const heatmap = page.locator('article figure').nth(1);
+    await heatmap.locator('[aria-roledescription=chart]').focus();
+    // The first arrow lands on the first cell; then two right and one down: Wk 2, Wednesday.
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowDown');
+    const heatLive = heatmap.locator('[aria-live]');
+    await page.waitForFunction((el) => el.textContent.startsWith('Wk 2'), await heatLive.elementHandle());
+    expect((await heatLive.textContent()) === 'Wk 2, W: 7', `heatmap read: ${await heatLive.textContent()}`);
+});
+
 await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
     await visit('theme-switcher');
     const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));

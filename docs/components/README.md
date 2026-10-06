@@ -54,6 +54,9 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Bar chart](bar-chart.md): Compare amounts across categories. Thin bars with rounded data ends and a square base on zero, real text for every label, a hover and keyboard tooltip, and the numbers as a table.
 - [Area chart](area-chart.md): How parts make up a total over time. A line chart with its fill on: several series stack, so the top edge is the total and each band is that series' share.
 - [Donut chart](donut-chart.md): A part-to-whole with a few parts. The list beside it is the legend and the numbers in one, so nobody has to judge an arc by eye.
+- [Bar list](bar-list.md): A ranked list with a bar behind each name: top pages, referrers, countries. A real list, with the bars as decoration.
+- [Scatter chart](scatter-chart.md): How two measures relate: one dot per item, placed by both. Each series has its own colour and shape.
+- [Heatmap](heatmap.md): A grid of values, each cell shaded on a single-hue scale: busy hours, activity by day. A real table, so every value can be read.
 - [Sparkline](sparkline.md): A tiny trend line for a stat or a table row. The line is quiet and the latest point is the accent, so the eye lands on now.
 - [Line chart](line-chart.md): Change over time, for one series or a few. Drawn on the server as SVG, with real text for every label, a keyboard-friendly crosshair and the numbers as a table.
 

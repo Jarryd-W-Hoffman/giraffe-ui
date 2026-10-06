@@ -6,7 +6,22 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 58 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
+
+### Bar list, scatter chart and heatmap
+
+#### Added
+- Bar list (`chart.bar-list`): a ranked list with a soft bar behind each name, for top pages, referrers and countries.
+  - Rows can link, are sorted largest first, and take `limit` and `percent` for each row's share.
+- Scatter chart (`chart.scatter`): how two measures relate, with axis titles and a point label in the tooltip and table.
+  - Each series has its own colour and marker shape (circle, square, diamond, triangle), so series are told apart without colour.
+  - Hover snaps to the nearest dot, and the arrow keys step through the dots left to right.
+- Heatmap (`chart.heatmap`): a table of values shaded in five steps of one hue, mixed into the chart surface so it suits light and dark mode, with a scale below.
+  - Screen readers move through it as a table; hover or arrow keys show each cell.
+- Translations: `series`, `scatter_summary`, `heatmap_summary`.
+
+#### Changed
+- Catalog: the header's RTL button is hidden on phones, where the header has no room.
 
 ### Right-to-left languages
 

@@ -112,3 +112,31 @@ it('draws a sparkline with a spoken summary', function () {
     expect($html)->toContain('role="img"', 'aria-label="Trend from 2.6% to 1.8%, high 2.6%, low 1.7%"', 'h-8 w-24')
         ->and((string) $this->blade('<x-gui::sparkline :data="[1, 2]" class="h-10 w-full" />'))->not->toContain('h-8', 'w-24');
 });
+
+it('ranks a bar list largest first, with links and shares', function () {
+    $html = (string) $this->blade('<x-gui::chart.bar-list label="Top pages" :data="[\'/a\' => 10, \'/b\' => [\'value\' => 40, \'href\' => \'/b\'], \'/c\' => 50]" :limit="2" percent />');
+
+    expect($html)->toMatch('/<ul\s+aria-label="Top pages"/')
+        ->toContain('href="/b"', 'width: max(100%, 2px)', 'width: max(80%, 2px)', '50%', '40%')
+        ->not->toContain('>/a<')
+        ->and(strpos($html, '/c'))->toBeLessThan(strpos($html, '/b'));
+});
+
+it('plots a scatter chart with a shape per series and a table', function () {
+    $html = (string) $this->blade('<x-gui::chart.scatter x-label="Spend" y-label="Signups" :series="[\'A\' => [[1, 2], [3, 4]], \'B\' => [[\'x\' => 2, \'y\' => 3, \'label\' => \'Podcast\']]]" />');
+
+    expect($html)
+        ->toContain('aria-label="A &amp; B: Signups by Spend"', 'rounded-full', 'rounded-[2px]', 'Podcast', 'Spend', 'Signups', 'Series')
+        ->and(substr_count($html, 'ring-(--gui-chart-surface)'))->toBe(3)
+        ->and(substr_count($html, '<tr '))->toBe(4);
+});
+
+it('shades a heatmap in five steps of one hue, as a table', function () {
+    $html = (string) $this->blade('<x-gui::chart.heatmap label="Orders" :rows="[\'Mon\', \'Tue\']" :columns="[\'09\', \'10\']" :data="[[0, 5], [null, 10]]" />');
+
+    expect($html)
+        ->toContain('<caption class="sr-only">Orders</caption>', 'scope="row"', 'scope="col"', 'color-mix(in oklab, var(--color-gui-chart-1) 56%, var(--gui-chart-surface))', 'color-mix(in oklab, var(--color-gui-chart-1) 100%')
+        // Zero and missing values are empty cells; every cell's value is in the table for screen readers.
+        ->and(substr_count($html, 'bg-zinc-100 dark:bg-zinc-800'))->toBe(3)
+        ->and($html)->toContain('<span class="sr-only">10</span>', '<span class="sr-only">–</span>');
+});
