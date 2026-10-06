@@ -42,6 +42,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Spinner](spinner.md): Shows that something is loading. Buttons use it for their loading state.
 - [Icon](icon.md): Heroicons that GiraffeUI ships with, or any icon from a blade-icons set.
 - [Progress](progress.md): Shows how far along a task is, or that it is working when you can't tell.
+- [Timeline](timeline.md): Events in order: an order's history, an activity feed, a changelog. An ordered list with a marker for each event and a line joining them.
 - [Kbd](kbd.md): A keyboard key, for shortcuts and instructions.
 - [Skeleton](skeleton.md): A placeholder shaped like the content that is loading.
 - [Empty state](empty-state.md): What to show when there is nothing to show yet, with a way forward.

@@ -6,7 +6,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 57 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 58 components and a catalog.
+
+### Timeline
+
+#### Added
+- Timeline: events in order (an order's history, an activity feed) as an ordered list, with `timeline.item` for each event.
+  - Each item has a `title`, a `time` (text or a date object, shown in a `<time>` element with `datetime`) and any content below.
+  - Its marker is an `icon` in a coloured circle, a small dot, or your own in the `marker` slot, such as an avatar. A line joins each event to the next.
 
 ### Time and datetime pickers
 
