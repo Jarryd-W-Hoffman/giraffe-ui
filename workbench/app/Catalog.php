@@ -2022,6 +2022,171 @@ class Catalog
                 ],
             ],
 
+            'bar-list' => [
+                'name' => 'Bar list',
+                'group' => 'Charts',
+                'description' => 'A ranked list with a bar behind each name: top pages, referrers, countries. A real list, with the bars as decoration.',
+                'usage' => '<x-gui::chart.bar-list :data="$visitsByPage" />',
+                'examples' => [
+                    [
+                        'title' => 'Top pages',
+                        'description' => 'Sorted largest first. Each bar is as long as its share of the largest. Rows can link with href.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.bar-list
+                                class="max-w-md"
+                                label="Top pages"
+                                :data="[
+                                    '/pricing' => ['value' => 4820, 'href' => '#'],
+                                    '/' => ['value' => 12410, 'href' => '#'],
+                                    '/docs/installation' => ['value' => 3105, 'href' => '#'],
+                                    '/blog/tailwind-v4' => ['value' => 2290, 'href' => '#'],
+                                    '/changelog' => ['value' => 870, 'href' => '#'],
+                                ]"
+                                compact
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'With shares, in a colour',
+                        'description' => 'percent adds each row\'s share of the total. limit keeps the top few (the share still counts every row). color takes any chart or theme colour.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.bar-list
+                                class="max-w-md"
+                                label="Visitors by country"
+                                :data="['United Kingdom' => 3820, 'United States' => 5210, 'Germany' => 1460, 'Australia' => 980, 'Japan' => 760, 'Brazil' => 420]"
+                                :limit="5"
+                                percent
+                                color="chart-3"
+                            />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['data', 'array', '[]', 'name => value, or name => [\'value\' => …, \'href\' => …].'],
+                    ['sort', 'bool', 'true', 'Largest first. Turn off to keep your order.'],
+                    ['limit', 'int', 'null', 'Show only the top few.'],
+                    ['percent', 'bool', 'false', 'Each row\'s share of the total, as well as its value.'],
+                    ['color', 'string', "'chart-1'", 'A chart or theme colour for the bars, softened behind the names.'],
+                    ['prefix, suffix, decimals, compact', 'string, string, int, bool', "'', '', auto, false", 'How values read.'],
+                    ['label', 'string', 'null', 'The list\'s accessible name.'],
+                ],
+                'slots' => [],
+            ],
+
+            'scatter-chart' => [
+                'name' => 'Scatter chart',
+                'group' => 'Charts',
+                'description' => 'How two measures relate: one dot per item, placed by both. Each series has its own colour and shape.',
+                'preview' => 'block',
+                'usage' => '<x-gui::chart.scatter :data="$campaigns" x-label="Spend" y-label="Signups" />',
+                'examples' => [
+                    [
+                        'title' => 'One series',
+                        'description' => 'Points are [x, y], or [\'x\' => …, \'y\' => …, \'label\' => …] to name them in the tooltip and table. x-label and y-label title the axes. Hover a dot, or focus the chart and use the arrow keys.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.scatter
+                                name="Campaigns"
+                                x-label="Spend"
+                                y-label="Signups"
+                                x-prefix="$"
+                                :data="[
+                                    ['x' => 1200, 'y' => 84, 'label' => 'Newsletter'],
+                                    ['x' => 3400, 'y' => 190, 'label' => 'Search ads'],
+                                    ['x' => 2100, 'y' => 96, 'label' => 'Podcast'],
+                                    ['x' => 5200, 'y' => 240, 'label' => 'Social'],
+                                    ['x' => 800, 'y' => 71, 'label' => 'Referrals'],
+                                    ['x' => 4300, 'y' => 158, 'label' => 'Video'],
+                                    ['x' => 2800, 'y' => 142, 'label' => 'Partners'],
+                                ]"
+                                :height="220"
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Comparing groups',
+                        'description' => 'With series, each group gets a colour and a shape (circle, square, diamond, triangle), so they\'re told apart without colour too.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.scatter
+                                x-label="Session length (min)"
+                                y-label="Pages viewed"
+                                :series="[
+                                    'Desktop' => [[4, 6], [7, 9], [12, 14], [9, 11], [15, 18], [6, 7], [11, 12]],
+                                    'Mobile' => [[2, 3], [3, 5], [5, 4], [6, 8], [4, 4], [8, 7], [3, 2]],
+                                    'Tablet' => [[5, 6], [8, 8], [10, 9], [7, 9]],
+                                ]"
+                                :zero="true"
+                            />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['series', 'array', 'null', 'name => points, for several series.'],
+                    ['data, name', 'array, string', 'null', 'One series of points instead.'],
+                    ['x-label, y-label', 'string', 'null', 'The axes\' titles, also used in the tooltip and table.'],
+                    ['x-prefix, x-suffix', 'string', "''", 'How x values read.'],
+                    ['prefix, suffix, compact', 'string, string, bool', "'', '', false", 'How y values read (compact applies to both).'],
+                    ['zero', 'bool', 'false', 'Start both axes at zero. By default they fit the data.'],
+                    ['colors', 'array', '[]', 'name => chart-1…chart-8, to pin a series to its colour.'],
+                    ['height', 'int', '260', 'The plot\'s height in pixels.'],
+                    ['label', 'string', 'null', 'The chart\'s accessible name. Defaults to its series and axes.'],
+                ],
+                'slots' => [],
+            ],
+
+            'heatmap' => [
+                'name' => 'Heatmap',
+                'group' => 'Charts',
+                'description' => 'A grid of values, each cell shaded on a single-hue scale: busy hours, activity by day. A real table, so every value can be read.',
+                'preview' => 'block',
+                'usage' => '<x-gui::chart.heatmap :rows="$days" :columns="$hours" :data="$ordersByDayAndHour" />',
+                'examples' => [
+                    [
+                        'title' => 'Orders by day and hour',
+                        'description' => 'data has one list per row, lined up with columns. More is darker in light mode and brighter in dark mode. Hover a cell, or focus the chart and use the arrow keys; screen readers can also move through it as a table.',
+                        'code' => <<<'BLADE'
+                            @php
+                                $hours = array_map(fn ($hour) => sprintf('%02d', $hour), range(8, 20));
+                                $shape = [1, 2, 4, 6, 7, 9, 10, 8, 6, 5, 7, 8, 4];
+                                $orders = collect(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'])
+                                    ->map(fn ($day, $d) => array_map(fn ($base, $h) => (int) round($base * ($d < 5 ? 3 : 1.6) + (($d * 7 + $h * 3) % 5)), $shape, array_keys($shape)))
+                                    ->all();
+                            @endphp
+                            <x-gui::chart.heatmap
+                                label="Orders by day and hour"
+                                :rows="['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
+                                :columns="$hours"
+                                :data="$orders"
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'In another colour',
+                        'description' => 'color takes one chart or theme colour. null cells show as empty.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.heatmap
+                                class="max-w-sm"
+                                label="Deploys by week"
+                                color="chart-3"
+                                :rows="['Wk 1', 'Wk 2', 'Wk 3', 'Wk 4']"
+                                :columns="['M', 'T', 'W', 'T', 'F']"
+                                :data="[[3, 5, 2, 6, 1], [4, null, 7, 5, 2], [1, 3, 4, 8, 3], [5, 6, 2, 4, 0]]"
+                            />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['rows, columns', 'array', '[]', 'The labels down the side and across the top.'],
+                    ['data', 'array', '[]', 'One list of values per row, lined up with columns. null is no data.'],
+                    ['color', 'string', "'chart-1'", 'The hue, from empty to full strength, in five steps.'],
+                    ['prefix, suffix, decimals, compact', 'string, string, int, bool', "'', '', auto, false", 'How values read.'],
+                    ['label', 'string', 'null', 'The chart\'s accessible name, also its table caption.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'Shades come from mixing the colour into --gui-chart-surface, so they suit light and dark mode. Values above zero are split into five equal steps of the largest.',
+                ],
+            ],
+
             'sparkline' => [
                 'name' => 'Sparkline',
                 'group' => 'Charts',

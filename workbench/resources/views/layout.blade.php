@@ -143,7 +143,7 @@
                         x-data="{ rtl: document.documentElement.dir === 'rtl' }"
                         x-bind:aria-pressed="rtl.toString()"
                         x-on:click="rtl = ! rtl; CatalogDirection.set(rtl ? 'rtl' : 'ltr')"
-                        class="cursor-pointer rounded-md px-2 py-1.5 font-mono text-xs font-medium text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text aria-pressed:bg-zinc-100 aria-pressed:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-100"
+                        class="hidden cursor-pointer rounded-md px-2 py-1.5 font-mono text-xs font-medium sm:block text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text aria-pressed:bg-zinc-100 aria-pressed:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-100"
                         aria-label="RTL (right to left)"
                     >RTL</button>
 

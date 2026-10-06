@@ -108,6 +108,9 @@ return [
     'total' => 'Total',
     'other' => 'Other',
     'share' => ':value, :percent of the total',
+    'series' => 'Series',
+    'scatter_summary' => ':y by :x',
+    'heatmap_summary' => 'Heatmap, :rows rows by :columns columns',
     'no_data' => 'No data yet.',
 
     // Avatar group. :count is a number.
