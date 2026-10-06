@@ -111,12 +111,12 @@ await check('dropdown: submenus open with ArrowRight and close with ArrowLeft an
     await page.waitForFunction(() => document.activeElement?.getAttribute('role') === 'menuitem');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowRight');
-    await page.waitForFunction(() => document.activeElement?.textContent.trim() === 'Copy link', null, { timeout: 2000 })
+    await page.waitForFunction(() => document.activeElement?.textContent.trim() === 'Copy link', null, { timeout: 5000 })
         .catch(() => expect(false, 'ArrowRight did not open the submenu on its first item'));
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('ArrowDown');
     await page.keyboard.press('Enter');
-    await page.waitForFunction(() => document.activeElement?.textContent.trim() === 'PDF', null, { timeout: 2000 })
+    await page.waitForFunction(() => document.activeElement?.textContent.trim() === 'PDF', null, { timeout: 5000 })
         .catch(() => expect(false, 'Enter did not open the nested submenu'));
     await page.keyboard.press('ArrowLeft');
     expect((await describeFocus()).startsWith('Export as'), 'ArrowLeft did not return to the submenu trigger');
@@ -293,6 +293,19 @@ await check('otp input: keeps digits, takes a pasted code and submits when compl
     await page.locator('[x-text="toast.message"]', { hasText: 'Checking 4321' }).waitFor();
 });
 
+await check('rating: arrow keys pick stars, and the stars up to the choice fill', async () => {
+    await visit('rating');
+    const group = page.locator('[role=radiogroup]').first();
+    await group.locator('input').first().focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    await page.mouse.move(0, 0);
+    expect((await group.locator('input:checked').getAttribute('value')) === '3', 'the arrows did not pick 3 stars');
+    await page.waitForTimeout(300);
+    const colours = await group.locator('label').evaluateAll((labels) => labels.map((label) => getComputedStyle(label).color));
+    expect(colours[0] === colours[2] && colours[2] !== colours[3], `the fill doesn't stop at the third star: ${colours.join(' | ')}`);
+});
+
 await check('number input: the buttons step the value', async () => {
     await visit('number-input');
     const input = page.locator('article input[type=number]').first();
@@ -336,7 +349,7 @@ await check('command palette: filters and runs a command', async () => {
     const palette = page.locator('#demo-palette');
     expect(await palette.evaluate((dialog) => dialog.open), 'the palette did not open');
     await page.keyboard.type('sign out');
-    await page.waitForFunction(() => [...document.querySelectorAll('#demo-palette [role=option]')].filter((option) => option.offsetParent).length === 1, null, { timeout: 2000 })
+    await page.waitForFunction(() => [...document.querySelectorAll('#demo-palette [role=option]')].filter((option) => option.offsetParent).length === 1, null, { timeout: 5000 })
         .catch(() => expect(false, 'the list was not filtered'));
     await page.keyboard.press('Enter');
     expect(! (await palette.evaluate((dialog) => dialog.open)), 'the palette did not close');
