@@ -19,7 +19,7 @@
             ]))
             ->class('peer absolute inset-0 z-10 size-full cursor-pointer appearance-none rounded-full opacity-0 disabled:cursor-not-allowed') }}>
         <span aria-hidden="true" class="flex h-6 w-11 items-center rounded-full bg-gui-input p-0.5 transition-colors peer-disabled:opacity-50 peer-checked:bg-gui-primary peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-gui-primary-text">
-            <span class="size-5 rounded-full bg-white shadow-sm transition-transform group-has-checked:translate-x-5"></span>
+            <span class="size-5 rounded-full bg-white shadow-sm transition-transform group-has-checked:translate-x-5 rtl:group-has-checked:-translate-x-5"></span>
         </span>
     </div>
 

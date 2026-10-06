@@ -8,8 +8,11 @@
 
     $layout = match (true) {
         ! $drawer => 'm-auto w-[calc(100%-2rem)] rounded-gui border opacity-0 scale-95 open:opacity-100 open:scale-100 starting:open:opacity-0 starting:open:scale-95',
+        // start and end follow the reading direction (end is the right in English, the left in Arabic); left and right don't.
+        $side === 'start' => 'm-0 me-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-e [--gui-slide:-100%] rtl:[--gui-slide:100%] translate-x-(--gui-slide) open:translate-x-0 starting:open:translate-x-(--gui-slide)',
         $side === 'left' => 'm-0 mr-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-r -translate-x-full open:translate-x-0 starting:open:-translate-x-full',
-        default => 'm-0 ml-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-l translate-x-full open:translate-x-0 starting:open:translate-x-full',
+        $side === 'right' => 'm-0 ml-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-l translate-x-full open:translate-x-0 starting:open:translate-x-full',
+        default => 'm-0 ms-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-s [--gui-slide:100%] rtl:[--gui-slide:-100%] translate-x-(--gui-slide) open:translate-x-0 starting:open:translate-x-(--gui-slide)',
     };
 @endphp
 
@@ -52,7 +55,7 @@
                         commandfor="{{ $id }}"
                         command="close"
                         aria-label="{{ __('giraffeui::ui.close') }}"
-                        class="-mt-1 -mr-2 shrink-0 cursor-pointer rounded-gui p-1.5 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                        class="-mt-1 -me-2 shrink-0 cursor-pointer rounded-gui p-1.5 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
                     >
                         <x-gui::icon name="x-mark" />
                     </button>

@@ -22,6 +22,20 @@
     };
     GiraffeUI.applyTheme();
 
+    // Preview right-to-left: ?dir=rtl, or the header's toggle (remembered in this browser).
+    window.CatalogDirection = {
+        get() {
+            const asked = new URLSearchParams(location.search).get('dir');
+            if (asked) return asked === 'rtl' ? 'rtl' : 'ltr';
+            try { return localStorage.getItem('catalog-dir') === 'rtl' ? 'rtl' : 'ltr'; } catch (e) { return 'ltr'; }
+        },
+        set(dir) {
+            try { dir === 'rtl' ? localStorage.setItem('catalog-dir', 'rtl') : localStorage.removeItem('catalog-dir'); } catch (e) {}
+            document.documentElement.dir = dir;
+        },
+    };
+    document.documentElement.dir = CatalogDirection.get();
+
     // The theme customiser's choices, kept across catalog pages.
     window.Catalog = {
         defaults: { primary: 'indigo', radius: 'md' },

@@ -68,7 +68,7 @@
     >
 
     @if ($showValue)
-        <output for="{{ $id }}" class="min-w-12 shrink-0 text-right text-sm font-medium text-zinc-900 tabular-nums dark:text-zinc-100" x-text="@js($prefix) + value + @js($suffix)">{{ $format($shown) }}</output>
+        <output for="{{ $id }}" class="min-w-12 shrink-0 text-end text-sm font-medium text-zinc-900 tabular-nums dark:text-zinc-100" x-text="@js($prefix) + value + @js($suffix)">{{ $format($shown) }}</output>
     @endif
 
     @if ($marks)

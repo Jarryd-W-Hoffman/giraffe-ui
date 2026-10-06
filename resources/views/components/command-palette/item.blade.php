@@ -12,7 +12,7 @@
     // Close the palette on click, then run the item's own x-on:click / @click, if any.
     $userClick = $attributes->get('x-on:click') ?? $attributes->get('@click');
     $click = "\$el.closest('dialog')?.close()".($userClick ? "; {$userClick}" : '');
-    $classes = 'flex w-full cursor-pointer items-center gap-3 rounded-[calc(var(--radius-gui)-2px)] px-2 py-2 text-left text-sm text-zinc-700 data-[active=true]:bg-zinc-100 data-[active=true]:text-zinc-900 dark:text-zinc-300 dark:data-[active=true]:bg-zinc-800 dark:data-[active=true]:text-zinc-100';
+    $classes = 'flex w-full cursor-pointer items-center gap-3 rounded-[calc(var(--radius-gui)-2px)] px-2 py-2 text-start text-sm text-zinc-700 data-[active=true]:bg-zinc-100 data-[active=true]:text-zinc-900 dark:text-zinc-300 dark:data-[active=true]:bg-zinc-800 dark:data-[active=true]:text-zinc-100';
 @endphp
 
 {{--
@@ -37,7 +37,7 @@
     @endif
     <span class="min-w-0 flex-1 truncate">{{ $slot }}</span>
     @if ($shortcut)
-        <span class="ml-auto flex shrink-0 gap-1" aria-hidden="true">
+        <span class="ms-auto flex shrink-0 gap-1" aria-hidden="true">
             @foreach (explode(' ', $shortcut) as $key)
                 <x-gui::kbd>{{ $key }}</x-gui::kbd>
             @endforeach

@@ -100,7 +100,7 @@
         x-on:click="step(-1)"
         x-bind:disabled="{{ $disabled ? 'true' : 'min !== null && value !== null && value <= min' }}"
         @disabled($disabled)
-        class="{{ $button }} left-0 rounded-l-gui"
+        class="{{ $button }} start-0 rounded-s-gui"
     >
         <x-gui::icon name="minus" size="sm" />
     </button>
@@ -114,7 +114,7 @@
         x-on:click="step(1)"
         x-bind:disabled="{{ $disabled ? 'true' : 'max !== null && value !== null && value >= max' }}"
         @disabled($disabled)
-        class="{{ $button }} right-0 rounded-r-gui"
+        class="{{ $button }} end-0 rounded-e-gui"
     >
         <x-gui::icon name="plus" size="sm" />
     </button>

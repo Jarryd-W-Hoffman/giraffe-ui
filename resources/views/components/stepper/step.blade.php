@@ -35,8 +35,8 @@
 <li class="group/step relative flex-1 [counter-increment:gui-step] last:flex-none group-data-[orientation=vertical]/stepper:flex-none group-data-[orientation=vertical]/stepper:pb-8 group-data-[orientation=vertical]/stepper:last:pb-0">
     {{-- The connector runs from this step's indicator towards the next step's. --}}
     <span @class([
-        'absolute top-4 right-2 left-10 h-0.5 -translate-y-1/2 rounded-full group-last/step:hidden',
-        'group-data-[orientation=vertical]/stepper:top-10 group-data-[orientation=vertical]/stepper:right-auto group-data-[orientation=vertical]/stepper:bottom-2 group-data-[orientation=vertical]/stepper:left-4 group-data-[orientation=vertical]/stepper:h-auto group-data-[orientation=vertical]/stepper:w-0.5 group-data-[orientation=vertical]/stepper:-translate-x-1/2 group-data-[orientation=vertical]/stepper:translate-y-0',
+        'absolute top-4 end-2 start-10 h-0.5 -translate-y-1/2 rounded-full group-last/step:hidden',
+        'group-data-[orientation=vertical]/stepper:top-10 group-data-[orientation=vertical]/stepper:end-auto group-data-[orientation=vertical]/stepper:bottom-2 group-data-[orientation=vertical]/stepper:start-4 group-data-[orientation=vertical]/stepper:h-auto group-data-[orientation=vertical]/stepper:w-0.5 group-data-[orientation=vertical]/stepper:-translate-x-1/2 group-data-[orientation=vertical]/stepper:translate-y-0',
         'bg-gui-primary' => $status === 'complete',
         'bg-zinc-200 dark:bg-zinc-800' => $status !== 'complete',
     ]) aria-hidden="true"></span>
@@ -46,8 +46,8 @@
         @if ($tag === 'button') type="button" @endif
         @if ($current) aria-current="step" @endif
         {{ $attributes->class([
-            'group/link flex flex-col items-start gap-2 pr-4 text-left',
-            'group-data-[orientation=vertical]/stepper:flex-row group-data-[orientation=vertical]/stepper:gap-3 group-data-[orientation=vertical]/stepper:pr-0',
+            'group/link flex flex-col items-start gap-2 pe-4 text-start',
+            'group-data-[orientation=vertical]/stepper:flex-row group-data-[orientation=vertical]/stepper:gap-3 group-data-[orientation=vertical]/stepper:pe-0',
             'cursor-pointer rounded-gui focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text' => $interactive,
         ]) }}
     >

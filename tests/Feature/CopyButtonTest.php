@@ -24,7 +24,7 @@ it('escapes the text it copies', function () {
 it('puts a copy button in a copyable input, aimed at that input', function () {
     $html = (string) $this->blade('<x-gui::field label="API key" name="api_key"><x-gui::input value="sk_123" readonly copyable /></x-gui::field>');
 
-    expect($html)->toContain('id="gui-api-key"', 'data-copy-target="[id=&quot;gui-api-key&quot;]"', 'aria-label="Copy"', 'pr-9');
+    expect($html)->toContain('id="gui-api-key"', 'data-copy-target="[id=&quot;gui-api-key&quot;]"', 'aria-label="Copy"', 'pe-9');
 });
 
 it('leaves a viewable password without a copy button', function () {

@@ -70,14 +70,14 @@
     // Firefox can't hide its own picker icon, so once Alpine is running the right padding shrinks to centre that
     // icon under our button, which covers it. Chromium and Safari hide theirs instead.
     $sizes = [
-        'sm' => 'h-8 pl-2.5 pr-9 text-sm data-enhanced:supports-[-moz-appearance:none]:pr-2',
-        'md' => 'h-10 pl-3 pr-10 text-sm data-enhanced:supports-[-moz-appearance:none]:pr-3',
-        'lg' => 'h-12 pl-3.5 pr-11 text-base data-enhanced:supports-[-moz-appearance:none]:pr-4',
+        'sm' => 'h-8 ps-2.5 pe-9 text-sm data-enhanced:supports-[-moz-appearance:none]:pe-2',
+        'md' => 'h-10 ps-3 pe-10 text-sm data-enhanced:supports-[-moz-appearance:none]:pe-3',
+        'lg' => 'h-12 ps-3.5 pe-11 text-base data-enhanced:supports-[-moz-appearance:none]:pe-4',
     ];
     $rangeSizes = [
-        'sm' => 'h-8 gap-1.5 pl-2.5 pr-1 text-sm',
-        'md' => 'h-10 gap-2 pl-3 pr-1 text-sm',
-        'lg' => 'h-12 gap-2 pl-3.5 pr-1 text-base',
+        'sm' => 'h-8 gap-1.5 ps-2.5 pe-1 text-sm',
+        'md' => 'h-10 gap-2 ps-3 pe-1 text-sm',
+        'lg' => 'h-12 gap-2 ps-3.5 pe-1 text-base',
     ];
     $buttonSizes = ['sm' => 'size-6', 'md' => 'size-8', 'lg' => 'size-10'];
 @endphp
@@ -240,9 +240,10 @@
         },
         key(event) {
             const weekday = (this.current.getUTCDay() - this.weekStart + 7) % 7;
+            const back = this.$refs.grid.matches(':dir(rtl)') ? 1 : -1;
             const keys = {
-                ArrowLeft: () => this.move(-1),
-                ArrowRight: () => this.move(1),
+                ArrowLeft: () => this.move(back),
+                ArrowRight: () => this.move(-back),
                 ArrowUp: () => this.move(-7),
                 ArrowDown: () => this.move(7),
                 Home: () => this.move(-weekday),
@@ -392,7 +393,7 @@
             aria-label="{{ $buttonLabel }}"
             aria-haspopup="dialog"
             @disabled($disabled)
-            class="absolute inset-y-1 right-1 flex aspect-square items-center justify-center rounded-[calc(var(--radius-gui)-2px)] bg-white text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text disabled:pointer-events-none disabled:bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:disabled:bg-zinc-800"
+            class="absolute inset-y-1 end-1 flex aspect-square items-center justify-center rounded-[calc(var(--radius-gui)-2px)] bg-white text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text disabled:pointer-events-none disabled:bg-zinc-100 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 dark:disabled:bg-zinc-800"
         >
             <x-gui::icon name="calendar" size="sm" />
         </button>
@@ -411,11 +412,11 @@
     >
         <div class="mb-2 flex items-center justify-between gap-2">
             <button type="button" aria-label="{{ $previousLabel }}" x-on:click="move(0, -1)" class="flex size-8 items-center justify-center rounded-[calc(var(--radius-gui)-2px)] text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
-                <x-gui::icon name="chevron-left" size="sm" />
+                <x-gui::icon name="chevron-left" size="sm" class="rtl:rotate-180" />
             </button>
             <h2 id="{{ $id }}-month" class="font-semibold" aria-live="polite" x-text="title"></h2>
             <button type="button" aria-label="{{ $nextLabel }}" x-on:click="move(0, 1)" class="flex size-8 items-center justify-center rounded-[calc(var(--radius-gui)-2px)] text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
-                <x-gui::icon name="chevron-right" size="sm" />
+                <x-gui::icon name="chevron-right" size="sm" class="rtl:rotate-180" />
             </button>
         </div>
 

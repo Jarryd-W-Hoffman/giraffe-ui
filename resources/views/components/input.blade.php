@@ -60,12 +60,12 @@
             'aria-invalid:border-gui-danger-text aria-invalid:focus:outline-gui-danger-text',
             'disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-500 dark:disabled:bg-zinc-800 dark:disabled:text-zinc-400',
             'dark:bg-zinc-900 dark:text-zinc-100 dark:scheme-dark',
-            'file:mr-3 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-zinc-900 dark:file:text-zinc-100',
+            'file:me-3 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-zinc-900 dark:file:text-zinc-100',
             $sizes[$size] ?? $sizes['md'],
-            'pl-9' => $hasLeading,
-            'pr-9' => $hasTrailing,
-            'rounded-l-none' => $hasPrefix,
-            'rounded-r-none' => $hasSuffix,
+            'ps-9' => $hasLeading,
+            'pe-9' => $hasTrailing,
+            'rounded-s-none' => $hasPrefix,
+            'rounded-e-none' => $hasSuffix,
         ])
         ->when($anchorId, fn ($input) => $input->style('anchor-name: '.\JayAitch\GiraffeUI\Support\Anchor::name($anchorId)));
 
@@ -82,14 +82,14 @@
         @endif
     >
         @if ($hasPrefix)
-            <span id="{{ $id }}-prefix" class="{{ $addon }} -mr-px rounded-l-gui">{{ $prefix }}</span>
+            <span id="{{ $id }}-prefix" class="{{ $addon }} -me-px rounded-s-gui">{{ $prefix }}</span>
         @endif
         @if ($hasLeading)
-            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 dark:text-zinc-400" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'left') }}">{{ $leading }}</div>
+            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-zinc-500 dark:text-zinc-400" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'left') }}">{{ $leading }}</div>
         @endif
         <input {{ $input }} @if ($viewable) x-ref="input" @endif>
         @if ($viewable)
-            <div class="absolute inset-y-0 right-0 flex items-center pr-1.5" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right', '0.375rem') }}">
+            <div class="absolute inset-y-0 end-0 flex items-center pe-1.5" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right', '0.375rem') }}">
                 <button
                     type="button"
                     x-cloak
@@ -104,14 +104,14 @@
                 </button>
             </div>
         @elseif ($copyable)
-            <div class="absolute inset-y-0 right-0 flex items-center pr-1" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right', '0.25rem') }}">
+            <div class="absolute inset-y-0 end-0 flex items-center pe-1" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right', '0.25rem') }}">
                 <x-gui::copy-button :target="$copyTarget" :size="$size === 'lg' ? 'sm' : 'xs'" />
             </div>
         @elseif ($hasTrailing)
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-500 dark:text-zinc-400" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right') }}">{{ $trailing }}</div>
+            <div class="absolute inset-y-0 end-0 flex items-center pe-3 text-zinc-500 dark:text-zinc-400" style="{{ \JayAitch\GiraffeUI\Support\Anchor::pin($anchorId, 'right') }}">{{ $trailing }}</div>
         @endif
         @if ($hasSuffix)
-            <span id="{{ $id }}-suffix" class="{{ $addon }} -ml-px rounded-r-gui">{{ $suffix }}</span>
+            <span id="{{ $id }}-suffix" class="{{ $addon }} -ms-px rounded-e-gui">{{ $suffix }}</span>
         @endif
     </div>
 @else

@@ -34,7 +34,7 @@
             <ul class="group/navbar flex items-center gap-1" data-place="bar">{{ $slot }}</ul>
         </nav>
 
-        <div class="ml-auto flex items-center gap-2">
+        <div class="ms-auto flex items-center gap-2">
             {{ $actions ?? '' }}
 
             <button

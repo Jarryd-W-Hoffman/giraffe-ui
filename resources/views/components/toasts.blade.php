@@ -44,7 +44,7 @@
     }"
     x-init="$el.showPopover?.(); @if ($flashed) add(@js($flashed)); @endif"
     x-on:toast.window="add($event.detail)"
-    {{ $attributes->class('pointer-events-none fixed inset-auto right-0 bottom-0 m-0 flex w-full max-w-sm flex-col gap-2 overflow-visible border-0 bg-transparent p-4') }}
+    {{ $attributes->class('pointer-events-none fixed inset-auto end-0 bottom-0 m-0 flex w-full max-w-sm flex-col gap-2 overflow-visible border-0 bg-transparent p-4') }}
 >
     <template x-for="toast in toasts" x-bind:key="toast.id">
         <div
