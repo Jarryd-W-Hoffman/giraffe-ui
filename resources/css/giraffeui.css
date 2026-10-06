@@ -79,6 +79,41 @@
     }
 }
 
+/*
+ * Rating stars. A star is filled when it, or any star after it, is the checked one; while the pointer is over the
+ * stars, they preview up to the one under it instead. Plain CSS, because the hover preview has to beat the
+ * checked state, which needs selectors Tailwind utilities can't express readably.
+ */
+@layer components {
+    .gui-rating-star {
+        color: var(--color-zinc-400);
+
+        @variant dark {
+            color: var(--color-zinc-600);
+        }
+    }
+
+    .gui-rating-star:has(:checked),
+    .gui-rating-star:has(~ .gui-rating-star :checked) {
+        color: var(--color-gui-warning-text);
+    }
+
+    @media (hover: hover) {
+        .gui-rating:not(:has(:disabled)):hover .gui-rating-star {
+            color: var(--color-zinc-400);
+
+            @variant dark {
+                color: var(--color-zinc-600);
+            }
+        }
+
+        .gui-rating:not(:has(:disabled)):hover .gui-rating-star:hover,
+        .gui-rating:not(:has(:disabled)):hover .gui-rating-star:has(~ .gui-rating-star:hover) {
+            color: var(--color-gui-warning-text);
+        }
+    }
+}
+
 /* Indeterminate progress: a bar sliding across its track. */
 @keyframes gui-indeterminate {
     0% {

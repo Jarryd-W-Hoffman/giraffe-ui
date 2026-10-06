@@ -6,7 +6,17 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 47 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 48 components and a catalog.
+
+### Rating
+
+#### Added
+- Rating: pick a number of stars, as a native radio group.
+  - One tab stop, arrow keys, `required` and form submission all come from the browser. Each star is read out as "3 stars", and in a field the group is named by the label.
+  - The stars fill and preview on hover with CSS alone.
+  - `readonly` shows a value instead, with partial stars for fractions ("Rated 4.5 out of 5").
+  - Also `max`, `size`, `disabled`, `wire:model` / `x-model`, and old input.
+- Icon: `star`. Translations: `star`, `stars`, `rated`.
 
 ### Safari (WebKit) testing
 

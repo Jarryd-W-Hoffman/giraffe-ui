@@ -80,6 +80,11 @@ return [
     'uploading' => 'Uploading',
     'upload_failed' => 'The upload failed. Please try again.',
 
+    // Rating. :count, :value and :max are numbers.
+    'star' => ':count star',
+    'stars' => ':count stars',
+    'rated' => 'Rated :value out of :max',
+
     // Avatar group. :count is a number.
     'more' => ':count more',
 ];
