@@ -92,6 +92,16 @@ return [
     'system' => 'System',
     'dark_mode' => 'Dark mode',
 
+    // Charts. Values are already formatted.
+    'trend' => 'Trend from :first to :last, high :high, low :low',
+    'chart_summary' => ':series from :from to :to',
+    'show_data' => 'Show the data',
+    'point' => 'Point',
+    'total' => 'Total',
+    'other' => 'Other',
+    'share' => ':value, :percent of the total',
+    'no_data' => 'No data yet.',
+
     // Avatar group. :count is a number.
     'more' => ':count more',
 ];

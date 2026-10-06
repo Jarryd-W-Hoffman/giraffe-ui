@@ -6,7 +6,23 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 49 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 54 components and a catalog.
+
+### Charts
+
+#### Added
+- Charts drawn on the server, with no chart library: SVG for the marks and HTML for every label, so text stays its real size at any width. Alpine adds the hover and keyboard layer; without it they still render in full.
+  - Line chart (`chart.line`): one series or several, gaps for missing values, rounded y ticks from zero, a legend for two or more lines and labels at their ends when there's room. Also `area`, `stacked`, `curve` (monotone, never overshoots), `markers`, `highlight` (one series in colour, the rest grey), `reference` and `reference-label`.
+  - Area chart (`chart.area`): a line chart with its fill on; several series stack by default.
+  - Bar chart (`chart.bar`): single, grouped, `stacked` or `horizontal`, with negative values from a zero line, thin bars with rounded data ends, a 2px gap between touching bars and segments, and value labels for a single series.
+  - Donut chart (`chart.donut`): a list beside it is the legend and the numbers in one; past eight parts the rest fold into "Other".
+  - Sparkline: a small trend line for stats and table rows, with a spoken summary of its start, end, high and low.
+  - Every chart is a focusable group: the arrow keys step through the points and a live region reads each series there. The crosshair or tooltip lists every series, "Show the data" opens the exact numbers as a table, and an empty chart says "No data yet."
+  - Charts adapt to their container's width, not the screen's.
+- Theme tokens `--color-gui-chart-1` to `8`, a categorical palette validated for colour-blind readers in light and dark, plus `--gui-chart-surface` and `--gui-chart-muted`. Translations: `trend`, `chart_summary`, `show_data`, `no_data`, `point`, `total`, `other`, `share`.
+
+#### Changed
+- The Dashboard example has sparklines in its stats, a revenue line chart, a payment-methods donut and an orders bar chart.
 
 ### Theme switcher
 
