@@ -466,6 +466,24 @@ await check('copy button: copies, confirms, and goes back after two seconds', as
     await page.waitForFunction((el) => el.innerText.trim() === 'Copy invite link', await button.elementHandle(), { timeout: 4000 });
 });
 
+await check('time picker: the list starts at the chosen time, and Enter picks with the keyboard', async () => {
+    await visit('time-picker');
+    const input = page.locator('#gui-pickup');
+    await input.fill('09:10');
+    await page.locator('article').getByRole('button', { name: 'Choose time' }).nth(1).click();
+    const list = page.locator('#gui-pickup-times [role=listbox]');
+    await list.waitFor();
+    // 09:10 isn't in the list, so it starts on the next time, 09:15, and the list is focused.
+    await page.waitForFunction((el) => document.activeElement === el, await list.elementHandle(), { timeout: 2000 }).catch(() => {});
+    expect(await list.evaluate((el) => document.activeElement === el), 'the list did not take focus');
+    expect((await list.locator('[data-active=true]').textContent()) === '9:15 AM', `it started on ${await list.locator('[data-active=true]').textContent()}`);
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    expect((await input.inputValue()) === '09:30', `picked ${await input.inputValue()}`);
+    expect(await input.evaluate((el) => document.activeElement === el), 'focus did not go back to the input');
+    expect(await list.isHidden(), 'the list stayed open');
+});
+
 await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
     await visit('theme-switcher');
     const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));

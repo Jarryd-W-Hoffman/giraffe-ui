@@ -61,6 +61,9 @@ return [
     // Date picker
     'choose_date' => 'Choose date',
     'choose_dates' => 'Choose dates',
+    'choose_time' => 'Choose time',
+    'date' => 'Date',
+    'time' => 'Time',
     'previous_month' => 'Previous month',
     'next_month' => 'Next month',
     'start_date' => 'Start date',
