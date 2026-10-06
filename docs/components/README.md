@@ -19,6 +19,8 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Slider](slider.md): A native range input in the theme colour, with an optional value and tick marks.
 - [OTP input](otp-input.md): A one-time code or PIN, shown as one box per character. It is one real input underneath, so phone autofill, pasting and screen readers work as they would on any field.
 - [Date picker](date-picker.md): A native date input with a calendar. Follows the WAI-ARIA date picker dialog pattern.
+- [Time picker](time-picker.md): A native time input with a list of times to pick from, written the way the visitor's locale writes them.
+- [Datetime picker](datetime-picker.md): A date and a time side by side, named as one: a Date picker and a Time picker that submit name[date] and name[time].
 - [File upload](file-upload.md): A drop zone around a real file input, with the chosen files listed and Livewire upload progress.
 - [Checkbox](checkbox.md): A native checkbox with a label and optional description.
 - [Radio](radio.md): A native radio button. Group them in a fieldset.

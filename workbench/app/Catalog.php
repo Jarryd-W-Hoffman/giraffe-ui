@@ -912,6 +912,99 @@ class Catalog
                 ],
             ],
 
+            'time-picker' => [
+                'name' => 'Time picker',
+                'group' => 'Forms',
+                'description' => 'A native time input with a list of times to pick from, written the way the visitor\'s locale writes them.',
+                'preview' => 'narrow',
+                'usage' => '<x-gui::time-picker name="starts_at" />',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'Type a time, or open the list: arrow keys move, Enter picks, Escape closes. It submits H:i, such as 14:30.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Start time" name="start_time">
+                                <x-gui::time-picker value="09:30" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Opening hours, every 15 minutes',
+                        'description' => 'interval sets the list\'s spacing in minutes. min and max limit the list and the browser\'s own validation; step makes typed times keep to the interval too (in seconds).',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Pickup time" name="pickup" hint="Between 8 AM and 6 PM.">
+                                <x-gui::time-picker min="08:00" max="18:00" :interval="15" step="900" required />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'In 24-hour time',
+                        'description' => 'locale sets how the list writes times; by default it follows the browser. The input itself always follows the browser.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Departure" name="departure">
+                                <x-gui::time-picker locale="en-GB" value="18:45" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['interval', 'int', '30', 'Minutes between the times in the list.'],
+                    ['min, max', 'string', 'null', 'The earliest and latest times, as H:i. They limit the list and validation.'],
+                    ['locale', 'string', 'null', 'How the list writes times, e.g. en-US (2:30 PM) or en-GB (14:30). Defaults to the browser\'s.'],
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                    ['invalid', 'bool | null', 'null', 'Force the invalid state. By default it follows the error bag.'],
+                    ['button-label', 'string', "'Choose time'", 'The clock button\'s and the list\'s accessible name (translatable).'],
+                    ['value', 'string | DateTimeInterface', 'null', 'The time, as H:i or a date object. Old input refills it after a failed validation.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'Any other attribute goes on the input: name, required, step, wire:model, x-model.',
+                    'Choosing from the list fires input and change on the input, so wire:model and x-model update as if it had been typed.',
+                ],
+            ],
+
+            'datetime-picker' => [
+                'name' => 'Datetime picker',
+                'group' => 'Forms',
+                'description' => 'A date and a time side by side, named as one: a Date picker and a Time picker that submit name[date] and name[time].',
+                'usage' => '<x-gui::datetime-picker name="starts_at" />',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'The field\'s label names the pair; each part is also named Date or Time. Takes a date object, "2026-10-07 14:30" or [\'date\' => …, \'time\' => …] as its value.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Starts" name="starts_at" hint="In your local time." class="max-w-md">
+                                <x-gui::datetime-picker value="2026-10-07 14:30" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Limits',
+                        'description' => 'min and max limit the date; min-time and max-time limit the time, every day. interval spaces the list of times.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Delivery slot" name="delivery" class="max-w-md">
+                                <x-gui::datetime-picker min="2026-10-08" max="2026-10-31" min-time="08:00" max-time="20:00" :interval="60" :disabled-weekdays="[0]" required />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['value', 'string | DateTimeInterface | array', 'null', 'A date object, "Y-m-d H:i", or [\'date\' => …, \'time\' => …]. Old input refills each part.'],
+                    ['min, max', 'string', 'null', 'The earliest and latest dates, as Y-m-d.'],
+                    ['min-time, max-time', 'string', 'null', 'The earliest and latest times of day, as H:i.'],
+                    ['interval', 'int', '30', 'Minutes between the times in the list.'],
+                    ['locale, week-start', 'string, int', 'null', 'As on the Date and Time pickers.'],
+                    ['disabled-dates, disabled-weekdays', 'array', '[]', 'Dates and weekdays that can\'t be picked, as on the Date picker.'],
+                    ['date-label, time-label', 'string', "'Date', 'Time'", 'Each part\'s accessible name (translatable).'],
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'It submits name[date] (Y-m-d) and name[time] (H:i). Validate starts_at.date and starts_at.time, and combine them with Carbon::parse($request->input(\'starts_at.date\').\' \'.$request->input(\'starts_at.time\')).',
+                    'wire:model="startsAt" and x-model="startsAt" bind startsAt.date and startsAt.time. Errors at starts_at.date and starts_at.time show under the pair.',
+                ],
+            ],
+
             'file-upload' => [
                 'name' => 'File upload',
                 'group' => 'Forms',

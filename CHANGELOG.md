@@ -6,7 +6,22 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 55 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 57 components and a catalog.
+
+### Time and datetime pickers
+
+#### Added
+- Time picker: a native time input (it works without JavaScript and submits H:i) with a clock button that opens a list of times every `interval` minutes, between `min` and `max`.
+  - The list follows the WAI-ARIA listbox pattern: it opens on the chosen time (or the next one), arrow keys, Page Up/Down, Home and End move, and Enter picks.
+  - Times are written the way the visitor's locale writes them (2:30 PM, or 14:30), or as `locale` sets.
+  - Picking fires input and change, so `wire:model` and `x-model` update.
+- Datetime picker: a Date picker and a Time picker side by side, submitting `name[date]` and `name[time]`.
+  - It takes a date object, "Y-m-d H:i" or an array as its value, plus `min`/`max` dates, `min-time`/`max-time`, `interval` and disabled dates.
+  - `wire:model="startsAt"` binds `startsAt.date` and `startsAt.time`, and each part's errors show under the pair.
+- Icon: `clock`. Translations: `choose_time`, `date`, `time`.
+
+#### Fixed
+- Catalog: pages for components without slots no longer show an empty Slots table.
 
 ### Copy button
 

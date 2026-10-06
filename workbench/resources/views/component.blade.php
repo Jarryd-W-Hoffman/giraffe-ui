@@ -146,6 +146,7 @@
     @endforeach
     <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400">Any other attribute, such as <code class="font-mono text-[13px]">class</code>, <code class="font-mono text-[13px]">wire:click</code> or <code class="font-mono text-[13px]">x-on:click</code>, is passed straight through to the element. To replace one of the component's own classes, add Tailwind's <code class="font-mono text-[13px]">!</code> modifier, e.g. <code class="font-mono text-[13px]">class="px-0!"</code>.</p>
 
+    @if ($component['slots'])
     <h3 class="mt-8 font-semibold">Slots</h3>
     <div role="region" aria-label="Slots" tabindex="0" class="mt-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
         <table class="min-w-full text-left text-sm">
@@ -165,4 +166,5 @@
             </tbody>
         </table>
     </div>
+    @endif
 @endsection
