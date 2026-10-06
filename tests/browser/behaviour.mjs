@@ -513,7 +513,9 @@ await check('donut chart: arrow keys show each part in the centre', async () => 
     const live = chart.locator('[aria-live]');
     await page.waitForFunction((el) => el.textContent !== '', await live.elementHandle());
     expect((await live.textContent()) === 'PayPal: $2,310, 23% of the total', `read out: ${await live.textContent()}`);
-    expect(await chart.getByText('23%').first().isVisible(), 'the centre did not change');
+    const centre = chart.locator('[x-show="index === 1"]');
+    await centre.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});
+    expect((await centre.isVisible()) && (await centre.innerText()).includes('23%'), 'the centre did not change');
 });
 
 await check('flashed toast shows after a form post', async () => {
