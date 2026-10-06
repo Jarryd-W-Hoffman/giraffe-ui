@@ -10,8 +10,8 @@ describe('anchor', function () {
     });
 
     it('flips when there is no room', function () {
-        expect(Anchor::position('bottom-end'))->toContain('[position-area:bottom_span-left]', '[position-try-fallbacks:flip-block,flip-inline]')
-            ->and(Anchor::position('nonsense'))->toContain('[position-area:bottom_span-right]');
+        expect(Anchor::position('bottom-end'))->toContain('[position-area:bottom_span-x-start]', '[position-try-fallbacks:flip-block,flip-inline]')
+            ->and(Anchor::position('nonsense'))->toContain('[position-area:bottom_span-x-end]');
     });
 });
 
@@ -49,7 +49,7 @@ describe('dropdown', function () {
     it('renders a menu popover with a default trigger', function () {
         expect($this->html)->toMatch('/<div\s+id="actions"\s+popover\s+role="menu"/s')
             ->toMatch('/<button[^>]*commandfor="actions"[^>]*command="toggle-popover"[^>]*aria-haspopup="menu"/s')
-            ->toContain('[position-area:bottom_span-left]');
+            ->toContain('[position-area:bottom_span-x-start]');
     });
 
     it('closes the menu from button items, even inside another component with an id', function () {

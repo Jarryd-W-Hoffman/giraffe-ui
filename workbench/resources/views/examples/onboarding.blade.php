@@ -86,7 +86,7 @@
                                 Back
                             </x-gui::button>
                         @endif
-                        <x-gui::button type="submit" form="onboarding-form" class="ml-auto">{{ $step === 'review' ? 'Create workspace' : 'Continue' }}</x-gui::button>
+                        <x-gui::button type="submit" form="onboarding-form" class="ms-auto">{{ $step === 'review' ? 'Create workspace' : 'Continue' }}</x-gui::button>
                     </div>
                 </x-slot:footer>
             </x-gui::card>

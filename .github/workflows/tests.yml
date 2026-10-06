@@ -115,6 +115,8 @@ jobs:
           exit 1
 
       - run: npm run audit:a11y
+      - name: Accessibility right to left
+        run: DIR=rtl npm run audit:a11y
       - run: npm run test:browser
 
       - name: Behaviour in Firefox

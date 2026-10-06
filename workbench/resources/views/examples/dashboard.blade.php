@@ -82,7 +82,7 @@
                             <x-gui::table.heading>Customer</x-gui::table.heading>
                             <x-gui::table.heading class="hidden sm:table-cell">Date</x-gui::table.heading>
                             <x-gui::table.heading>Status</x-gui::table.heading>
-                            <x-gui::table.heading class="text-right">Total</x-gui::table.heading>
+                            <x-gui::table.heading class="text-end">Total</x-gui::table.heading>
                         </x-slot:head>
 
                         @foreach ($orders as $order)
@@ -91,7 +91,7 @@
                                 <x-gui::table.cell>{{ $order['customer'] }}</x-gui::table.cell>
                                 <x-gui::table.cell class="hidden sm:table-cell">{{ $order['date'] }}</x-gui::table.cell>
                                 <x-gui::table.cell><x-gui::badge size="sm" :color="$statusColors[$order['status']]">{{ $order['status'] }}</x-gui::badge></x-gui::table.cell>
-                                <x-gui::table.cell class="text-right tabular-nums">{{ $order['total'] }}</x-gui::table.cell>
+                                <x-gui::table.cell class="text-end tabular-nums">{{ $order['total'] }}</x-gui::table.cell>
                             </x-gui::table.row>
                         @endforeach
                     </x-gui::table>

@@ -39,7 +39,7 @@
 --}}
 <li {{ $attributes->class('group/item relative flex gap-3 pb-6 last:pb-0') }}>
     {{-- The line down to the next event's marker; the last event has none. --}}
-    <span class="absolute top-9 bottom-1 left-4 w-px -translate-x-1/2 bg-zinc-200 group-last/item:hidden dark:bg-zinc-800" aria-hidden="true"></span>
+    <span class="absolute top-9 bottom-1 start-4 w-px -translate-x-1/2 rtl:translate-x-1/2 bg-zinc-200 group-last/item:hidden dark:bg-zinc-800" aria-hidden="true"></span>
 
     <div class="relative flex size-8 shrink-0 items-center justify-center" aria-hidden="true">
         @isset($marker)

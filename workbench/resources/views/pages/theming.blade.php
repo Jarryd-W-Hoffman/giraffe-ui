@@ -63,7 +63,7 @@
     <h2 id="tokens" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Tokens</h2>
     <p class="mt-2 text-zinc-600 dark:text-zinc-400">Each colour has three tokens: the colour itself for solid backgrounds, <code class="font-mono text-sm">-foreground</code> for text on it, and <code class="font-mono text-sm">-text</code> for text, borders and focus rings on the page, which switches to a lighter shade in dark mode. Every default pairing meets WCAG AA in both modes. Override any of them in an <code class="font-mono text-sm">@@theme</code> block after the GiraffeUI import.</p>
     <div class="mt-4 overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <table class="min-w-full text-left text-sm">
+        <table class="min-w-full text-start text-sm">
             <thead class="bg-zinc-50 text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
                 <tr>
                     <th scope="col" class="px-4 py-2.5 font-medium">Token</th>

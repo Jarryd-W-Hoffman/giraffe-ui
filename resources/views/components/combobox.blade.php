@@ -38,9 +38,9 @@
     $selectedLabel = $multiple || $selected === null ? '' : $labelOf($selected);
 
     $sizes = [
-        'sm' => 'h-8 pl-2.5 text-sm',
-        'md' => 'h-10 pl-3 text-sm',
-        'lg' => 'h-12 pl-3.5 text-base',
+        'sm' => 'h-8 ps-2.5 text-sm',
+        'md' => 'h-10 ps-3 text-sm',
+        'lg' => 'h-12 ps-3.5 text-base',
     ];
 @endphp
 
@@ -258,16 +258,16 @@
             style="anchor-name: {{ \JayAitch\GiraffeUI\Support\Anchor::name($id) }}"
             x-on:click.self="$refs.text.focus()"
             @class([
-                'flex w-full min-w-0 flex-wrap items-center gap-1 rounded-gui border border-gui-input bg-white pr-9 text-zinc-900 shadow-xs transition-colors',
+                'flex w-full min-w-0 flex-wrap items-center gap-1 rounded-gui border border-gui-input bg-white pe-9 text-zinc-900 shadow-xs transition-colors',
                 'has-[input:focus]:outline-2 has-[input:focus]:-outline-offset-1 has-[input:focus]:outline-gui-primary-text',
                 'has-aria-invalid:border-gui-danger-text has-disabled:cursor-not-allowed has-disabled:bg-zinc-100 dark:has-disabled:bg-zinc-800',
                 'dark:bg-zinc-900 dark:text-zinc-100',
-                ['sm' => 'min-h-8 py-0.5 pl-1 text-sm', 'md' => 'min-h-10 py-1 pl-1.5 text-sm', 'lg' => 'min-h-12 py-1.5 pl-2 text-base'][$size] ?? 'min-h-10 py-1 pl-1.5 text-sm',
+                ['sm' => 'min-h-8 py-0.5 ps-1 text-sm', 'md' => 'min-h-10 py-1 ps-1.5 text-sm', 'lg' => 'min-h-12 py-1.5 ps-2 text-base'][$size] ?? 'min-h-10 py-1 ps-1.5 text-sm',
                 $inputAttributes->get('class'),
             ])
         >
             <template x-for="chosen in value" x-bind:key="chosen">
-                <span class="inline-flex max-w-full items-center gap-1 rounded-[calc(var(--radius-gui)-2px)] bg-zinc-100 py-0.5 pr-0.5 pl-2 text-sm text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
+                <span class="inline-flex max-w-full items-center gap-1 rounded-[calc(var(--radius-gui)-2px)] bg-zinc-100 py-0.5 pe-0.5 ps-2 text-sm text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
                     <span class="truncate" x-text="chipLabel(chosen)"></span>
                     <button
                         type="button"
@@ -340,7 +340,7 @@
                 ->except(['aria-describedby', 'name', 'value', 'id'])
                 ->merge(array_diff_key($control['attributes'], ['name' => true]) + ['id' => $id])
                 ->class([
-                    'block w-full min-w-0 rounded-gui border border-gui-input bg-white pr-9 text-zinc-900 shadow-xs transition-colors',
+                    'block w-full min-w-0 rounded-gui border border-gui-input bg-white pe-9 text-zinc-900 shadow-xs transition-colors',
                     'placeholder:text-zinc-500 dark:placeholder:text-zinc-400',
                     'focus:outline-2 focus:-outline-offset-1 focus:outline-gui-primary-text',
                     'aria-invalid:border-gui-danger-text aria-invalid:focus:outline-gui-danger-text',
@@ -353,7 +353,7 @@
     @endif
 
     {{-- Pinned to the control, so width classes on it move the icon and size the list too. --}}
-    <x-gui::icon name="chevron-up-down" size="sm" class="pointer-events-none absolute inset-y-0 right-0 my-auto mr-3 text-zinc-500 dark:text-zinc-400" :style="\JayAitch\GiraffeUI\Support\Anchor::pin($id, 'right')" />
+    <x-gui::icon name="chevron-up-down" size="sm" class="pointer-events-none absolute inset-y-0 end-0 my-auto me-3 text-zinc-500 dark:text-zinc-400" :style="\JayAitch\GiraffeUI\Support\Anchor::pin($id, 'right')" />
 
     {{-- A manual popover in the top layer, so the list isn't clipped by modals or scrolling containers. --}}
     <div

@@ -11,8 +11,8 @@ describe('number input', function () {
             ->and(classesOf($html, 'input'))->toContain('max-w-40', 'text-center')
             ->and(attr($html, 'input', 'style'))->toBe('anchor-name: --gui-gui-qty;')
             ->and($html)
-            ->toMatch('/<button(?=[^>]*tabindex="-1")(?=[^>]*aria-label="Decrease")(?=[^>]*aria-controls="gui-qty")(?=[^>]*x-cloak)(?=[^>]*left: calc\(anchor\(left\) \+ 0px\))[^>]*>/s')
-            ->toMatch('/<button(?=[^>]*aria-label="Increase")(?=[^>]*right: calc\(anchor\(right\) \+ 0px\))[^>]*>/s');
+            ->toMatch('/<button(?=[^>]*tabindex="-1")(?=[^>]*aria-label="Decrease")(?=[^>]*aria-controls="gui-qty")(?=[^>]*x-cloak)(?=[^>]*inset-inline-start: calc\(anchor\(start\) \+ 0px\))[^>]*>/s')
+            ->toMatch('/<button(?=[^>]*aria-label="Increase")(?=[^>]*inset-inline-end: calc\(anchor\(end\) \+ 0px\))[^>]*>/s');
     });
 
     it('works inside a field and refills old input', function () {
@@ -85,7 +85,7 @@ describe('pinned parts', function () {
         $html = (string) $this->blade('<x-gui::input id="q" aria-label="Q"><x-slot:leading>L</x-slot:leading><x-slot:trailing>T</x-slot:trailing></x-gui::input>');
 
         expect(attr($html, 'input', 'style'))->toBe('anchor-name: --gui-q;')
-            ->and($html)->toContain('left: calc(anchor(left) + 0px)">L</div>', 'right: calc(anchor(right) + 0px)">T</div>');
+            ->and($html)->toContain('inset-inline-start: calc(anchor(start) + 0px)">L</div>', 'inset-inline-end: calc(anchor(end) + 0px)">T</div>');
     });
 
     it('leaves a plain input without anchor styles', function () {

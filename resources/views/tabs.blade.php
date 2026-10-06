@@ -32,8 +32,8 @@
     <div
         role="tablist"
         x-ref="list"
-        x-on:keydown.right.prevent="move(1)"
-        x-on:keydown.left.prevent="move(-1)"
+        x-on:keydown.right.prevent="move($el.matches(':dir(rtl)') ? -1 : 1)"
+        x-on:keydown.left.prevent="move($el.matches(':dir(rtl)') ? 1 : -1)"
         x-on:keydown.home.prevent="move('first')"
         x-on:keydown.end.prevent="move('last')"
         class="{{ $style['list'] }}"

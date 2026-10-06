@@ -7,7 +7,7 @@
     @endif
     <li><a href="#examples" class="hover:text-zinc-900 dark:hover:text-zinc-100">Examples</a></li>
     @foreach ($examples as $example)
-        <li class="pl-3"><a href="#{{ $example['id'] }}" class="hover:text-zinc-900 dark:hover:text-zinc-100">{{ $example['title'] }}</a></li>
+        <li class="ps-3"><a href="#{{ $example['id'] }}" class="hover:text-zinc-900 dark:hover:text-zinc-100">{{ $example['title'] }}</a></li>
     @endforeach
     <li><a href="#api" class="hover:text-zinc-900 dark:hover:text-zinc-100">API reference</a></li>
 @endsection
@@ -44,7 +44,7 @@
                     {!! $playground['html'] !!}
                 </div>
 
-                <form class="space-y-4 border-t border-zinc-200 bg-zinc-50 p-4 md:border-t-0 md:border-l dark:border-zinc-800 dark:bg-zinc-900/50" x-on:submit.prevent>
+                <form class="space-y-4 border-t border-zinc-200 bg-zinc-50 p-4 md:border-t-0 md:border-s dark:border-zinc-800 dark:bg-zinc-900/50" x-on:submit.prevent>
                     @foreach ($playground['controls'] as $control)
                         @php $id = 'control-'.$control['name']; @endphp
 
@@ -120,7 +120,7 @@
     <h3 class="mt-6 font-semibold">Props</h3>
     {{-- Focusable so the table can be scrolled with the keyboard on narrow screens. --}}
     <div role="region" aria-label="Props" tabindex="0" class="mt-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <table class="min-w-full text-left text-sm">
+        <table class="min-w-full text-start text-sm">
             <thead class="bg-zinc-50 text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
                 <tr>
                     <th scope="col" class="px-4 py-2.5 font-medium">Prop</th>
@@ -149,7 +149,7 @@
     @if ($component['slots'])
     <h3 class="mt-8 font-semibold">Slots</h3>
     <div role="region" aria-label="Slots" tabindex="0" class="mt-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
-        <table class="min-w-full text-left text-sm">
+        <table class="min-w-full text-start text-sm">
             <thead class="bg-zinc-50 text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
                 <tr>
                     <th scope="col" class="px-4 py-2.5 font-medium">Slot</th>

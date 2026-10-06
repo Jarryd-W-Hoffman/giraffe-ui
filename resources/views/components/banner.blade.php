@@ -69,7 +69,7 @@
                 data-dismiss
                 x-cloak
                 aria-label="{{ __('giraffeui::ui.dismiss') }}"
-                class="-mr-1.5 flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-gui opacity-80 transition-opacity hover:bg-black/10 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-current dark:hover:bg-white/10"
+                class="-me-1.5 flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-gui opacity-80 transition-opacity hover:bg-black/10 hover:opacity-100 focus-visible:outline-2 focus-visible:outline-current dark:hover:bg-white/10"
             >
                 <x-gui::icon name="x-mark" size="sm" />
             </button>

@@ -122,7 +122,7 @@ describe('input', function () {
         $html = (string) $this->blade('<x-gui::input><x-slot:leading><svg data-icon></svg></x-slot:leading></x-gui::input>');
 
         expect($html)->toContain('data-icon')
-            ->and(classesOf($html, 'input'))->toContain('pl-9');
+            ->and(classesOf($html, 'input'))->toContain('ps-9');
     });
 
     it('passes attributes through to the input', function () {
@@ -395,10 +395,10 @@ describe('input addons', function () {
         $html = (string) $this->blade('<x-gui::field label="Price" name="price" hint="Before tax."><x-gui::input prefix="$" suffix="USD" /></x-gui::field>');
 
         expect($html)
-            ->toMatch('/<span id="gui-price-prefix"[^>]*rounded-l-gui[^>]*>\$<\/span>/')
-            ->toMatch('/<span id="gui-price-suffix"[^>]*rounded-r-gui[^>]*>USD<\/span>/')
+            ->toMatch('/<span id="gui-price-prefix"[^>]*rounded-s-gui[^>]*>\$<\/span>/')
+            ->toMatch('/<span id="gui-price-suffix"[^>]*rounded-e-gui[^>]*>USD<\/span>/')
             ->and(attr($html, 'input', 'aria-describedby'))->toBe('gui-price-prefix gui-price-hint gui-price-suffix')
-            ->and(classesOf($html, 'input'))->toContain('rounded-l-none', 'rounded-r-none');
+            ->and(classesOf($html, 'input'))->toContain('rounded-s-none', 'rounded-e-none');
     });
 
     it('adds a Show button to a viewable password, and only to a password', function () {
@@ -406,7 +406,7 @@ describe('input addons', function () {
 
         expect($html)
             ->toContain('x-data="{ shown: false }"', 'aria-pressed="false"', 'aria-label="Show password"', 'x-ref="input"', "\$refs.input.type = 'password'")
-            ->and(classesOf($html, 'input'))->toContain('pr-9')
+            ->and(classesOf($html, 'input'))->toContain('pe-9')
             ->and((string) $this->blade('<x-gui::input viewable aria-label="Name" />'))->not->toContain('Show password');
     });
 

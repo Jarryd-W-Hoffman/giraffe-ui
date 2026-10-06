@@ -62,11 +62,11 @@ it('aligns columns from an align map, or per heading and cell', function () {
     $data = (string) $this->blade('<x-gui::table :columns="[\'plan\', \'price\']" :rows="[[\'plan\' => \'Pro\', \'price\' => \'$99\']]" :align="[\'price\' => \'right\']" />');
     $composed = (string) $this->blade('<x-gui::table><x-slot:head><x-gui::table.heading align="center">Seats</x-gui::table.heading></x-slot:head><x-gui::table.row><x-gui::table.cell align="center">3</x-gui::table.cell></x-gui::table.row></x-gui::table>');
 
-    expect($data)->toMatch('/<th[^>]*class="[^"]*text-right[^"]*"[^>]*>\s*Price/')
-        ->toMatch('/<td class="[^"]*text-right[^"]*">\$99<\/td>/')
-        ->toMatch('/<th[^>]*class="[^"]*text-left[^"]*"[^>]*>\s*Plan/')
-        // An aligned heading drops the default text-left rather than fighting it.
-        ->not->toMatch('/<th[^>]*class="[^"]*text-left[^"]*text-right/')
+    expect($data)->toMatch('/<th[^>]*class="[^"]*text-end[^"]*"[^>]*>\s*Price/')
+        ->toMatch('/<td class="[^"]*text-end[^"]*">\$99<\/td>/')
+        ->toMatch('/<th[^>]*class="[^"]*text-start[^"]*"[^>]*>\s*Plan/')
+        // An aligned heading drops the default text-start rather than fighting it.
+        ->not->toMatch('/<th[^>]*class="[^"]*text-start[^"]*text-end/')
         ->and($composed)->toMatch('/<th[^>]*text-center[^>]*>\s*Seats/')->toMatch('/<td class="[^"]*text-center[^"]*">3/');
 });
 

@@ -30,7 +30,7 @@ it('nests submenus as popovers whose items close the whole menu', function () {
     expect($html)
         ->toMatch('/<button(?=[^>]*role="menuitem")(?=[^>]*aria-haspopup="menu")(?=[^>]*aria-expanded="false")[^>]*>/s')
         ->toMatch('/id="'.preg_quote($panel[1], '/').'"\s+x-ref="panel"\s+popover\s+role="menu"\s+aria-label="Share"/')
-        ->toContain('[position-area:right_span-bottom]')
+        ->toContain('[position-area:x-end_span-bottom]')
         // The item inside the submenu targets the root menu, so picking it closes every level.
         ->toMatch('/commandfor="file"\s+command="hide-popover"[^>]*>\s*Copy link/s');
 });

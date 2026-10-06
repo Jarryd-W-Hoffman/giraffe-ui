@@ -17,13 +17,13 @@
     $next = $sorted && $direction === 'asc' ? 'desc' : 'asc';
 
     // Every class is written out in full so Tailwind can find it when scanning this file.
-    $alignments = ['left' => 'text-left', 'center' => 'text-center', 'right' => 'text-right'];
+    $alignments = ['left' => 'text-start', 'center' => 'text-center', 'right' => 'text-end'];
 @endphp
 
 <th
     scope="col"
     @if ($sorted) aria-sort="{{ $direction === 'asc' ? 'ascending' : 'descending' }}" @endif
-    {{ $cell->class(['px-4 py-3 text-xs font-medium tracking-wider whitespace-nowrap text-zinc-600 uppercase dark:text-zinc-400', $alignments[$align] ?? 'text-left']) }}
+    {{ $cell->class(['px-4 py-3 text-xs font-medium tracking-wider whitespace-nowrap text-zinc-600 uppercase dark:text-zinc-400', $alignments[$align] ?? 'text-start']) }}
 >
     @if ($sortable !== null)
         @php

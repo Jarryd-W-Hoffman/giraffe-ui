@@ -139,7 +139,7 @@
 
                 @foreach ($comparison as $feature => $values)
                     <x-gui::table.row>
-                        <th scope="row" class="px-4 py-3 text-left font-medium whitespace-nowrap text-zinc-900 dark:text-zinc-100">{{ $feature }}</th>
+                        <th scope="row" class="px-4 py-3 text-start font-medium whitespace-nowrap text-zinc-900 dark:text-zinc-100">{{ $feature }}</th>
                         @foreach ($values as $value)
                             <x-gui::table.cell class="text-center">
                                 @if ($value === true)

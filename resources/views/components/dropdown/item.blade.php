@@ -8,7 +8,7 @@
 
 @php
     $classes = [
-        'flex w-full cursor-pointer items-center gap-2 rounded-[calc(var(--radius-gui)-2px)] px-2.5 py-1.5 text-left whitespace-nowrap transition-colors',
+        'flex w-full cursor-pointer items-center gap-2 rounded-[calc(var(--radius-gui)-2px)] px-2.5 py-1.5 text-start whitespace-nowrap transition-colors',
         'focus:outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gui-primary-text',
         'aria-disabled:pointer-events-none aria-disabled:opacity-50',
         $color === 'danger'

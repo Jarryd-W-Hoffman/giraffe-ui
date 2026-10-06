@@ -38,7 +38,7 @@
             <span class="relative inline-flex">
                 <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="{{ $star }} text-zinc-400 dark:text-zinc-600"><path fill-rule="evenodd" clip-rule="evenodd" d="{{ $path }}" /></svg>
                 @if ($fill > 0)
-                    <span class="absolute inset-y-0 left-0 overflow-hidden" style="width: {{ round($fill * 100) }}%">
+                    <span class="absolute inset-y-0 start-0 overflow-hidden" style="width: {{ round($fill * 100) }}%">
                         <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="{{ $star }} max-w-none text-gui-warning-text"><path fill-rule="evenodd" clip-rule="evenodd" d="{{ $path }}" /></svg>
                     </span>
                 @endif

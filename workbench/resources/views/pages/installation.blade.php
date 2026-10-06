@@ -46,7 +46,7 @@
     <p class="mt-3 text-lg text-zinc-600 dark:text-zinc-400">Add GiraffeUI to a Laravel app in two commands.</p>
 
     <h2 id="requirements" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Requirements</h2>
-    <ul class="mt-3 list-disc space-y-1 pl-5 text-zinc-600 dark:text-zinc-400">
+    <ul class="mt-3 list-disc space-y-1 ps-5 text-zinc-600 dark:text-zinc-400">
         <li>PHP 8.4+</li>
         <li>Laravel 13</li>
         <li>Tailwind CSS v4 (new Laravel apps already have it)</li>
@@ -58,7 +58,7 @@
         @include('catalog::partials.code', ['code' => "composer require jayaitch/giraffeui\nphp artisan gui:install"])
     </div>
     <p class="mt-4 text-zinc-600 dark:text-zinc-400">The installer:</p>
-    <ol class="mt-2 list-decimal space-y-1 pl-5 text-zinc-600 dark:text-zinc-400">
+    <ol class="mt-2 list-decimal space-y-1 ps-5 text-zinc-600 dark:text-zinc-400">
         <li>adds GiraffeUI's CSS to <code class="font-mono text-sm">resources/css/app.css</code>, after <code class="font-mono text-sm">@@import "tailwindcss"</code>;</li>
         <li>offers to install Livewire (optional, off by default);</li>
         <li>without Livewire, offers to start Alpine in <code class="font-mono text-sm">resources/js/app.js</code> and tells you to run <code class="font-mono text-sm">npm install alpinejs</code>;</li>

@@ -22,9 +22,9 @@
 
     // Every class is written out in full so Tailwind can find it when scanning this file.
     $sizes = [
-        'sm' => 'h-8 pl-2.5 pr-9 text-sm',
-        'md' => 'h-10 pl-3 pr-10 text-sm',
-        'lg' => 'h-12 pl-3.5 pr-11 text-base',
+        'sm' => 'h-8 ps-2.5 pe-9 text-sm',
+        'md' => 'h-10 ps-3 pe-10 text-sm',
+        'lg' => 'h-12 ps-3.5 pe-11 text-base',
     ];
 @endphp
 
@@ -127,7 +127,7 @@
         aria-label="{{ $buttonLabel }}"
         aria-haspopup="listbox"
         @disabled($disabled || $readonly)
-        class="absolute inset-y-1 right-1 flex aspect-square items-center justify-center rounded-[calc(var(--radius-gui)-2px)] text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text disabled:pointer-events-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+        class="absolute inset-y-1 end-1 flex aspect-square items-center justify-center rounded-[calc(var(--radius-gui)-2px)] text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text disabled:pointer-events-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
     >
         <x-gui::icon name="clock" size="sm" />
     </button>

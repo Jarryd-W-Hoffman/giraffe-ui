@@ -28,7 +28,7 @@
                 <span class="font-medium text-zinc-900 dark:text-zinc-100" aria-hidden="true">{{ $label }}</span>
             @endif
             @if ($showValue && ! $indeterminate)
-                <span class="ml-auto text-zinc-600 tabular-nums dark:text-zinc-400" aria-hidden="true">{{ $percent }}%</span>
+                <span class="ms-auto text-zinc-600 tabular-nums dark:text-zinc-400" aria-hidden="true">{{ $percent }}%</span>
             @endif
         </div>
     @endif

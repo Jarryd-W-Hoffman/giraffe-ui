@@ -109,6 +109,7 @@
         @endif
 
         <div
+            dir="ltr"
             x-data="{
                 index: null,
                 chart: { labels: [], series: [] },

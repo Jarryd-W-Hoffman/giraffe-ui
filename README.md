@@ -176,6 +176,18 @@ Components use Tailwind's `dark:` variant. By default Tailwind follows the OS se
 GiraffeUI.setTheme('dark'); // or 'light', or 'system'
 ```
 
+## Right-to-left languages
+
+Set `dir="rtl"` on `<html>` (or any wrapper) for Arabic, Hebrew, Persian or Urdu, and every component mirrors:
+- spacing and placement use start and end, not left and right;
+- input adornments, prefixes and suffixes swap sides;
+- popovers and menus open towards the reading direction;
+- drawers with `side="start"` or `"end"` slide in from the right edge;
+- arrow keys follow the reading direction in tabs, submenus and the calendar;
+- directional icons, such as chevrons, turn around.
+
+Charts keep their axes running left to right, like the numbers on them. In the catalog, the header's RTL button (or `?dir=rtl`) previews every page right to left.
+
 ## Development
 
 ```bash
