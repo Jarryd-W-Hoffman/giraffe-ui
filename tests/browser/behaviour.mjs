@@ -449,6 +449,23 @@ await check('banner: dismissing hides it, and remember keeps it hidden after a r
     await page.evaluate(() => localStorage.removeItem('gui-banner:catalog-demo'));
 });
 
+await check('copy button: copies, confirms, and goes back after two seconds', async () => {
+    await visit('copy-button');
+    const wrapper = page.locator('article [data-copy-target="#invite-link"]').first();
+    const button = wrapper.getByRole('button');
+    await button.click();
+    await wrapper.getByRole('status').filter({ hasText: 'Copied' }).waitFor({ state: 'attached' });
+    await page.waitForFunction((el) => el.innerText.trim() === 'Copied', await button.elementHandle(), { timeout: 1500 }).catch(() => {});
+    expect((await button.innerText()).trim() === 'Copied', `the label said: ${JSON.stringify(await button.innerText())}`);
+    // The copyable input's button copies that input's value.
+    await page.evaluate(() => document.addEventListener('copied', (event) => { window.guiCopied = event.detail.text; }));
+    await page.locator('article [data-copy-target^="[id="]').first().getByRole('button', { name: 'Copy' }).click();
+    await page.waitForFunction(() => window.guiCopied !== undefined);
+    const copied = await page.evaluate(() => window.guiCopied);
+    expect(copied === 'https://acme.app/hooks/orders/3f9a', `copied: ${copied}`);
+    await page.waitForFunction((el) => el.innerText.trim() === 'Copy invite link', await button.elementHandle(), { timeout: 4000 });
+});
+
 await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
     await visit('theme-switcher');
     const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));

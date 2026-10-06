@@ -429,6 +429,15 @@ class Catalog
                             BLADE,
                     ],
                     [
+                        'title' => 'With a Copy button',
+                        'description' => 'copyable adds a Copy button, for keys and links people copy rather than type. It confirms with a check.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="API key" name="api_key" hint="Keep it secret: it can read and write your data.">
+                                <x-gui::input value="sk_live_4eC39HqLyjWDarjtT1zdp7dc" readonly copyable class="font-mono" />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                    [
                         'title' => 'Disabled',
                         'code' => <<<'BLADE'
                             <x-gui::input value="Can't touch this" disabled aria-label="Disabled example" />
@@ -449,6 +458,7 @@ class Catalog
                     ['suffix', 'string', 'null', 'Text attached after the input, e.g. a unit.'],
                     ['viewable', 'bool', 'false', 'For type="password": a button to show and hide it. It replaces the trailing slot.'],
                     ['show-label', 'string', "'Show password'", 'The Show button\'s accessible name (translatable).'],
+                    ['copyable', 'bool', 'false', 'A Copy button that copies the value. It replaces the trailing slot.'],
                 ],
                 'slots' => [
                     ['leading', 'Content inside the input, before the text. Usually an icon.'],
@@ -2899,6 +2909,60 @@ class Catalog
                 'slots' => [
                     ['trigger', 'A custom trigger. Give it commandfor="{id}" command="toggle-popover".'],
                     ['default', 'The panel content.'],
+                ],
+            ],
+
+            'copy-button' => [
+                'name' => 'Copy button',
+                'group' => 'Actions',
+                'description' => 'Copies text to the clipboard and confirms it, with a check for sighted users and "Copied" for screen readers.',
+                'usage' => '<x-gui::copy-button value="composer require jayaitch/giraffeui" />',
+                'examples' => [
+                    [
+                        'title' => 'Icon only',
+                        'description' => 'Named "Copy" for screen readers. Pass the text as value.',
+                        'code' => <<<'BLADE'
+                            <div class="flex w-full max-w-md items-center justify-between gap-3 rounded-gui border border-zinc-200 bg-zinc-50 py-1 pr-1 pl-3 font-mono text-sm dark:border-zinc-800 dark:bg-zinc-900">
+                                <code class="truncate">composer require jayaitch/giraffeui</code>
+                                <x-gui::copy-button value="composer require jayaitch/giraffeui" />
+                            </div>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'With a label, copying from the page',
+                        'description' => 'target copies the text of an element (or an input\'s value) by CSS selector, as it is when clicked. The label swaps to "Copied" for two seconds. Takes the Button\'s variant, color and size.',
+                        'code' => <<<'BLADE'
+                            <div class="space-y-3">
+                                <p id="invite-link" class="text-sm">https://acme.app/join/7Hq2-xK9p</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <x-gui::copy-button target="#invite-link">Copy invite link</x-gui::copy-button>
+                                    <x-gui::copy-button target="#invite-link" variant="solid" color="primary">Copy link</x-gui::copy-button>
+                                </div>
+                            </div>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'In an input',
+                        'description' => 'The Input\'s copyable prop puts one inside the field.',
+                        'code' => <<<'BLADE'
+                            <x-gui::field label="Webhook URL" name="webhook">
+                                <x-gui::input value="https://acme.app/hooks/orders/3f9a" readonly copyable />
+                            </x-gui::field>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['value', 'string', 'null', 'The text to copy.'],
+                    ['target', 'string', 'null', 'Or a CSS selector: copies that input\'s value, or that element\'s text.'],
+                    ['label, copied-label', 'string', "'Copy', 'Copied'", 'The icon button\'s accessible name, and what it says after a copy (translatable).'],
+                    ['variant, color, size', 'string', "'outline', 'secondary', 'sm'", 'As on Button, for a button with a label. Icon only: size xs, sm or md.'],
+                ],
+                'slots' => [
+                    ['default', 'A label. Without one, it\'s an icon button.'],
+                ],
+                'notes' => [
+                    'Dispatches a copied event with the text in event.detail.text, e.g. x-on:copied="GiraffeUI.toast(\'Copied\')".',
+                    'It uses the Clipboard API, falling back to the older copy command on plain HTTP. Hidden until Alpine starts, since it can\'t work without JavaScript.',
                 ],
             ],
 
