@@ -53,6 +53,24 @@
     --radius-gui: var(--radius-md);
 }
 
+/* static: charts use these through var() in inline styles, so Tailwind must emit them even when no class does. */
+@theme static {
+    /*
+     * Chart series colours, used in this order (never cycled). The order is what keeps neighbouring series apart
+     * for colour-blind readers: it was validated for colour-blind separation, normal-vision separation, lightness
+     * and chroma on white and on zinc-900/950. If you change them, re-validate the set, not each colour alone.
+     * Slots 3 to 5 are under 3:1 on white, which is why charts always come with a legend, labels and a data table.
+     */
+    --color-gui-chart-1: #2a78d6;
+    --color-gui-chart-2: #eb6834;
+    --color-gui-chart-3: #1baf7a;
+    --color-gui-chart-4: #eda100;
+    --color-gui-chart-5: #e87ba4;
+    --color-gui-chart-6: #008300;
+    --color-gui-chart-7: #4a3aa7;
+    --color-gui-chart-8: #e34948;
+}
+
 /*
  * On dark backgrounds, text colours need lighter shades to stay readable.
  * If you change a colour, override its -text token here too:
@@ -68,6 +86,33 @@
             --color-gui-warning-text: var(--color-amber-400);
             --color-gui-danger-text: var(--color-red-400);
             --color-gui-info-text: var(--color-sky-400);
+
+            /* The same eight hues, stepped for dark backgrounds (all at least 3:1 there). */
+            --color-gui-chart-1: #3987e5;
+            --color-gui-chart-2: #d95926;
+            --color-gui-chart-3: #199e70;
+            --color-gui-chart-4: #c98500;
+            --color-gui-chart-5: #d55181;
+            --color-gui-chart-6: #008300;
+            --color-gui-chart-7: #9085e9;
+            --color-gui-chart-8: #e66767;
+        }
+    }
+}
+
+/*
+ * The colour charts sit on: markers get a ring of it so they stay legible where lines cross. Cards are white and
+ * zinc-900; set --gui-chart-surface on a wrapper when a chart sits on something else.
+ */
+@layer base {
+    :root {
+        --gui-chart-surface: var(--color-white);
+        /* The grey that other series step back to when one is highlighted. */
+        --gui-chart-muted: var(--color-zinc-300);
+
+        @variant dark {
+            --gui-chart-surface: var(--color-zinc-900);
+            --gui-chart-muted: var(--color-zinc-600);
         }
     }
 }

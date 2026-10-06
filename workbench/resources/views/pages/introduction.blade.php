@@ -4,7 +4,7 @@
     @php
         // Built from the catalog itself, so this page can't fall behind what exists.
         $groups = collect(\Workbench\App\Catalog::components())->groupBy(fn ($component) => $component['group'] ?? 'Components', preserveKeys: true);
-        $order = ['Actions', 'Forms', 'Display', 'Navigation', 'Overlays', 'Disclosure', 'Data'];
+        $order = ['Actions', 'Forms', 'Display', 'Charts', 'Navigation', 'Overlays', 'Disclosure', 'Data'];
         $groups = $groups->sortBy(fn ($components, $group) => array_search($group, $order, true) === false ? 99 : array_search($group, $order, true));
         $count = $groups->flatten(1)->count();
         $examples = \Workbench\App\Catalog::examples();

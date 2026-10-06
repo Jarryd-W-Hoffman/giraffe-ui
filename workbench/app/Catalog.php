@@ -1742,6 +1742,346 @@ class Catalog
                 ],
             ],
 
+            'bar-chart' => [
+                'name' => 'Bar chart',
+                'group' => 'Charts',
+                'description' => 'Compare amounts across categories. Thin bars with rounded data ends and a square base on zero, real text for every label, a hover and keyboard tooltip, and the numbers as a table.',
+                'preview' => 'block',
+                'usage' => '<x-gui::chart.bar :labels="$weekdays" :data="$orders" name="Orders" />',
+                'examples' => [
+                    [
+                        'title' => 'One series',
+                        'description' => 'Values sit at the end of each bar when there\'s one series and room for them; values="false" hides them.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.bar
+                                name="Orders"
+                                :labels="['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
+                                :data="[182, 214, 198, 246, 271, 140, 96]"
+                                :height="200"
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Grouped',
+                        'description' => 'Several series sit side by side, 2px apart, with a legend. Hover anywhere in a column, or focus the chart and use the arrow keys.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.bar
+                                :labels="['Q1', 'Q2', 'Q3', 'Q4']"
+                                :series="['2025' => [42000, 51000, 48000, 63000], '2026' => [47000, 58000, 61000, 72000]]"
+                                prefix="$"
+                                compact
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Stacked',
+                        'description' => 'stacked shows how parts make up each total, with a 2px gap between segments and the total above each bar.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.bar
+                                stacked
+                                :values="true"
+                                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']"
+                                :series="['Free' => [320, 340, 390, 410, 450, 480], 'Pro' => [120, 140, 150, 180, 210, 240], 'Team' => [40, 45, 60, 70, 85, 100]]"
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Horizontal',
+                        'description' => 'horizontal suits long category names and ranked lists. Sort the data first: the chart keeps your order.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.bar
+                                horizontal
+                                name="Visitors"
+                                :labels="['Search engines', 'Direct', 'Newsletter', 'Social media', 'Partner sites']"
+                                :data="[48200, 31900, 12400, 9800, 4100]"
+                                compact
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Negative values',
+                        'description' => 'Bars grow down from a stronger zero line.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.bar
+                                name="Net cash flow"
+                                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']"
+                                :data="[12400, -3200, 8100, -6900, 15300, 9800]"
+                                prefix="$"
+                                compact
+                                :height="200"
+                            />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['labels', 'array', '[]', 'The categories, in order.'],
+                    ['series', 'array', 'null', 'name => values for several series, values lined up with labels.'],
+                    ['data, name', 'array, string', 'null', 'One series instead of series.'],
+                    ['colors', 'array', '[]', 'name => chart-1…chart-8, to pin a series to its colour.'],
+                    ['stacked', 'bool', 'false', 'Stack series into one bar per category.'],
+                    ['horizontal', 'bool', 'false', 'Bars run left to right, with category names down the side.'],
+                    ['values', 'bool', 'auto', 'Value labels at the bar ends. On for one series of up to 12 bars.'],
+                    ['height', 'int', '240', 'The plot\'s height in pixels (vertical bars).'],
+                    ['prefix, suffix, decimals, compact', 'string, string, int, bool', "'', '', auto, false", 'How values read.'],
+                    ['label', 'string', 'null', 'The chart\'s accessible name. Defaults to its series and range (translatable).'],
+                ],
+                'slots' => [],
+            ],
+
+            'area-chart' => [
+                'name' => 'Area chart',
+                'group' => 'Charts',
+                'description' => 'How parts make up a total over time. A line chart with its fill on: several series stack, so the top edge is the total and each band is that series\' share.',
+                'preview' => 'block',
+                'usage' => '<x-gui::chart.area :labels="$months" :series="[\'Free\' => $free, \'Pro\' => $pro]" />',
+                'examples' => [
+                    [
+                        'title' => 'Stacked',
+                        'description' => 'The tooltip shows each series\' own value, not the running total. Takes every line chart option: curve, markers, highlight, reference.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.area
+                                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']"
+                                :series="[
+                                    'Free' => [3200, 3400, 3900, 4100, 4500, 4800, 5100, 5300, 5800, 6100, 6400, 6900],
+                                    'Pro' => [1200, 1400, 1500, 1800, 2100, 2400, 2500, 2800, 3000, 3300, 3700, 4000],
+                                    'Team' => [400, 450, 600, 700, 850, 1000, 1100, 1300, 1400, 1600, 1800, 2100],
+                                ]"
+                                compact
+                                curve
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'One series',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.area
+                                name="Storage"
+                                :labels="['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6']"
+                                :data="[1.2, 1.5, 1.9, 2.4, 2.6, 3.1]"
+                                suffix=" TB"
+                                :reference="4"
+                                reference-label="Plan limit"
+                                :height="180"
+                            />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['stacked', 'bool', 'true', 'Stack several series. stacked="false" overlaps them, best kept to two.'],
+                    ['…', '', '', 'Every Line chart prop: labels, series or data and name, colors, curve, markers, highlight, reference, height and formatting.'],
+                ],
+                'slots' => [],
+            ],
+
+            'donut-chart' => [
+                'name' => 'Donut chart',
+                'group' => 'Charts',
+                'description' => 'A part-to-whole with a few parts. The list beside it is the legend and the numbers in one, so nobody has to judge an arc by eye.',
+                'usage' => '<x-gui::chart.donut :data="[\'Card\' => 6420, \'PayPal\' => 2310, \'Bank transfer\' => 980]" prefix="$" />',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'Pass name => value, largest first: the chart keeps your order. Hover a part or a row, or focus it and use the arrow keys, to show that part in the centre.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.donut
+                                :data="['Card' => 6420, 'PayPal' => 2310, 'Bank transfer' => 980, 'Gift card' => 290]"
+                                prefix="$"
+                                compact
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Smaller, with a custom centre',
+                        'description' => 'size and thickness are in pixels and viewBox units. center replaces the total. Past eight parts, the rest fold into "Other".',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.donut
+                                :size="120"
+                                :thickness="12"
+                                center="68 GB"
+                                :data="['Photos' => 31, 'Video' => 18, 'Documents' => 9, 'Apps' => 6, 'Other' => 4]"
+                                suffix=" GB"
+                            />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['data', 'array', '[]', 'name => value. Zero and negative values are left out.'],
+                    ['colors', 'array', '[]', 'name => chart-1…chart-8, to pin a part to its colour.'],
+                    ['size', 'int', '160', 'The donut\'s width and height in pixels.'],
+                    ['thickness', 'int', '14', 'The ring\'s thickness, out of 100.'],
+                    ['center', 'string', 'null', 'What the centre shows instead of the total.'],
+                    ['prefix, suffix, decimals, compact', 'string, string, int, bool', "'', '', auto, false", 'How values read.'],
+                    ['label', 'string', 'null', 'The chart\'s accessible name. Defaults to every part and its share.'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'Keep it to a few parts. To compare many, or compare across groups, use a bar chart: lengths are easier to judge than angles.',
+                ],
+            ],
+
+            'sparkline' => [
+                'name' => 'Sparkline',
+                'group' => 'Charts',
+                'description' => 'A tiny trend line for a stat or a table row. The line is quiet and the latest point is the accent, so the eye lands on now.',
+                'usage' => '<x-gui::sparkline :data="$visitsByDay" />',
+                'examples' => [
+                    [
+                        'title' => 'In stats',
+                        'description' => 'Sized by its classes (h-8 w-24 by default). Screen readers hear the trend\'s start, end, high and low.',
+                        'code' => <<<'BLADE'
+                            <div class="grid w-full gap-4 sm:grid-cols-2">
+                                <x-gui::card>
+                                    <div class="flex items-end justify-between gap-4">
+                                        <x-gui::stat label="Visitors" value="12,840" change="8%" trend="up" description="last 12 weeks" />
+                                        <x-gui::sparkline :data="[820, 932, 901, 934, 1290, 1330, 1320, 1180, 1250, 1410, 1380, 1520]" class="h-10 w-28" />
+                                    </div>
+                                </x-gui::card>
+                                <x-gui::card>
+                                    <div class="flex items-end justify-between gap-4">
+                                        <x-gui::stat label="Refunds" value="1.8%" change="0.3 pts" trend="down" invert description="last 12 weeks" />
+                                        <x-gui::sparkline :data="[2.6, 2.4, 2.5, 2.2, 2.3, 2.1, 2.2, 1.9, 2.0, 1.9, 1.7, 1.8]" suffix="%" class="h-10 w-28" />
+                                    </div>
+                                </x-gui::card>
+                            </div>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'With an area, or in a colour',
+                        'description' => 'area adds a soft wash under the line. color draws the whole line in one of the chart colours (chart-1 to chart-8) or a theme colour such as success.',
+                        'code' => <<<'BLADE'
+                            <div class="flex items-center gap-8">
+                                <x-gui::sparkline :data="[4, 6, 5, 9, 7, 11, 10, 14]" area />
+                                <x-gui::sparkline :data="[4, 6, 5, 9, 7, 11, 10, 14]" color="chart-1" area />
+                                <x-gui::sparkline :data="[14, 12, 13, 9, 10, 7, 8, 5]" color="chart-2" />
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['data', 'array', '[]', 'The values, oldest first. null leaves a gap.'],
+                    ['color', 'string', 'null', 'A chart colour (chart-1 to chart-8) or theme colour for the whole line. By default the line is grey and the latest point is chart-1.'],
+                    ['area', 'bool', 'false', 'A soft fill under the line.'],
+                    ['prefix, suffix, compact', 'string, string, bool', "'', '', false", 'How values read in the summary, e.g. prefix="$" or suffix="%".'],
+                    ['label', 'string', 'null', 'What screen readers hear. Defaults to the trend\'s start, end, high and low (translatable).'],
+                ],
+                'slots' => [],
+            ],
+
+            'line-chart' => [
+                'name' => 'Line chart',
+                'group' => 'Charts',
+                'description' => 'Change over time, for one series or a few. Drawn on the server as SVG, with real text for every label, a keyboard-friendly crosshair and the numbers as a table.',
+                'preview' => 'block',
+                'usage' => '<x-gui::chart.line :labels="$months" :series="[\'Revenue\' => $revenue, \'Costs\' => $costs]" prefix="$" compact />',
+                'examples' => [
+                    [
+                        'title' => 'One series',
+                        'description' => 'A single line needs no legend: say what it is in the heading around it. Its latest value is labelled at the end. Hover, or focus it and use the arrow keys, for the value at each point.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.line
+                                name="Revenue"
+                                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']"
+                                :data="[18200, 21400, 19800, 24600, 27100, 26300, 29800, 31200, 30400, 34900, 38100, 42600]"
+                                prefix="$"
+                                compact
+                                area
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Comparing series',
+                        'description' => 'Two or more lines get a legend, and labels at their ends when there\'s room. The tooltip lists every line at that point, so you never have to land on one. Each series keeps its colour slot, in order; pass colors to pin one, so filtering others out never repaints it.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.line
+                                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']"
+                                :series="[
+                                    'Online' => [12400, 14100, 13200, 16900, 18800, 18100, 20900, 22400, 21300, 24800, 27600, 31200],
+                                    'In store' => [5800, 7300, 6600, 7700, 8300, 8200, 8900, 8800, 9100, 10100, 10500, 11400],
+                                ]"
+                                prefix="$"
+                                compact
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Highlight one series',
+                        'description' => 'highlight keeps one line in colour and steps the rest back to grey, for "how are we doing against everyone else".',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.line
+                                highlight="Acme"
+                                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']"
+                                :series="[
+                                    'Acme' => [12, 14, 13, 17, 19, 22, 24, 27],
+                                    'Globex' => [18, 17, 19, 18, 20, 19, 21, 20],
+                                    'Initech' => [9, 11, 10, 12, 11, 13, 12, 14],
+                                    'Umbrella' => [15, 16, 14, 15, 13, 14, 12, 13],
+                                ]"
+                                suffix="%"
+                                :height="200"
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Curves, markers and a target',
+                        'description' => 'curve smooths the line without overshooting, so every peak is a real value. markers puts a dot on each point. reference draws a dashed line, such as a target, with reference-label.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.line
+                                name="Signups"
+                                :labels="['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
+                                :data="[42, 58, 51, 74, 69, 38, 33]"
+                                curve
+                                markers
+                                :reference="60"
+                                reference-label="Target"
+                                :height="200"
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Gaps and an honest baseline',
+                        'description' => 'A missing value (null) breaks the line rather than pretending it was zero. The y axis starts at zero by default so changes aren\'t exaggerated; zero="false" fits it to the data instead, for values that never get near zero.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.line
+                                name="Uptime"
+                                :labels="['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
+                                :data="[99.95, 99.97, null, 99.91, 99.98, 99.99, 99.96]"
+                                suffix="%"
+                                :zero="false"
+                                :height="180"
+                            />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'No data yet',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.line name="Signups" :labels="[]" :data="[]" :height="160" />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['labels', 'array', '[]', 'The x axis, in order: dates, months, weeks.'],
+                    ['series', 'array', 'null', 'name => values for several lines, values lined up with labels. Up to 8.'],
+                    ['data, name', 'array, string', 'null', 'One line instead of series.'],
+                    ['colors', 'array', '[]', 'name => chart-1…chart-8, to pin a series to its colour.'],
+                    ['area', 'bool', 'false', 'A soft fill under each line. Best for one series.'],
+                    ['stacked', 'bool', 'false', 'Stack the series, so the top line is the total. Turns area on.'],
+                    ['curve', 'bool', 'false', 'Smooth curves that never overshoot the data.'],
+                    ['markers', 'bool', 'false', 'A dot at every point.'],
+                    ['highlight', 'string', 'null', 'The one series to keep in colour; the others turn grey.'],
+                    ['reference, reference-label', 'number, string', 'null', 'A dashed reference line, such as a target or limit, and its label.'],
+                    ['zero', 'bool', 'true', 'Start the y axis at zero. Turn off for values that never get near it.'],
+                    ['height', 'int', '240', 'The plot\'s height in pixels (axis labels are extra).'],
+                    ['prefix, suffix, decimals, compact', 'string, string, int, bool', "'', '', auto, false", 'How values read on the axis, in the tooltip and table. compact gives 12.9K, 4.2M.'],
+                    ['label', 'string', 'null', 'The chart\'s accessible name. Defaults to its series and range (translatable).'],
+                ],
+                'slots' => [],
+                'notes' => [
+                    'Colours come from --color-gui-chart-1 to 8 in the theme, in a fixed order validated for colour-blind readers. Override them in your @theme, and re-check the set.',
+                    'Markers are ringed in --gui-chart-surface (white, or zinc-900 in dark mode, to match cards). Set it on a wrapper if the chart sits on another colour.',
+                    'Text never takes a series colour: labels, values and the legend use the normal text colours, with a coloured key beside them.',
+                ],
+            ],
+
             'kbd' => [
                 'name' => 'Kbd',
                 'group' => 'Display',

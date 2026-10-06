@@ -460,6 +460,45 @@ await check('theme switcher: picks a theme, saves it, and keeps every switcher i
     await page.evaluate(() => window.GiraffeUI.setTheme('system'));
 });
 
+await check('line chart: arrow keys move the crosshair, which reads every series', async () => {
+    await visit('line-chart');
+    const chart = page.locator('article figure').nth(1);
+    await chart.locator('[aria-roledescription=chart]').focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('End');
+    const live = chart.locator('[aria-live]');
+    await page.waitForFunction((el) => el.textContent.startsWith('Dec:'), await live.elementHandle());
+    expect((await live.textContent()) === 'Dec: Online $31.2K, In store $11.4K', `read out: ${await live.textContent()}`);
+    expect(await chart.locator('.shadow-lg').isVisible(), 'no tooltip');
+    await page.keyboard.press('Escape');
+    expect((await live.textContent()) === '', 'Escape did not clear it');
+});
+
+await check('bar chart: hovering a column shows every series there', async () => {
+    await visit('bar-chart');
+    const chart = page.locator('article figure').nth(1);
+    const plot = chart.locator('[aria-roledescription=chart]');
+    await plot.scrollIntoViewIfNeeded();
+    const box = await plot.boundingBox();
+    await page.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.8);
+    const tooltip = chart.locator('.shadow-lg');
+    await tooltip.waitFor();
+    expect((await tooltip.innerText()).replace(/\s+/g, ' ').trim() === 'Q2 $51K 2025 $58K 2026', `tooltip: ${await tooltip.innerText()}`);
+    await page.mouse.move(0, 0);
+});
+
+await check('donut chart: arrow keys show each part in the centre', async () => {
+    await visit('donut-chart');
+    const chart = page.locator('article figure').first();
+    await chart.locator('[aria-roledescription=chart]').focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    const live = chart.locator('[aria-live]');
+    await page.waitForFunction((el) => el.textContent !== '', await live.elementHandle());
+    expect((await live.textContent()) === 'PayPal: $2,310, 23% of the total', `read out: ${await live.textContent()}`);
+    expect(await chart.getByText('23%').first().isVisible(), 'the centre did not change');
+});
+
 await check('flashed toast shows after a form post', async () => {
     await visit('examples/sign-in');
     await page.fill('input[name=email]', 'ada@example.com');

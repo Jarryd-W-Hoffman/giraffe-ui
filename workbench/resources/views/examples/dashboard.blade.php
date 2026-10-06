@@ -31,16 +31,43 @@
             <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <x-gui::card>
                     <x-gui::stat label="Revenue" value="$48,200" change="12%" trend="up" description="vs last month" />
+                    <x-gui::sparkline :data="[31, 34, 33, 36, 35, 38, 37, 41, 40, 43, 45, 48.2]" prefix="$" suffix="K" class="mt-4 h-10 w-full" />
                 </x-gui::card>
                 <x-gui::card>
                     <x-gui::stat label="Orders" value="1,204" change="4%" trend="up" description="vs last month" />
+                    <x-gui::sparkline :data="[980, 1010, 995, 1060, 1040, 1100, 1090, 1120, 1150, 1130, 1160, 1204]" class="mt-4 h-10 w-full" />
                 </x-gui::card>
                 <x-gui::card>
                     <x-gui::stat label="Refund rate" value="1.8%" change="0.3 pts" trend="down" invert description="vs last month" />
+                    <x-gui::sparkline :data="[2.6, 2.4, 2.5, 2.2, 2.3, 2.1, 2.2, 1.9, 2.0, 1.9, 2.1, 1.8]" suffix="%" class="mt-4 h-10 w-full" />
                 </x-gui::card>
                 <x-gui::card>
                     <x-gui::stat label="Avg. response" value="2.4 h" change="0.6 h" trend="up" invert description="vs last month" />
+                    <x-gui::sparkline :data="[1.6, 1.7, 1.5, 1.8, 1.9, 1.8, 2.0, 2.1, 1.9, 2.2, 2.3, 2.4]" suffix=" h" class="mt-4 h-10 w-full" />
                 </x-gui::card>
+            </div>
+
+            <div class="grid gap-6 xl:grid-cols-3">
+            <x-gui::card title="Revenue" description="Online and in-store sales, by month." class="xl:col-span-2">
+                <x-gui::chart.line
+                    :labels="['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']"
+                    :series="[
+                        'Online' => [21300, 26800, 18400, 19900, 22700, 24100, 25600, 24900, 27300, 28800, 30100, 33600],
+                        'In store' => [9100, 12400, 7600, 7900, 8800, 9300, 9900, 9600, 10400, 10900, 11800, 14600],
+                    ]"
+                    prefix="$"
+                    compact
+                />
+            </x-gui::card>
+
+            <div class="space-y-6">
+                <x-gui::card title="Payment methods">
+                    <x-gui::chart.donut :size="120" :thickness="12" :data="['Card' => 31200, 'PayPal' => 11400, 'Bank transfer' => 4100, 'Gift card' => 1500]" prefix="$" compact />
+                </x-gui::card>
+                <x-gui::card title="Orders by day">
+                    <x-gui::chart.bar name="Orders" :labels="['M', 'T', 'W', 'T', 'F', 'S', 'S']" :data="[182, 214, 198, 246, 271, 140, 96]" :height="110" />
+                </x-gui::card>
+            </div>
             </div>
 
             <div class="grid gap-6 xl:grid-cols-3">
