@@ -2,14 +2,19 @@
 // Needs the catalog running: `composer catalog`, or set CATALOG_URL. Exits 1 on any violation.
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { chromium } from 'playwright';
+// BROWSER=firefox or BROWSER=webkit audits in that engine instead of Chromium.
+import { chromium, firefox, webkit } from 'playwright';
 
 const require = createRequire(import.meta.url);
 const axe = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const base = (process.env.CATALOG_URL ?? 'http://127.0.0.1:8000/catalog').replace(/\/$/, '');
 const tags = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
-const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
+const browser = process.env.BROWSER === 'firefox'
+    ? await firefox.launch()
+    : process.env.BROWSER === 'webkit'
+        ? await webkit.launch()
+        : await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 
 // Every page linked from the sidebar.

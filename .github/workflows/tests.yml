@@ -122,6 +122,13 @@ jobs:
           npx playwright install --with-deps firefox
           BROWSER=firefox npm run test:browser
 
+      # WebKit is the engine behind Safari, so this is Safari's coverage.
+      - name: Behaviour and accessibility in WebKit (Safari)
+        run: |
+          npx playwright install --with-deps webkit
+          BROWSER=webkit npm run test:browser
+          BROWSER=webkit npm run audit:a11y
+
   without-livewire:
     name: Without optional packages (no Livewire, no blade-icons)
     runs-on: ubuntu-latest

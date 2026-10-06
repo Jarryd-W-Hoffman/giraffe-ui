@@ -8,6 +8,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 47 components and a catalog.
 
+### Safari (WebKit) testing
+
+#### Added
+- CI runs the browser behaviour tests and the axe audit in WebKit, the engine behind Safari, alongside Chromium and Firefox. Both scripts take `BROWSER=webkit`, and CONTRIBUTING shows how to run it locally in Playwright's Docker image.
+
+#### Fixed
+- Catalog: the playground's selects were unreadable in dark mode in WebKit.
+
 ### Banner
 
 #### Added

@@ -59,6 +59,6 @@
 
     <h2 class="mt-14 text-xl font-semibold tracking-tight">Status</h2>
     <p class="mt-3 text-zinc-600 dark:text-zinc-400">
-        GiraffeUI is pre-1.0, so expect breaking changes between minor versions. Every component works with plain Blade and Alpine, and with Livewire, and is tested in Chrome and Firefox, in light and dark mode. See the <a href="https://github.com/Jarryd-W-Hoffman/GiraffeUI/blob/master/CHANGELOG.md" class="font-medium text-gui-primary-text hover:underline">changelog</a> for what's new.
+        GiraffeUI is pre-1.0, so expect breaking changes between minor versions. Every component works with plain Blade and Alpine, and with Livewire, and is tested in Chromium, Firefox and WebKit (Safari's engine), in light and dark mode. See the <a href="https://github.com/Jarryd-W-Hoffman/GiraffeUI/blob/master/CHANGELOG.md" class="font-medium text-gui-primary-text hover:underline">changelog</a> for what's new.
     </p>
 @endsection

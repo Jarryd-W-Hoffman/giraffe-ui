@@ -112,6 +112,6 @@
         GiraffeUI targets current versions of Chrome, Edge, Firefox and Safari. It builds on recent platform features: <code class="font-mono text-sm">&lt;dialog&gt;</code>, the popover API, CSS anchor positioning (Baseline since January 2026) and invoker commands (<code class="font-mono text-sm">command</code>/<code class="font-mono text-sm">commandfor</code>). Older browsers without them can't open modals, menus or popovers.
     </p>
     <p class="mt-3 text-zinc-600 dark:text-zinc-400">
-        Every change is tested in Chrome and Firefox. Safari uses the same engine features, but isn't part of the automated tests yet.
+        Every change is tested automatically in Chromium, Firefox and WebKit (the engine behind Safari).
     </p>
 @endsection

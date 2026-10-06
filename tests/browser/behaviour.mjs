@@ -1,13 +1,15 @@
 // Drives the Alpine-powered components in a real browser and fails on any console error or warning.
 // Runs against the catalog with or without Livewire (CI does both), to prove the components only need Alpine.
 // Needs the catalog running: `composer catalog`, or set CATALOG_URL. Exits 1 on any failure.
-// BROWSER=firefox runs it in Firefox instead of Chromium.
-import { chromium, firefox } from 'playwright';
+// BROWSER=firefox or BROWSER=webkit (Safari's engine) runs it there instead of Chromium.
+import { chromium, firefox, webkit } from 'playwright';
 
 const base = (process.env.CATALOG_URL ?? 'http://127.0.0.1:8000/catalog').replace(/\/$/, '');
 const browser = process.env.BROWSER === 'firefox'
     ? await firefox.launch()
-    : await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
+    : process.env.BROWSER === 'webkit'
+        ? await webkit.launch()
+        : await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const page = await context.newPage();
 
