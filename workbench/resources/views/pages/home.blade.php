@@ -307,11 +307,9 @@
                     radius: 'lg',
                     dark: false,
                     radii: @js($radii),
+                    // The preview starts in the page's mode; after that its switch is its own.
                     init() {
                         this.dark = document.documentElement.classList.contains('dark');
-                        this.$watch('dark', (value) => GiraffeUI.setTheme(value ? 'dark' : 'light'));
-                        // Follow the theme when it changes elsewhere, e.g. the header's button.
-                        new MutationObserver(() => this.dark = document.documentElement.classList.contains('dark')).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
                     },
                     get css() {
                         return '@theme {\n    --color-gui-primary: var(--color-' + this.color + '-600);\n    --radius-gui: ' + this.radii[this.radius] + ';\n}';
@@ -321,7 +319,7 @@
                 <div class="mx-auto grid grid-cols-1 max-w-7xl gap-12 lg:grid-cols-[minmax(0,24rem)_minmax(0,1fr)]">
                     <div>
                         <h2 id="theming-heading" class="text-4xl font-normal tracking-tight sm:text-5xl">Make it <span class="text-zinc-500 dark:text-zinc-400">yours</span></h2>
-                        <p class="mt-4 text-lg text-zinc-600 dark:text-zinc-400">Two variables restyle everything, in light and dark. Try it: the preview is live.</p>
+                        <p class="mt-4 text-lg text-zinc-600 dark:text-zinc-400">Two variables restyle everything, in light and dark. Try it: the preview is live, with its own dark mode.</p>
 
                         <fieldset class="mt-10">
                             <legend class="text-sm font-medium">Primary colour</legend>
@@ -342,8 +340,8 @@
                         </div>
 
                         <div class="mt-8">
-                            {{-- Dark mode is the page's: it can't be undone for one box, so the switch changes the page. --}}
-                            <x-gui::switch name="home_dark" label="Dark mode" x-model="dark" />
+                            {{-- Only the preview: the page's own theme stays as it is (the button at the top changes that). --}}
+                            <x-gui::switch name="home_dark" label="Dark preview" x-model="dark" />
                         </div>
 
                         <div class="mt-10">
@@ -354,6 +352,7 @@
 
                     {{-- The preview: the theme's variables set on this box alone. --}}
                     <div
+                        x-bind:class="dark ? 'dark' : 'light'"
                         x-bind:style="`--color-gui-primary: var(--color-${color}-600); --color-gui-primary-text: var(--color-${color}-${dark ? 400 : 600}); --radius-gui: ${radii[radius]}`"
                         class="self-start rounded-3xl bg-white p-6 text-zinc-900 shadow-xl ring-1 ring-zinc-200 transition-colors sm:p-8 dark:bg-zinc-900 dark:text-zinc-100 dark:ring-zinc-800"
                     >

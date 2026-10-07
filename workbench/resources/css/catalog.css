@@ -10,7 +10,38 @@
 @source inline("text-{indigo,violet,blue,sky,teal,emerald,rose,orange,zinc}-400");
 @source inline("rounded-{none,sm,md,lg,xl,2xl}");
 
-@custom-variant dark (&:where(.dark, .dark *));
+/*
+ * Dark mode is a .dark class, as in the published layout. A box marked .light stays light inside a dark page, and a
+ * .dark box goes dark inside a light one, so the landing page's theme preview can pick its own mode.
+ */
+@custom-variant dark (&:where(.dark, .dark *):not(:where(.light, .light *)));
+
+/* The theme colours that change with the mode, set again for boxes that choose their own. */
+@layer base {
+    .light {
+        color-scheme: light;
+        --color-gui-primary-text: var(--color-gui-primary);
+        --color-gui-secondary-text: var(--color-gui-secondary);
+        --color-gui-success-text: var(--color-emerald-700);
+        --color-gui-warning-text: var(--color-amber-700);
+        --color-gui-danger-text: var(--color-red-700);
+        --color-gui-info-text: var(--color-sky-700);
+        --gui-chart-surface: var(--color-white);
+        --gui-chart-muted: var(--color-zinc-300);
+    }
+
+    .dark:not(:root) {
+        color-scheme: dark;
+        --color-gui-primary-text: var(--color-indigo-400);
+        --color-gui-secondary-text: var(--color-zinc-400);
+        --color-gui-success-text: var(--color-emerald-400);
+        --color-gui-warning-text: var(--color-amber-400);
+        --color-gui-danger-text: var(--color-red-400);
+        --color-gui-info-text: var(--color-sky-400);
+        --gui-chart-surface: var(--color-zinc-900);
+        --gui-chart-muted: var(--color-zinc-600);
+    }
+}
 
 [x-cloak] {
     display: none !important;
