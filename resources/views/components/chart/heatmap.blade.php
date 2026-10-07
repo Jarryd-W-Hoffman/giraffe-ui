@@ -30,7 +30,8 @@
 
     // Fewer column labels when there are many: about every 6th on narrow charts, every 3rd from 32rem.
     $count = count($columns);
-    $everySmall = max(1, (int) ceil($count / 6));
+    // A week's worth of short labels fits; more than that thins out.
+    $everySmall = $count <= 8 ? 1 : max(1, (int) ceil($count / 6));
     $everyLarge = max(1, (int) ceil($count / 12));
     $label ??= __('giraffeui::ui.heatmap_summary', ['rows' => count($rows), 'columns' => $count]);
 @endphp

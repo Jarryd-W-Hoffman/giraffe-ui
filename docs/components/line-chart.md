@@ -39,6 +39,25 @@ Two or more lines get a legend, and labels at their ends when there's room. The 
 />
 ```
 
+## Against last year, minimal
+
+dashed draws a series dashed, behind the others, for a comparison; muted colours it grey. axis="false" drops the y axis and gridlines; hover, the keyboard and "Show the data" still give the numbers.
+
+```blade
+<x-gui::chart.line
+    :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']"
+    :series="['This year' => [52, 59, 74, 80, 61, 48, 56, 60], 'Last year' => [39, 43, 36, 48, 42, 37, 45, 41]]"
+    :colors="['Last year' => 'muted']"
+    :dashed="['Last year']"
+    :axis="false"
+    :height="180"
+    prefix="$"
+    suffix="K"
+    curve
+    area
+/>
+```
+
 ## Highlight one series
 
 highlight keeps one line in colour and steps the rest back to grey, for "how are we doing against everyone else".
@@ -103,8 +122,10 @@ A missing value (null) breaks the line rather than pretending it was zero. The y
 | `labels` | `array` | `[]` | The x axis, in order: dates, months, weeks. |
 | `series` | `array` | `null` | name =&gt; values for several lines, values lined up with labels. Up to 8. |
 | `data, name` | `array, string` | `null` | One line instead of series. |
-| `colors` | `array` | `[]` | name =&gt; chart-1…chart-8, to pin a series to its colour. |
-| `area` | `bool` | `false` | A soft fill under each line. Best for one series. |
+| `colors` | `array` | `[]` | name =&gt; chart-1…chart-8 (or any theme colour), to pin a series to its colour. muted is the grey that recedes. |
+| `area` | `bool` | `false` | A soft fill under each line that fades towards the baseline. Best for one series. |
+| `dashed` | `array` | `[]` | Series names to draw dashed, for a comparison such as last year or a forecast. |
+| `axis` | `bool` | `true` | The y axis and its gridlines. Turn off for a minimal chart; the tooltip and table still give exact values. |
 | `stacked` | `bool` | `false` | Stack the series, so the top line is the total. Turns area on. |
 | `curve` | `bool` | `false` | Smooth curves that never overshoot the data. |
 | `markers` | `bool` | `false` | A dot at every point. |

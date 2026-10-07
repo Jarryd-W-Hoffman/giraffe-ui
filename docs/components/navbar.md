@@ -36,6 +36,19 @@ The current page is marked with aria-current="page", worked out from the URL unl
 </x-gui::navbar>
 ```
 
+## Pills
+
+variant="pills" makes each link a rounded pill and fills the current one. The Dashboard example uses it.
+
+```blade
+<x-gui::navbar variant="pills" label="Pills example">
+    <x-slot:brand><span class="font-semibold">Acme</span></x-slot:brand>
+    <x-gui::navbar.item href="#" current>Overview</x-gui::navbar.item>
+    <x-gui::navbar.item href="#">Analytics</x-gui::navbar.item>
+    <x-gui::navbar.item href="#">Reports</x-gui::navbar.item>
+</x-gui::navbar>
+```
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -44,6 +57,7 @@ The current page is marked with aria-current="page", worked out from the URL unl
 | `menu-label` | `string` | `'Menu'` | The small-screen menu button's accessible name (translatable). |
 | `sticky` | `bool` | `false` | Keep the bar at the top of the window, over a blurred background. |
 | `container` | `string` | `'max-w-6xl'` | Width classes for the bar's contents, e.g. max-w-7xl. |
+| `variant` | `'default' \| 'pills'` | `'default'` | pills: each link a rounded pill, the current one filled. |
 | `href (item)` | `string` | `required` |  |
 | `current (item)` | `bool \| null` | `null` | Mark the item as the current page. By default it is when its URL is the page being shown. |
 

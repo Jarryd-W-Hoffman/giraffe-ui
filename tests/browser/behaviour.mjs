@@ -507,14 +507,14 @@ await check('scatter and heatmap: arrow keys read out a point, and a cell', asyn
 });
 
 await check('sidebar: collapses to a rail and remembers it, and a submenu opens the sidebar from the rail', async () => {
-    await visit('examples/dashboard');
+    await visit('examples/settings');
     await page.evaluate(() => localStorage.removeItem('gui-sidebar-collapsed'));
-    await visit('examples/dashboard');
+    await visit('examples/settings');
     const layout = page.locator('[data-sidebar-layout]');
     await page.getByRole('button', { name: 'Collapse sidebar' }).click();
     expect(await layout.evaluate((el) => el.hasAttribute('data-collapsed')), 'it did not collapse');
     expect(await page.locator('aside a', { hasText: 'Settings' }).getAttribute('href') !== null, 'the rail lost its links');
-    await visit('examples/dashboard');
+    await visit('examples/settings');
     expect(await layout.evaluate((el) => el.hasAttribute('data-collapsed')), 'it forgot after a reload');
     // In the rail, a submenu expands the sidebar and opens.
     await page.locator('aside summary', { hasText: 'Projects' }).click();

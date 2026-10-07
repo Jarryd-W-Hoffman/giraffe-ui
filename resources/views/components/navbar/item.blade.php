@@ -20,6 +20,8 @@
             'group-data-[place=bar]/navbar:aria-[current=page]:bg-zinc-100 dark:group-data-[place=bar]/navbar:aria-[current=page]:bg-zinc-800',
             'group-data-[place=menu]/navbar:w-full group-data-[place=menu]/navbar:py-2.5 group-data-[place=menu]/navbar:text-base group-data-[place=menu]/navbar:aria-[current=page]:bg-zinc-100 dark:group-data-[place=menu]/navbar:aria-[current=page]:bg-zinc-800',
             'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gui-primary-text',
+            'group-data-[variant=pills]/navbar:rounded-full group-data-[variant=pills]/navbar:bg-zinc-100 group-data-[variant=pills]/navbar:px-4 dark:group-data-[variant=pills]/navbar:bg-zinc-900',
+            'group-data-[variant=pills]/navbar:aria-[current=page]:bg-zinc-900 group-data-[variant=pills]/navbar:aria-[current=page]:text-white dark:group-data-[variant=pills]/navbar:aria-[current=page]:bg-white dark:group-data-[variant=pills]/navbar:aria-[current=page]:text-zinc-900',
         ]) }}
     >{{ $slot }}</a>
 </li>

@@ -2,141 +2,249 @@
 
 @section('content')
     @php
-        $orders = [
-            ['id' => '#1048', 'customer' => 'Ada Lovelace', 'date' => '5 Oct 2026', 'status' => 'Paid', 'total' => '$248.00'],
-            ['id' => '#1047', 'customer' => 'Grace Hopper', 'date' => '5 Oct 2026', 'status' => 'Pending', 'total' => '$96.50'],
-            ['id' => '#1046', 'customer' => 'Alan Turing', 'date' => '4 Oct 2026', 'status' => 'Paid', 'total' => '$1,240.00'],
-            ['id' => '#1045', 'customer' => 'Katherine Johnson', 'date' => '4 Oct 2026', 'status' => 'Refunded', 'total' => '$32.00'],
-            ['id' => '#1044', 'customer' => 'Margaret Hamilton', 'date' => '3 Oct 2026', 'status' => 'Paid', 'total' => '$410.75'],
+        $photo = \Workbench\App\Catalog::data()['photo'];
+
+        // Where the money went this month: each part's share sets its width; the bars are decoration.
+        $breakdown = [
+            ['label' => 'Invest', 'value' => 14465, 'change' => '+23%', 'style' => 'solid'],
+            ['label' => 'Products', 'value' => 22458.7, 'change' => '+12%', 'style' => 'stripes'],
+            ['label' => 'Other', 'value' => 6034.3, 'change' => '+1.2%', 'style' => 'faint'],
         ];
-        $statusColors = ['Paid' => 'success', 'Pending' => 'warning', 'Refunded' => 'secondary'];
+        $breakdownMax = max(array_column($breakdown, 'value'));
+        $breakdownTotal = array_sum(array_column($breakdown, 'value'));
+
+        $weeks = ['1 Mar', '15 Mar', '1 Apr', '15 Apr', '1 May', '15 May', '1 Jun', '15 Jun', '1 Jul', '15 Jul', '1 Aug', '15 Aug'];
+        $income = [5200, 5900, 7400, 7968, 6100, 4800, 5600, 5957, 4700, 5300, 6800, 6200];
+        $expenses = [3900, 4300, 3600, 4800, 4200, 3700, 4500, 4100, 3800, 4600, 4000, 4400];
+
+        $hours = ['9 am', '11 am', '1 pm', '3 pm', '5 pm', '7 pm'];
+        $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        $activity = [
+            [3, 4, 6, 9, 5, 2, 1],
+            [5, 6, 12, 14, 11, 4, 3],
+            [4, 13, 15, 16, 14, 12, 3],
+            [9, 10, 15, 18, 15, 13, 8],
+            [4, 8, 9, 15, 19, 5, 3],
+            [2, 3, 3, 7, 4, 2, 2],
+        ];
+
+        $transactions = [
+            ['name' => 'Fastly', 'category' => 'Hosting', 'dot' => 'bg-lime-500', 'amount' => '-$40.00'],
+            ['name' => 'Grace Hopper', 'category' => 'Transfer', 'dot' => 'bg-violet-500', 'amount' => '-$86.50'],
+            ['name' => 'Figma', 'category' => 'Software', 'dot' => 'bg-sky-500', 'amount' => '-$248.80'],
+            ['name' => 'Linear', 'category' => 'Software', 'dot' => 'bg-sky-500', 'amount' => '-$96.00'],
+            ['name' => 'Alan Turing', 'category' => 'Transfer', 'dot' => 'bg-violet-500', 'amount' => '+$500.00'],
+        ];
+
+        // Pill buttons: dark on light, light on dark.
+        $pill = 'rounded-full! bg-zinc-900! text-white! hover:bg-zinc-700! dark:bg-white! dark:text-zinc-900! dark:hover:bg-zinc-200!';
+        $round = 'flex size-9 cursor-pointer items-center justify-center rounded-full bg-zinc-100 text-zinc-700 transition-colors hover:bg-zinc-200 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100';
+        $small = 'flex size-8 cursor-pointer items-center justify-center rounded-full bg-zinc-200 text-zinc-700 transition-colors hover:bg-zinc-300 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:text-zinc-100';
+        $cardClass = 'rounded-3xl border-transparent! bg-zinc-100! shadow-none! dark:bg-zinc-900!';
     @endphp
 
-    <x-example::app-shell>
-        <div class="mx-auto max-w-6xl space-y-8">
-            <div class="flex flex-wrap items-end justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl font-semibold tracking-tight">Dashboard</h1>
-                    <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">How the shop is doing this month.</p>
+    {{-- The palette for this page: lime for income and violet for activity, over the theme's chart colours. --}}
+    <div class="min-h-dvh bg-white [--color-gui-chart-1:var(--color-lime-600)] [--color-gui-chart-7:var(--color-violet-600)] [--gui-chart-surface:var(--color-zinc-100)] dark:bg-black dark:[--color-gui-chart-1:var(--color-lime-300)] dark:[--color-gui-chart-7:var(--color-violet-500)] dark:[--gui-chart-surface:var(--color-zinc-900)]">
+        <x-gui::navbar variant="pills" container="max-w-7xl" class="border-transparent! bg-transparent! dark:border-transparent!">
+            <x-slot:brand>
+                <a href="/catalog/examples/dashboard" class="flex items-center gap-2.5 rounded-full text-lg font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gui-primary-text">
+                    <span class="size-8 rounded-full bg-[conic-gradient(var(--color-violet-500)_0_25%,var(--color-violet-200)_0)]" aria-hidden="true"></span>
+                    Acme
+                </a>
+            </x-slot:brand>
+
+            <x-gui::navbar.item href="/catalog/examples/dashboard">Overview</x-gui::navbar.item>
+            <x-gui::navbar.item href="#">Analytics</x-gui::navbar.item>
+            @if (\Workbench\App\Catalog::livewire())
+                <x-gui::navbar.item href="/catalog/examples/customers">Customers</x-gui::navbar.item>
+            @endif
+            <x-gui::navbar.item href="#">Reports</x-gui::navbar.item>
+            <x-gui::navbar.item href="/catalog/examples/settings">Settings</x-gui::navbar.item>
+
+            <x-slot:actions>
+                <button type="button" class="{{ $round }} hidden sm:flex" aria-label="Search" x-on:click="GiraffeUI.toast('Search is coming soon')">
+                    <x-gui::icon name="magnifying-glass" size="sm" />
+                </button>
+                <a href="#" class="{{ $round }} relative" aria-label="Messages, 2 unread">
+                    <x-gui::icon name="envelope" size="sm" />
+                    <span class="absolute top-2 end-2 size-2 rounded-full bg-gui-danger ring-2 ring-zinc-100 dark:ring-zinc-800" aria-hidden="true"></span>
+                </a>
+                <x-gui::dropdown id="account-menu" position="bottom-end">
+                    <x-slot:trigger>
+                        <button type="button" commandfor="account-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Account" class="cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text">
+                            <x-gui::avatar :src="$photo" name="Ada Lovelace" />
+                        </button>
+                    </x-slot:trigger>
+                    <x-gui::dropdown.item href="#">Profile</x-gui::dropdown.item>
+                    <x-gui::dropdown.item href="/catalog/examples/settings">Settings</x-gui::dropdown.item>
+                    <x-gui::dropdown.separator />
+                    <x-gui::dropdown.item href="/catalog/examples/sign-in">Sign out</x-gui::dropdown.item>
+                </x-gui::dropdown>
+            </x-slot:actions>
+        </x-gui::navbar>
+
+        <main class="mx-auto max-w-7xl space-y-10 px-4 pt-6 pb-16 sm:px-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <h1 class="text-4xl font-normal tracking-tight sm:text-5xl">Welcome back, <span class="text-zinc-500 dark:text-zinc-400">Ada</span></h1>
+                <div style="--radius-gui: 9999px">
+                    <x-gui::segmented-control name="period" label="Period" size="sm" :options="['week' => 'Week', 'month' => 'Month', 'year' => 'Year']" value="month" />
                 </div>
-                <div class="flex items-center gap-2">
-                    <x-gui::segmented-control name="range" label="Period" size="sm" :options="['7d' => '7 days', '30d' => '30 days', '12m' => '12 months']" value="30d" />
-                    <x-gui::button size="sm" x-on:click="GiraffeUI.toast('Report exported', { color: 'success' })">
-                        <x-gui::icon name="arrow-down" size="sm" />
-                        Export
-                    </x-gui::button>
-                </div>
             </div>
 
-            <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <x-gui::card>
-                    <x-gui::stat label="Revenue" value="$48,200" change="12%" trend="up" description="vs last month" />
-                    <x-gui::sparkline :data="[31, 34, 33, 36, 35, 38, 37, 41, 40, 43, 45, 48.2]" prefix="$" suffix="K" class="mt-4 h-10 w-full" />
-                </x-gui::card>
-                <x-gui::card>
-                    <x-gui::stat label="Orders" value="1,204" change="4%" trend="up" description="vs last month" />
-                    <x-gui::sparkline :data="[980, 1010, 995, 1060, 1040, 1100, 1090, 1120, 1150, 1130, 1160, 1204]" class="mt-4 h-10 w-full" />
-                </x-gui::card>
-                <x-gui::card>
-                    <x-gui::stat label="Refund rate" value="1.8%" change="0.3 pts" trend="down" invert description="vs last month" />
-                    <x-gui::sparkline :data="[2.6, 2.4, 2.5, 2.2, 2.3, 2.1, 2.2, 1.9, 2.0, 1.9, 2.1, 1.8]" suffix="%" class="mt-4 h-10 w-full" />
-                </x-gui::card>
-                <x-gui::card>
-                    <x-gui::stat label="Avg. response" value="2.4 h" change="0.6 h" trend="up" invert description="vs last month" />
-                    <x-gui::sparkline :data="[1.6, 1.7, 1.5, 1.8, 1.9, 1.8, 2.0, 2.1, 1.9, 2.2, 2.3, 2.4]" suffix=" h" class="mt-4 h-10 w-full" />
-                </x-gui::card>
+            <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-6">
+                {{-- The headline: total revenue, with the cents quieter than the dollars. --}}
+                <section aria-labelledby="revenue-heading" class="space-y-6">
+                    <div>
+                        <h2 id="revenue-heading" class="text-base text-zinc-600 dark:text-zinc-400">Total revenue</h2>
+                        <p class="mt-2 flex flex-wrap items-baseline gap-x-3">
+                            <span class="text-5xl font-semibold tracking-tight tabular-nums">$48,200<span class="text-zinc-500">.00</span></span>
+                            <span class="text-sm font-medium text-gui-success-text"><span class="sr-only">Up </span>+12.4%<span class="sr-only"> on last month</span></span>
+                        </p>
+                    </div>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400">Available to spend: <span class="font-semibold text-zinc-900 tabular-nums dark:text-zinc-100">$31,450.00</span></p>
+                    <div class="flex items-center gap-2">
+                        <x-gui::button size="sm" :class="$pill" x-on:click="GiraffeUI.toast('Transfer started', { color: 'success' })">
+                            Transfer <x-gui::icon name="arrow-up" size="sm" />
+                        </x-gui::button>
+                        <x-gui::button size="sm" :class="$pill" x-on:click="GiraffeUI.toast('Request sent', { color: 'success' })">
+                            Request <x-gui::icon name="arrow-down" size="sm" />
+                        </x-gui::button>
+                        <x-gui::dropdown id="revenue-menu">
+                            <x-slot:trigger>
+                                <button type="button" commandfor="revenue-menu" command="toggle-popover" aria-haspopup="menu" aria-label="More actions" class="flex size-8 cursor-pointer items-center justify-center rounded-full border border-zinc-300 text-zinc-700 hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-900">
+                                    <x-gui::icon name="ellipsis-vertical" size="sm" />
+                                </button>
+                            </x-slot:trigger>
+                            <x-gui::dropdown.item x-on:click="GiraffeUI.toast('Report exported', { color: 'success' })">Export report</x-gui::dropdown.item>
+                            <x-gui::dropdown.item href="#">View statements</x-gui::dropdown.item>
+                        </x-gui::dropdown>
+                    </div>
+                </section>
+
+                {{-- Where it went: a list of the parts, drawn as one split bar. Each column starts at a divider. --}}
+                <section aria-labelledby="breakdown-heading">
+                    <h2 id="breakdown-heading" class="sr-only">Spending by category this month</h2>
+                    <div class="relative">
+                        {{-- The average, dashed across every part. --}}
+                        <div class="pointer-events-none absolute inset-x-0 top-[42%] border-t border-dashed border-zinc-300 dark:border-zinc-700" aria-hidden="true">
+                            <span class="absolute end-[12%] -translate-y-1/2 rounded-full bg-zinc-200 px-2.5 py-0.5 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">Average</span>
+                        </div>
+                        <dl class="flex h-52 gap-4">
+                            @foreach ($breakdown as $part)
+                                @php($rise = round(48 - $part['value'] / $breakdownMax * 44))
+                                {{-- Equal columns on phones, so every amount fits; sized by share from sm up. --}}
+                                <div class="flex min-w-0 flex-1 flex-col border-s border-zinc-200 ps-3 sm:flex-(--share) sm:ps-4 dark:border-zinc-800" style="--share: {{ round($part['value'] / $breakdownTotal * 100, 1) }} 1 0%">
+                                    <dd class="text-base tabular-nums sm:text-xl" style="margin-top: {{ $rise }}px">${{ number_format($part['value'], 2) }}</dd>
+                                    <dt class="mt-auto mb-2 truncate text-sm">
+                                        <span class="font-medium">{{ $part['change'] }}</span>
+                                        <span class="text-zinc-600 dark:text-zinc-400">{{ $part['label'] }}</span>
+                                    </dt>
+                                    <div class="h-12" aria-hidden="true">
+                                        @if ($part['style'] === 'solid')
+                                            <div class="h-full rounded-xl bg-violet-600"></div>
+                                        @else
+                                            {{-- Thin rounded stripes, fainter for the smaller part. --}}
+                                            <div class="flex h-full justify-between gap-1 overflow-hidden">
+                                                @foreach (range(1, $part['style'] === 'stripes' ? 22 : 8) as $stripe)
+                                                    <span @class(['w-1.5 shrink-0 rounded-full', 'bg-violet-500' => $part['style'] === 'stripes', 'bg-violet-500/35' => $part['style'] === 'faint'])></span>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </dl>
+                        <div class="mt-3 flex justify-between text-sm text-zinc-600 dark:text-zinc-400">
+                            <span>1 October</span>
+                            <span>31 October</span>
+                        </div>
+                    </div>
+                </section>
             </div>
 
-            <div class="grid gap-6 xl:grid-cols-3">
-            <x-gui::card title="Revenue" description="Online and in-store sales, by month." class="xl:col-span-2">
-                <x-gui::chart.line
-                    :labels="['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']"
-                    :series="[
-                        'Online' => [21300, 26800, 18400, 19900, 22700, 24100, 25600, 24900, 27300, 28800, 30100, 33600],
-                        'In store' => [9100, 12400, 7600, 7900, 8800, 9300, 9900, 9600, 10400, 10900, 11800, 14600],
-                    ]"
-                    prefix="$"
-                    compact
-                />
-            </x-gui::card>
-
-            <div class="space-y-6">
-                <x-gui::card title="Payment methods">
-                    <x-gui::chart.donut :size="120" :thickness="12" :data="['Card' => 31200, 'PayPal' => 11400, 'Bank transfer' => 4100, 'Gift card' => 1500]" prefix="$" compact />
+            <div class="grid gap-4 lg:grid-cols-3">
+                <x-gui::card :class="$cardClass">
+                    <div class="mb-4 flex items-center justify-between gap-2">
+                        <h2 class="flex items-center gap-2.5 text-lg">
+                            <x-gui::icon name="presentation-chart-line" class="text-zinc-500 dark:text-zinc-400" />
+                            Cash flow
+                        </h2>
+                        <x-gui::dropdown id="cash-flow-menu" position="bottom-end">
+                            <x-slot:trigger>
+                                <button type="button" commandfor="cash-flow-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Cash flow options" class="{{ $small }}">
+                                    <x-gui::icon name="ellipsis-vertical" size="sm" />
+                                </button>
+                            </x-slot:trigger>
+                            <x-gui::dropdown.item href="#">Last 6 months</x-gui::dropdown.item>
+                            <x-gui::dropdown.item href="#">Last 12 months</x-gui::dropdown.item>
+                        </x-gui::dropdown>
+                    </div>
+                    <x-gui::chart.line
+                        :labels="$weeks"
+                        :series="['Income' => $income, 'Expenses' => $expenses]"
+                        :colors="['Income' => 'chart-1', 'Expenses' => 'muted']"
+                        :dashed="['Expenses']"
+                        :axis="false"
+                        :height="180"
+                        prefix="$"
+                        compact
+                        curve
+                        area
+                    />
                 </x-gui::card>
-                <x-gui::card title="Orders by day">
-                    <x-gui::chart.bar name="Orders" :labels="['M', 'T', 'W', 'T', 'F', 'S', 'S']" :data="[182, 214, 198, 246, 271, 140, 96]" :height="110" />
+
+                <x-gui::card :class="$cardClass">
+                    <div class="mb-4 flex items-center justify-between gap-2">
+                        <h2 class="flex items-center gap-2.5 text-lg">
+                            <x-gui::icon name="globe-alt" class="text-zinc-500 dark:text-zinc-400" />
+                            Activity by time
+                        </h2>
+                        <a href="#" class="{{ $small }}" aria-label="Open the activity report">
+                            <x-gui::icon name="arrow-up-right" size="sm" />
+                        </a>
+                    </div>
+                    <x-gui::chart.heatmap
+                        label="Orders by day and time"
+                        color="chart-7"
+                        :rows="$hours"
+                        :columns="$days"
+                        :data="$activity"
+                    />
                 </x-gui::card>
-            </div>
-            </div>
 
-            <div class="grid gap-6 xl:grid-cols-3">
-                <x-gui::card title="Recent orders" description="The last five orders across all channels." class="self-start xl:col-span-2">
-                    <x-slot:actions>
-                        <x-gui::button href="#" variant="outline" color="secondary" size="sm">View all</x-gui::button>
-                    </x-slot:actions>
-
-                    <x-gui::table label="Recent orders">
-                        <x-slot:head>
-                            <x-gui::table.heading>Order</x-gui::table.heading>
-                            <x-gui::table.heading>Customer</x-gui::table.heading>
-                            <x-gui::table.heading class="hidden sm:table-cell">Date</x-gui::table.heading>
-                            <x-gui::table.heading>Status</x-gui::table.heading>
-                            <x-gui::table.heading class="text-end">Total</x-gui::table.heading>
-                        </x-slot:head>
-
-                        @foreach ($orders as $order)
-                            <x-gui::table.row>
-                                <x-gui::table.cell class="font-medium">{{ $order['id'] }}</x-gui::table.cell>
-                                <x-gui::table.cell>{{ $order['customer'] }}</x-gui::table.cell>
-                                <x-gui::table.cell class="hidden sm:table-cell">{{ $order['date'] }}</x-gui::table.cell>
-                                <x-gui::table.cell><x-gui::badge size="sm" :color="$statusColors[$order['status']]">{{ $order['status'] }}</x-gui::badge></x-gui::table.cell>
-                                <x-gui::table.cell class="text-end tabular-nums">{{ $order['total'] }}</x-gui::table.cell>
-                            </x-gui::table.row>
+                <x-gui::card :class="$cardClass">
+                    <div class="mb-4 flex items-center justify-between gap-2">
+                        <h2 class="flex items-center gap-2.5 text-lg">
+                            <x-gui::icon name="arrows-right-left" class="text-zinc-500 dark:text-zinc-400" />
+                            Recent transactions
+                        </h2>
+                        <a href="#" class="{{ $small }}" aria-label="Search transactions">
+                            <x-gui::icon name="magnifying-glass" size="sm" />
+                        </a>
+                    </div>
+                    <ul class="divide-y divide-zinc-200/70 dark:divide-zinc-800">
+                        @foreach ($transactions as $i => $transaction)
+                            <li class="flex items-center gap-3 py-3">
+                                <span class="min-w-0 flex-1 truncate text-sm font-medium">{{ $transaction['name'] }}</span>
+                                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-200 px-2.5 py-1 text-xs text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                    <span class="size-1.5 rounded-full {{ $transaction['dot'] }}" aria-hidden="true"></span>
+                                    {{ $transaction['category'] }}
+                                </span>
+                                <span class="w-20 shrink-0 text-end text-sm font-medium tabular-nums">{{ $transaction['amount'] }}</span>
+                                <x-gui::dropdown id="transaction-{{ $i }}" position="bottom-end">
+                                    <x-slot:trigger>
+                                        <button type="button" commandfor="transaction-{{ $i }}" command="toggle-popover" aria-haspopup="menu" aria-label="Options for {{ $transaction['name'] }}" class="-me-1.5 flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-zinc-500 hover:bg-zinc-200 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
+                                            <x-gui::icon name="ellipsis-vertical" size="sm" />
+                                        </button>
+                                    </x-slot:trigger>
+                                    <x-gui::dropdown.item href="#">View receipt</x-gui::dropdown.item>
+                                    <x-gui::dropdown.item href="#">Change category</x-gui::dropdown.item>
+                                </x-gui::dropdown>
+                            </li>
                         @endforeach
-                    </x-gui::table>
+                    </ul>
                 </x-gui::card>
-
-                <div class="space-y-6">
-                    <x-gui::card title="Monthly goals">
-                        <div class="space-y-5">
-                            <x-gui::progress :value="48200" :max="60000" label="Revenue: $48,200 of $60,000" show-value />
-                            <x-gui::progress :value="1204" :max="1500" label="Orders: 1,204 of 1,500" show-value />
-                            <x-gui::progress :value="9" :max="10" label="New products: 9 of 10" show-value color="success" />
-                        </div>
-                    </x-gui::card>
-
-                    <x-gui::card title="Team">
-                        <div class="flex items-center justify-between gap-4">
-                            {{-- The rings match the card, not the page. --}}
-                            <x-gui::avatar.group :avatars="$users" :max="3" label="Team members" class="dark:*:ring-zinc-900!" />
-                            <x-gui::button variant="outline" color="secondary" size="sm" commandfor="invite" command="show-modal">
-                                <x-gui::icon name="plus" size="sm" />
-                                Invite
-                            </x-gui::button>
-                        </div>
-                    </x-gui::card>
-
-                    <x-gui::alert color="warning" title="Payout on hold">
-                        Confirm your bank details to receive this week's payout.
-                    </x-gui::alert>
-                </div>
             </div>
-        </div>
-    </x-example::app-shell>
-
-    <x-gui::modal id="invite" title="Invite a teammate" description="They'll get an email with a link to join." size="sm">
-        <form id="invite-form" class="space-y-4" onsubmit="event.preventDefault(); this.closest('dialog').close(); GiraffeUI.toast('Invitation sent', { color: 'success' })">
-            <x-gui::field label="Email" name="invite_email" required>
-                <x-gui::input type="email" placeholder="name@example.com" />
-            </x-gui::field>
-            <x-gui::field label="Role" name="invite_role">
-                <x-gui::select :options="['admin' => 'Admin', 'editor' => 'Editor', 'viewer' => 'Viewer']" value="editor" />
-            </x-gui::field>
-        </form>
-        <x-slot:footer>
-            <x-gui::modal.close>Cancel</x-gui::modal.close>
-            <x-gui::button type="submit" form="invite-form">Send invite</x-gui::button>
-        </x-slot:footer>
-    </x-gui::modal>
+        </main>
+    </div>
 @endsection

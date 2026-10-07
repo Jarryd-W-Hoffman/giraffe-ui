@@ -2276,6 +2276,24 @@ class Catalog
                             BLADE,
                     ],
                     [
+                        'title' => 'Against last year, minimal',
+                        'description' => 'dashed draws a series dashed, behind the others, for a comparison; muted colours it grey. axis="false" drops the y axis and gridlines; hover, the keyboard and "Show the data" still give the numbers.',
+                        'code' => <<<'BLADE'
+                            <x-gui::chart.line
+                                :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']"
+                                :series="['This year' => [52, 59, 74, 80, 61, 48, 56, 60], 'Last year' => [39, 43, 36, 48, 42, 37, 45, 41]]"
+                                :colors="['Last year' => 'muted']"
+                                :dashed="['Last year']"
+                                :axis="false"
+                                :height="180"
+                                prefix="$"
+                                suffix="K"
+                                curve
+                                area
+                            />
+                            BLADE,
+                    ],
+                    [
                         'title' => 'Highlight one series',
                         'description' => 'highlight keeps one line in colour and steps the rest back to grey, for "how are we doing against everyone else".',
                         'code' => <<<'BLADE'
@@ -2334,8 +2352,10 @@ class Catalog
                     ['labels', 'array', '[]', 'The x axis, in order: dates, months, weeks.'],
                     ['series', 'array', 'null', 'name => values for several lines, values lined up with labels. Up to 8.'],
                     ['data, name', 'array, string', 'null', 'One line instead of series.'],
-                    ['colors', 'array', '[]', 'name => chart-1…chart-8, to pin a series to its colour.'],
-                    ['area', 'bool', 'false', 'A soft fill under each line. Best for one series.'],
+                    ['colors', 'array', '[]', 'name => chart-1…chart-8 (or any theme colour), to pin a series to its colour. muted is the grey that recedes.'],
+                    ['area', 'bool', 'false', 'A soft fill under each line that fades towards the baseline. Best for one series.'],
+                    ['dashed', 'array', '[]', 'Series names to draw dashed, for a comparison such as last year or a forecast.'],
+                    ['axis', 'bool', 'true', 'The y axis and its gridlines. Turn off for a minimal chart; the tooltip and table still give exact values.'],
                     ['stacked', 'bool', 'false', 'Stack the series, so the top line is the total. Turns area on.'],
                     ['curve', 'bool', 'false', 'Smooth curves that never overshoot the data.'],
                     ['markers', 'bool', 'false', 'A dot at every point.'],
@@ -2645,7 +2665,7 @@ class Catalog
                 'examples' => [
                     [
                         'title' => 'Navigation',
-                        'description' => 'A labelled nav of groups and links. The link for the page being shown gets aria-current="page" automatically, or set current yourself. Group headings name their group without an id, so the layout can render the same navigation in its column and its drawer. See it all together in the Dashboard example.',
+                        'description' => 'A labelled nav of groups and links. The link for the page being shown gets aria-current="page" automatically, or set current yourself. Group headings name their group without an id, so the layout can render the same navigation in its column and its drawer. See it all together in the Settings example.',
                         'code' => <<<'BLADE'
                             <div class="rounded-gui border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900">
                                 <x-gui::sidebar label="Example">
@@ -2659,7 +2679,7 @@ class Catalog
                                     </x-gui::sidebar.group>
                                 </x-gui::sidebar>
                             </div>
-                            <x-gui::button href="/catalog/examples/dashboard" variant="outline" color="secondary">Open the Dashboard example →</x-gui::button>
+                            <x-gui::button href="/catalog/examples/settings" variant="outline" color="secondary">Open the Settings example →</x-gui::button>
                             BLADE,
                     ],
                     [
@@ -2690,7 +2710,7 @@ class Catalog
                     ],
                     [
                         'title' => 'Collapsing to a rail',
-                        'description' => 'collapsible on the layout adds a Collapse sidebar button below the navigation. Collapsed, the column becomes a rail of icons: hover or focus one for its name, and screen readers still hear every label. Items without an icon show their first letter. The choice is remembered in this browser and applied before the page paints. Below, a rail on its own (data-collapsed is what the button sets); the Dashboard example has the real thing.',
+                        'description' => 'collapsible on the layout adds a Collapse sidebar button below the navigation. Collapsed, the column becomes a rail of icons: hover or focus one for its name, and screen readers still hear every label. Items without an icon show their first letter. The choice is remembered in this browser and applied before the page paints. Below, a rail on its own (data-collapsed is what the button sets); the Settings example has the real thing.',
                         'code' => <<<'BLADE'
                             <div data-collapsed class="w-16 rounded-gui border border-zinc-200 bg-zinc-50 px-3 py-3 dark:border-zinc-800 dark:bg-zinc-900">
                                 <x-gui::sidebar label="Rail example">
@@ -2814,12 +2834,25 @@ class Catalog
                             </x-gui::navbar>
                             BLADE,
                     ],
+                    [
+                        'title' => 'Pills',
+                        'description' => 'variant="pills" makes each link a rounded pill and fills the current one. The Dashboard example uses it.',
+                        'code' => <<<'BLADE'
+                            <x-gui::navbar variant="pills" label="Pills example">
+                                <x-slot:brand><span class="font-semibold">Acme</span></x-slot:brand>
+                                <x-gui::navbar.item href="#" current>Overview</x-gui::navbar.item>
+                                <x-gui::navbar.item href="#">Analytics</x-gui::navbar.item>
+                                <x-gui::navbar.item href="#">Reports</x-gui::navbar.item>
+                            </x-gui::navbar>
+                            BLADE,
+                    ],
                 ],
                 'props' => [
                     ['label', 'string', "'Main'", 'Names the navigation landmark (translatable).'],
                     ['menu-label', 'string', "'Menu'", 'The small-screen menu button\'s accessible name (translatable).'],
                     ['sticky', 'bool', 'false', 'Keep the bar at the top of the window, over a blurred background.'],
                     ['container', 'string', "'max-w-6xl'", 'Width classes for the bar\'s contents, e.g. max-w-7xl.'],
+                    ['variant', "'default' | 'pills'", "'default'", 'pills: each link a rounded pill, the current one filled.'],
                     ['href (item)', 'string', 'required', ''],
                     ['current (item)', 'bool | null', 'null', 'Mark the item as the current page. By default it is when its URL is the page being shown.'],
                 ],
