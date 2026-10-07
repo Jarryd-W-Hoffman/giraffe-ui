@@ -240,10 +240,9 @@
         },
         key(event) {
             const weekday = (this.current.getUTCDay() - this.weekStart + 7) % 7;
-            const back = this.$refs.grid.matches(':dir(rtl)') ? 1 : -1;
             const keys = {
-                ArrowLeft: () => this.move(back),
-                ArrowRight: () => this.move(-back),
+                ArrowLeft: () => this.move(-1),
+                ArrowRight: () => this.move(1),
                 ArrowUp: () => this.move(-7),
                 ArrowDown: () => this.move(7),
                 Home: () => this.move(-weekday),
@@ -412,11 +411,11 @@
     >
         <div class="mb-2 flex items-center justify-between gap-2">
             <button type="button" aria-label="{{ $previousLabel }}" x-on:click="move(0, -1)" class="flex size-8 items-center justify-center rounded-[calc(var(--radius-gui)-2px)] text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
-                <x-gui::icon name="chevron-left" size="sm" class="rtl:rotate-180" />
+                <x-gui::icon name="chevron-left" size="sm" />
             </button>
             <h2 id="{{ $id }}-month" class="font-semibold" aria-live="polite" x-text="title"></h2>
             <button type="button" aria-label="{{ $nextLabel }}" x-on:click="move(0, 1)" class="flex size-8 items-center justify-center rounded-[calc(var(--radius-gui)-2px)] text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100">
-                <x-gui::icon name="chevron-right" size="sm" class="rtl:rotate-180" />
+                <x-gui::icon name="chevron-right" size="sm" />
             </button>
         </div>
 

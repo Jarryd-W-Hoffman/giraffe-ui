@@ -28,7 +28,6 @@ class Anchor
     public static function pin(string $id, string $side, string $inset = '0px'): string
     {
         $name = self::name($id);
-        // Sides follow the reading direction: "left" is the start (the right, in Arabic or Hebrew) and "right" the end.
         [$property, $edge] = in_array($side, ['left', 'start'], true) ? ['inset-inline-start', 'start'] : ['inset-inline-end', 'end'];
 
         return "position-anchor: {$name}; top: calc(anchor(top) + {$inset}); bottom: calc(anchor(bottom) + {$inset}); {$property}: calc(anchor({$edge}) + {$inset})";
@@ -40,7 +39,6 @@ class Anchor
     public static function position(string $position): string
     {
         return match ($position) {
-            // start and end follow the reading direction (x-start is the left in English, the right in Arabic).
             'bottom' => '[position-area:bottom] my-1',
             'bottom-end' => '[position-area:bottom_span-x-start] my-1',
             'top' => '[position-area:top] my-1',

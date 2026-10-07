@@ -44,7 +44,7 @@
     </div>
 </div>
 
-<x-gui::drawer :id="$drawerId" :title="$drawerTitle" side="start" size="sm">
+<x-gui::drawer :id="$drawerId" :title="$drawerTitle" side="left" size="sm">
     {{ $sidebar }}
     @isset($footer)
         <div class="mt-6 border-t border-zinc-200 pt-4 dark:border-zinc-800">{{ $footer }}</div>

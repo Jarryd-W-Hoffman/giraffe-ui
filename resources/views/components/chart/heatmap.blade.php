@@ -44,7 +44,6 @@
         <p class="flex h-40 items-center justify-center rounded-gui border border-dashed border-zinc-200 text-sm dark:border-zinc-800">{{ __('giraffeui::ui.no_data') }}</p>
     @else
         <div
-            dir="ltr"
             class="relative"
             x-data="{
                 row: null,

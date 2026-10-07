@@ -1,23 +1,20 @@
 <?php
 
 describe('drawer', function () {
-    it('is a labelled native dialog that slides in from the end', function () {
+    it('is a labelled native dialog that slides in from the right', function () {
         $html = (string) $this->blade('<x-gui::drawer id="cart" title="Your cart" description="2 items">Items</x-gui::drawer>');
 
         expect(attr($html, 'dialog', 'id'))->toBe('cart')
             ->and(attr($html, 'dialog', 'aria-labelledby'))->toBe('cart-title')
             ->and(attr($html, 'dialog', 'aria-describedby'))->toBe('cart-description')
-            ->and(classesOf($html, 'dialog'))->toContain('ms-auto', 'h-dvh', '[--gui-slide:100%]', 'rtl:[--gui-slide:-100%]', 'translate-x-(--gui-slide)', 'open:translate-x-0', 'border-s', 'max-w-md')
+            ->and(classesOf($html, 'dialog'))->toContain('ml-auto', 'h-dvh', 'translate-x-full', 'open:translate-x-0', 'border-l', 'max-w-md')
             ->and($html)->toContain('commandfor="cart"', 'command="close"');
     });
 
-    it('can slide in from the start, or from a fixed left or right', function () {
-        expect(classesOf((string) $this->blade('<x-gui::drawer id="nav" side="start">Menu</x-gui::drawer>'), 'dialog'))
-            ->toContain('me-auto', '[--gui-slide:-100%]', 'rtl:[--gui-slide:100%]', 'border-e')->not->toContain('ms-auto')
-            ->and(classesOf((string) $this->blade('<x-gui::drawer id="nav" side="left">Menu</x-gui::drawer>'), 'dialog'))
-            ->toContain('mr-auto', '-translate-x-full', 'border-r')
-            ->and(classesOf((string) $this->blade('<x-gui::drawer id="nav" side="right">Menu</x-gui::drawer>'), 'dialog'))
-            ->toContain('ml-auto', 'translate-x-full', 'border-l');
+    it('can slide in from the left', function () {
+        $html = (string) $this->blade('<x-gui::drawer id="nav" side="left">Menu</x-gui::drawer>');
+
+        expect(classesOf($html, 'dialog'))->toContain('mr-auto', '-translate-x-full', 'border-r')->not->toContain('ml-auto');
     });
 
     it('lets modal.close target the drawer', function () {

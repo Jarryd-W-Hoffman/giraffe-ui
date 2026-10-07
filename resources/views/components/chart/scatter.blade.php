@@ -102,7 +102,6 @@
         @endif
 
         <div
-            dir="ltr"
             class="flex gap-2 pt-2"
             x-data="{
                 index: null,
