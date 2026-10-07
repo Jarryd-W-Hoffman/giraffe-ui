@@ -6,7 +6,7 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 70 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 69 components and a catalog.
 
 ### Marketing components
 
