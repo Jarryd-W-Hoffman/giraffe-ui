@@ -28,6 +28,9 @@
         \Workbench\App\Catalog::livewire()
             ? ['slug' => 'customers', 'title' => 'Customers', 'text' => 'A sortable, filterable table, with Livewire.']
             : ['slug' => 'onboarding', 'title' => 'Onboarding', 'text' => 'A four-step setup, as plain form posts.'],
+        ['slug' => 'calendar', 'title' => 'Calendar', 'text' => 'A month of events and a day agenda.'],
+        ['slug' => 'invoice', 'title' => 'Invoice', 'text' => 'Line items, totals and payments.'],
+        ['slug' => 'store', 'title' => 'Store', 'text' => 'A product page with a cart.'],
         ['slug' => 'sign-in', 'title' => 'Sign in', 'text' => 'A split page with validation.'],
         ['slug' => 'pricing', 'title' => 'Pricing', 'text' => 'Plans, a billing switch and FAQs.'],
     ]));

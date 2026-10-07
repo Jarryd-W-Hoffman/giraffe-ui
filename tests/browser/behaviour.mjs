@@ -582,6 +582,23 @@ await check('example filters: the period and view switches change what is shown'
     await revenue.getByText('$512,900').waitFor();
 });
 
+await check('calendar, invoice and store: choosing a day, recording a payment and adding to the cart', async () => {
+    await visit('examples/calendar');
+    await page.getByRole('button', { name: /Thursday 22 October/ }).click();
+    await page.getByText('Launch rehearsal').last().waitFor();
+
+    await visit('examples/invoice');
+    await page.getByRole('button', { name: 'Record payment' }).first().click();
+    await page.locator('#record-payment').getByRole('button', { name: 'Record payment' }).click();
+    await page.getByText('Paid', { exact: true }).first().waitFor();
+
+    await visit('examples/store');
+    await page.locator('label', { has: page.locator('input[name=glaze][value=clay]') }).click();
+    expect((await page.locator('[role=img][aria-label^="The everyday mug"]').getAttribute('aria-label')).includes('clay'), 'the glaze did not change');
+    await page.getByRole('button', { name: 'Add to cart' }).click();
+    await page.getByRole('button', { name: 'Cart, 1 item' }).waitFor();
+});
+
 await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
     await visit('theme-switcher');
     const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));
