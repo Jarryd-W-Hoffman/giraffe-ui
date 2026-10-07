@@ -4,6 +4,7 @@ namespace Workbench\App;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use JayAitch\GiraffeUI\Support\Icons;
 use Livewire\Livewire;
 
 /**
@@ -1757,7 +1758,7 @@ class Catalog
                 'examples' => [
                     [
                         'title' => 'Bundled icons',
-                        'description' => 'These '.count(\JayAitch\GiraffeUI\Support\Icons::PATHS).' come with GiraffeUI, no packages needed: Heroicons\' 20px solid set. Type to filter them.',
+                        'description' => 'These '.count(Icons::PATHS).' come with GiraffeUI, no packages needed: Heroicons\' 20px solid set. Type to filter them.',
                         'code' => <<<'BLADE'
                             <div x-data="{ query: '' }" class="w-full space-y-4">
                                 <x-gui::input type="search" x-model="query" placeholder="Filter icons" aria-label="Filter icons" class="max-w-xs" />
