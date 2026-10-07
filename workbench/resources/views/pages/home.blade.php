@@ -20,11 +20,17 @@
     $colors = ['indigo', 'violet', 'blue', 'sky', 'teal', 'emerald', 'rose', 'orange'];
     $radii = ['none' => '0px', 'sm' => 'var(--radius-sm)', 'md' => 'var(--radius-md)', 'lg' => 'var(--radius-lg)', 'xl' => 'var(--radius-xl)', 'full' => '9999px'];
 
-    $examples = [
+    // Customers is a Livewire component, so without Livewire its place goes to Onboarding.
+    $examples = array_values(array_filter([
         ['slug' => 'dashboard', 'title' => 'Dashboard', 'text' => 'Charts, stats and a collapsible sidebar.'],
         ['slug' => 'projects', 'title' => 'Projects', 'text' => 'A board of tasks in a workspace.'],
+        ['slug' => 'inbox', 'title' => 'Inbox', 'text' => 'Conversations, search and replies.'],
+        \Workbench\App\Catalog::livewire()
+            ? ['slug' => 'customers', 'title' => 'Customers', 'text' => 'A sortable, filterable table, with Livewire.']
+            : ['slug' => 'onboarding', 'title' => 'Onboarding', 'text' => 'A four-step setup, as plain form posts.'],
+        ['slug' => 'sign-in', 'title' => 'Sign in', 'text' => 'A split page with validation.'],
         ['slug' => 'pricing', 'title' => 'Pricing', 'text' => 'Plans, a billing switch and FAQs.'],
-    ];
+    ]));
 
     $modalCode = <<<'BLADE'
         <x-gui::button commandfor="invite" command="show-modal">
