@@ -136,17 +136,6 @@
 
                     <a href="https://github.com/Jarryd-W-Hoffman/GiraffeUI" class="hidden rounded-md px-3 py-1.5 text-sm text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 sm:block dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100">GitHub</a>
 
-                    {{-- Previews every component right to left, as in Arabic or Hebrew. --}}
-                    <button
-                        type="button"
-                        aria-pressed="false"
-                        x-data="{ rtl: document.documentElement.dir === 'rtl' }"
-                        x-bind:aria-pressed="rtl.toString()"
-                        x-on:click="rtl = ! rtl; CatalogDirection.set(rtl ? 'rtl' : 'ltr')"
-                        class="hidden cursor-pointer rounded-md px-2 py-1.5 font-mono text-xs font-medium sm:block text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text aria-pressed:bg-zinc-100 aria-pressed:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100 dark:aria-pressed:bg-zinc-800 dark:aria-pressed:text-zinc-100"
-                        aria-label="RTL (right to left)"
-                    >RTL</button>
-
                     <x-gui::theme-switcher variant="toggle" size="sm" />
                 </nav>
             </div>
@@ -157,8 +146,8 @@
 
             <aside
                 id="sidebar"
-                class="fixed inset-y-0 top-14 start-0 z-20 w-64 [--slide:-100%] rtl:[--slide:100%] translate-x-(--slide) overflow-y-auto border-e border-zinc-200 bg-white px-4 py-8 transition-transform md:sticky md:block md:h-[calc(100vh-3.5rem)] md:translate-x-0 md:border-e-0 md:bg-transparent md:px-6 dark:border-zinc-800 dark:bg-zinc-950 md:dark:bg-transparent"
-                x-bind:class="menu && '[--slide:0%]!'"
+                class="fixed inset-y-0 top-14 start-0 z-20 w-64 -translate-x-full overflow-y-auto border-e border-zinc-200 bg-white px-4 py-8 transition-transform md:sticky md:block md:h-[calc(100vh-3.5rem)] md:translate-x-0 md:border-e-0 md:bg-transparent md:px-6 dark:border-zinc-800 dark:bg-zinc-950 md:dark:bg-transparent"
+                x-bind:class="menu && 'translate-x-0'"
             >
                 @foreach (collect($nav)->groupBy('group') as $group => $items)
                     <p class="mb-2 px-2 text-xs font-semibold tracking-wide text-zinc-500 uppercase dark:text-zinc-400">{{ $group }}</p>

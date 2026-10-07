@@ -20,24 +20,6 @@ The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 componen
   - Screen readers move through it as a table; hover or arrow keys show each cell.
 - Translations: `series`, `scatter_summary`, `heatmap_summary`.
 
-#### Changed
-- Catalog: the header's RTL button is hidden on phones, where the header has no room.
-
-### Right-to-left languages
-
-#### Added
-- Right-to-left support: with `dir="rtl"`, every component mirrors.
-  - Spacing, placement and alignment use logical start and end classes.
-  - Input adornments and anchored parts are pinned with logical insets, and popovers, dropdowns and submenus open towards the reading direction.
-  - Arrow keys in tabs, submenus and the calendar follow the direction, and chevrons turn around.
-  - Charts keep their axes left to right.
-- Drawer: `side="start"` and `side="end"`, which follow the reading direction. `end` is the new default (the right in English, so nothing changes there); `left` and `right` stay fixed.
-- Catalog: an RTL button in the header (and `?dir=rtl`) previews every page right to left. The axe audit takes `DIR=rtl`, and the behaviour tests check RTL keyboard handling and drawers.
-
-#### Changed
-- Table: `align` uses `text-start` and `text-end`, so `left` and `right` columns mirror in RTL.
-- The sidebar layout's mobile drawer opens from the start.
-
 ### Timeline
 
 #### Added

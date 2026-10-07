@@ -16,12 +16,11 @@ class Drawer extends Modal
         string $size = 'md',
         bool $dismissible = true,
         bool $open = false,
-        public string $side = 'end',
+        public string $side = 'right',
     ) {
         parent::__construct($id, $title, $description, $size, $dismissible, $open);
 
-        // start and end follow the reading direction; left and right are fixed.
-        $this->side = in_array($side, ['start', 'end', 'left', 'right'], true) ? $side : 'end';
+        $this->side = $side === 'left' ? 'left' : 'right';
     }
 
     public function render(): View

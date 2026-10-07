@@ -11,7 +11,7 @@
 {{--
     A nested popover beside its trigger, so it stays open with the parent menu and closes with it.
     Click, Enter, Space or ArrowRight open it and focus its first item; ArrowLeft or Escape close it and return
-    focus to the trigger. In a right-to-left page it opens to the left, and the arrows swap. Hovering opens it too, and moving away closes it after a moment.
+    focus to the trigger. Hovering opens it too, and moving away closes it after a moment.
 --}}
 <div
     x-data="{
@@ -62,8 +62,7 @@
         aria-controls="{{ $id }}"
         @if ($disabled) aria-disabled="true" @endif
         x-on:click="show(true)"
-        x-on:keydown.right="if (! $el.matches(':dir(rtl)')) { $event.preventDefault(); $event.stopPropagation(); show(true) }"
-        x-on:keydown.left="if ($el.matches(':dir(rtl)')) { $event.preventDefault(); $event.stopPropagation(); show(true) }"
+        x-on:keydown.right.prevent.stop="show(true)"
         x-on:keydown.enter.prevent="show(true)"
         x-on:keydown.space.prevent="show(true)"
         style="anchor-name: {{ $anchor }}"
@@ -75,7 +74,7 @@
         ]) }}
     >
         {{ $leading ?? '' }}{{ $label }}
-        <x-gui::icon name="chevron-right" size="sm" class="ms-auto rtl:rotate-180 text-zinc-500 dark:text-zinc-400" />
+        <x-gui::icon name="chevron-right" size="sm" class="ms-auto text-zinc-500 dark:text-zinc-400" />
     </button>
 
     <div
@@ -86,8 +85,7 @@
         aria-label="{{ $label }}"
         style="position-anchor: {{ $anchor }}"
         x-on:toggle="toggled()"
-        x-on:keydown.left="if (! $el.matches(':dir(rtl)')) { $event.preventDefault(); $event.stopPropagation(); close() }"
-        x-on:keydown.right="if ($el.matches(':dir(rtl)')) { $event.preventDefault(); $event.stopPropagation(); close() }"
+        x-on:keydown.left.prevent.stop="close()"
         x-on:keydown.escape.prevent.stop="close()"
         class="inset-auto m-0 -mt-[5px] ms-1 min-w-48 max-w-[calc(100vw-1rem)] rounded-gui border border-zinc-200 bg-white p-1 text-sm text-zinc-900 shadow-lg [position-area:x-end_span-bottom] [position-try-fallbacks:flip-inline,bottom_span-left,bottom_span-right] dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
     >

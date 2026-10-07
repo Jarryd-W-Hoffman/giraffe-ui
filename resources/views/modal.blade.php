@@ -8,11 +8,8 @@
 
     $layout = match (true) {
         ! $drawer => 'm-auto w-[calc(100%-2rem)] rounded-gui border opacity-0 scale-95 open:opacity-100 open:scale-100 starting:open:opacity-0 starting:open:scale-95',
-        // start and end follow the reading direction (end is the right in English, the left in Arabic); left and right don't.
-        $side === 'start' => 'm-0 me-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-e [--gui-slide:-100%] rtl:[--gui-slide:100%] translate-x-(--gui-slide) open:translate-x-0 starting:open:translate-x-(--gui-slide)',
         $side === 'left' => 'm-0 mr-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-r -translate-x-full open:translate-x-0 starting:open:-translate-x-full',
-        $side === 'right' => 'm-0 ml-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-l translate-x-full open:translate-x-0 starting:open:translate-x-full',
-        default => 'm-0 ms-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-s [--gui-slide:100%] rtl:[--gui-slide:-100%] translate-x-(--gui-slide) open:translate-x-0 starting:open:translate-x-(--gui-slide)',
+        default => 'm-0 ml-auto h-dvh max-h-dvh w-[calc(100%-3rem)] border-l translate-x-full open:translate-x-0 starting:open:translate-x-full',
     };
 @endphp
 

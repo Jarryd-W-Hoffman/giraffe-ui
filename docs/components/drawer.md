@@ -38,7 +38,7 @@ A panel that slides in from the side. The same native &lt;dialog&gt; as Modal, s
     Menu
 </x-gui::button>
 
-<x-gui::drawer id="mobile-nav" side="start" size="sm" title="GiraffeUI">
+<x-gui::drawer id="mobile-nav" side="left" size="sm" title="GiraffeUI">
     <nav aria-label="Main" class="-mx-2 flex flex-col">
         <a href="#" class="rounded-gui px-2 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800">Dashboard</a>
         <a href="#" class="rounded-gui px-2 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-800">Projects</a>
@@ -52,7 +52,7 @@ A panel that slides in from the side. The same native &lt;dialog&gt; as Modal, s
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `id` | `string` | `required` | Used by buttons to open and close it. |
-| `side` | `'end' \| 'start' \| 'right' \| 'left'` | `'end'` | The edge it slides in from. start and end follow the reading direction (end is the right in English, the left in Arabic); left and right are fixed. |
+| `side` | `'right' \| 'left'` | `'right'` | The edge it slides in from. |
 | `title` | `string` | `null` | Heading, linked with aria-labelledby. |
 | `description` | `string` | `null` | Linked with aria-describedby. |
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Maximum width. |

@@ -121,7 +121,6 @@
 
         {{-- Room above the plot for the top tick's label, which is centred on the top line. --}}
         <div
-            dir="ltr"
             class="flex gap-2 pt-2"
             x-data="{
                 index: null,

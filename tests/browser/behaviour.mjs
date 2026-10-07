@@ -484,37 +484,6 @@ await check('time picker: the list starts at the chosen time, and Enter picks wi
     expect(await list.isHidden(), 'the list stayed open');
 });
 
-await check('right to left: arrows follow the reading direction, and drawers open from the start', async () => {
-    // Tabs: in Arabic or Hebrew, the left arrow moves to the next tab.
-    await visit('tabs?dir=rtl');
-    const tabs = page.locator('article [role=tab][aria-controls]');
-    await tabs.first().focus();
-    await page.keyboard.press('ArrowLeft');
-    expect(await tabs.nth(1).evaluate((el) => document.activeElement === el), 'ArrowLeft did not move to the next tab');
-
-    // The calendar: the left arrow is the next day.
-    await visit('date-picker?dir=rtl');
-    await page.locator('article').getByRole('button', { name: 'Choose date' }).nth(1).click();
-    await page.waitForFunction(() => document.activeElement?.dataset.date);
-    const before = await page.evaluate(() => document.activeElement.dataset.date);
-    await page.keyboard.press('ArrowLeft');
-    const after = await page.evaluate(() => document.activeElement.dataset.date);
-    expect(new Date(after) - new Date(before) === 86400000, `ArrowLeft went from ${before} to ${after}`);
-    await page.keyboard.press('Escape');
-
-    // The sidebar layout's drawer slides in from the start: the right.
-    await page.setViewportSize({ width: 390, height: 800 });
-    await visit('examples/dashboard?dir=rtl');
-    await page.getByRole('button', { name: /navigation/i }).first().click();
-    const drawer = page.locator('dialog[open]');
-    await drawer.waitFor();
-    await page.waitForTimeout(400);
-    const box = await drawer.boundingBox();
-    expect(Math.round(box.x + box.width) === 390, `the drawer sits at ${box.x}–${box.x + box.width}`);
-    await page.keyboard.press('Escape');
-    await page.setViewportSize({ width: 1280, height: 900 });
-});
-
 await check('scatter and heatmap: arrow keys read out a point, and a cell', async () => {
     await visit('scatter-chart');
     const scatter = page.locator('article figure').first();
