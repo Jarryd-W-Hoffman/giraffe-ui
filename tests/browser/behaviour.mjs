@@ -540,6 +540,22 @@ await check('landing page: the theming playground restyles its preview, and ⌘K
     await page.keyboard.press('Escape');
 });
 
+await check('inbox: opening a conversation marks it read, replies appear, and archiving removes it', async () => {
+    await visit('examples/inbox');
+    const unread = page.locator('p[aria-live]').first();
+    expect((await unread.textContent()).trim() === '3 unread', `started with ${await unread.textContent()}`);
+    await page.locator('button', { hasText: 'Numbers for the board deck' }).click();
+    await page.waitForFunction((el) => el.textContent.trim() === '2 unread', await unread.elementHandle());
+    const thread = page.locator('article', { has: page.locator('#thread-4-heading') });
+    await thread.locator('textarea').fill('Yes please.');
+    await thread.getByRole('button', { name: /Send/ }).click();
+    await thread.getByText('Yes please.').waitFor();
+    await thread.getByRole('button', { name: 'Archive' }).click();
+    expect(await page.locator('button', { hasText: 'Numbers for the board deck' }).isHidden(), 'the archived conversation is still listed');
+    await page.locator('input[aria-label="Search conversations"]').fill('payout');
+    await page.waitForFunction(() => [...document.querySelectorAll('section[aria-label=Conversations] li')].filter((li) => li.offsetParent).length === 1);
+});
+
 await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
     await visit('theme-switcher');
     const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));

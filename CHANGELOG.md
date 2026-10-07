@@ -8,6 +8,20 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### Inbox example
+
+#### Added
+- Inbox example, in the workspace shell:
+  - conversations with search, an All/Unread filter, labels with dots, stars and unread marks;
+  - a reading pane with the thread, and star, mark-as-unread and archive buttons;
+  - a reply box that adds your message, and a Compose modal;
+  - on phones the list and the conversation take turns, with a back button.
+- Icon: `archive-box` (167 bundled).
+- Landing page: the examples gallery shows six apps: Dashboard, Projects, Inbox, Customers (Onboarding without Livewire), Sign in and Pricing.
+
+#### Changed
+- The examples' "Back to the catalog" link hides when a page is shown in a frame, such as the landing page's previews.
+
 ### Logo
 
 #### Added
@@ -81,7 +95,7 @@ The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 componen
 ### More icons
 
 #### Added
-- Icons: 166 bundled Heroicons (up from 38), with no packages needed. They're generated from the Heroicons source and cover:
+- Icons: 167 bundled Heroicons (up from 38), with no packages needed. They're generated from the Heroicons source and cover:
   - money (`banknotes`, `credit-card`, `wallet`, `receipt-percent`);
   - charts (`chart-bar`, `chart-pie`, `presentation-chart-line`, `arrow-trending-up`);
   - messages (`envelope`, `bell`, `chat-bubble-left-right`, `inbox`);

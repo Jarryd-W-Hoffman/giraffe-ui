@@ -3,7 +3,7 @@
 ])
 
 {{--
-    The app around the Dashboard, Projects and Customers examples: a workspace with a collapsible sidebar
+    The app around the Dashboard, Projects, Inbox and Customers examples: a workspace with a collapsible sidebar
     (collapse it to a rail of icons with the button at the bottom; the choice is remembered in this browser), search
     and notifications in the top bar, on black (or white). Lime and violet replace the first and seventh chart colours.
 --}}
@@ -31,7 +31,7 @@
                     {{-- The Customers page is a Livewire component, so it only exists when Livewire is installed. --}}
                     <x-gui::sidebar.item href="/catalog/examples/customers" icon="users">Customers</x-gui::sidebar.item>
                 @endif
-                <x-gui::sidebar.item href="#" icon="inbox" badge="12">Inbox</x-gui::sidebar.item>
+                <x-gui::sidebar.item href="/catalog/examples/inbox" icon="inbox" badge="3">Inbox</x-gui::sidebar.item>
                 <x-gui::sidebar.item href="#" icon="calendar">Calendar</x-gui::sidebar.item>
                 {{-- No href: a button that opens the settings modal. --}}
                 <x-gui::sidebar.item icon="cog-6-tooth" commandfor="settings" command="show-modal">Settings</x-gui::sidebar.item>

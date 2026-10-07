@@ -49,6 +49,7 @@ class Catalog
         return array_filter([
             'dashboard' => 'Dashboard',
             'projects' => 'Projects',
+            'inbox' => 'Inbox',
             'customers' => self::livewire() ? 'Customers' : null,
             'sign-in' => 'Sign in',
             'register' => 'Register',
