@@ -8,6 +8,20 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### Sidebar: collapsing and sub-sections
+
+#### Added
+- Sidebar layout: `collapsible` adds a Collapse sidebar button that shrinks the column to a rail of icons, from the lg breakpoint.
+  - In the rail, labels stay for screen readers, and show as tooltips on hover and keyboard focus. Items without an icon show their first letter.
+  - The choice is kept in localStorage (`persist`) and applied before the page paints. `collapsed` sets the starting state.
+- Sidebar submenu (`sidebar.submenu`): items nested under a parent, as a native disclosure that works without JavaScript. It opens when it holds the current page.
+- Sidebar group: `collapsible` lets its heading show and hide it.
+- In the rail, clicking a submenu or a closed group expands the sidebar and opens it.
+- Icon: `chevron-double-left`. Translations: `collapse_sidebar`, `expand_sidebar`.
+
+#### Changed
+- The Dashboard and Settings examples use a collapsible sidebar, with a Projects submenu and a collapsible Help group.
+
 ### Bar list, scatter chart and heatmap
 
 #### Added

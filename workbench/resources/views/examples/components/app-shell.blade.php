@@ -3,7 +3,7 @@
     $photo = \Workbench\App\Catalog::data()['photo'];
 @endphp
 
-<x-gui::sidebar-layout>
+<x-gui::sidebar-layout collapsible>
     <x-slot:brand>
         <a href="/catalog/examples/dashboard" class="flex items-center gap-2 font-semibold">
             <span class="flex size-7 items-center justify-center rounded-gui bg-gui-primary text-sm text-gui-primary-foreground" aria-hidden="true">A</span>
@@ -15,7 +15,11 @@
         <x-gui::sidebar>
             <x-gui::sidebar.group>
                 <x-gui::sidebar.item href="/catalog/examples/dashboard" icon="home">Dashboard</x-gui::sidebar.item>
-                <x-gui::sidebar.item href="#" icon="folder" badge="3">Projects</x-gui::sidebar.item>
+                <x-gui::sidebar.submenu label="Projects" icon="folder" badge="3">
+                    <x-gui::sidebar.item href="#">Website redesign</x-gui::sidebar.item>
+                    <x-gui::sidebar.item href="#">Mobile app</x-gui::sidebar.item>
+                    <x-gui::sidebar.item href="#">Spring campaign</x-gui::sidebar.item>
+                </x-gui::sidebar.submenu>
                 @if (\Workbench\App\Catalog::livewire())
                     {{-- The Customers page is a Livewire component, so it only exists when Livewire is installed. --}}
                     <x-gui::sidebar.item href="/catalog/examples/customers" icon="user">Customers</x-gui::sidebar.item>
@@ -23,7 +27,7 @@
                 <x-gui::sidebar.item href="#" icon="calendar">Calendar</x-gui::sidebar.item>
                 <x-gui::sidebar.item href="/catalog/examples/settings" icon="cog-6-tooth">Settings</x-gui::sidebar.item>
             </x-gui::sidebar.group>
-            <x-gui::sidebar.group heading="Help">
+            <x-gui::sidebar.group heading="Help" collapsible>
                 <x-gui::sidebar.item href="/catalog/introduction" icon="information-circle">Documentation</x-gui::sidebar.item>
                 <x-gui::sidebar.item href="#" icon="magnifying-glass">Search</x-gui::sidebar.item>
             </x-gui::sidebar.group>

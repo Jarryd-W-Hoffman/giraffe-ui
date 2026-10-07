@@ -506,6 +506,23 @@ await check('scatter and heatmap: arrow keys read out a point, and a cell', asyn
     expect((await heatLive.textContent()) === 'Wk 2, W: 7', `heatmap read: ${await heatLive.textContent()}`);
 });
 
+await check('sidebar: collapses to a rail and remembers it, and a submenu opens the sidebar from the rail', async () => {
+    await visit('examples/dashboard');
+    await page.evaluate(() => localStorage.removeItem('gui-sidebar-collapsed'));
+    await visit('examples/dashboard');
+    const layout = page.locator('[data-sidebar-layout]');
+    await page.getByRole('button', { name: 'Collapse sidebar' }).click();
+    expect(await layout.evaluate((el) => el.hasAttribute('data-collapsed')), 'it did not collapse');
+    expect(await page.locator('aside a', { hasText: 'Settings' }).getAttribute('href') !== null, 'the rail lost its links');
+    await visit('examples/dashboard');
+    expect(await layout.evaluate((el) => el.hasAttribute('data-collapsed')), 'it forgot after a reload');
+    // In the rail, a submenu expands the sidebar and opens.
+    await page.locator('aside summary', { hasText: 'Projects' }).click();
+    expect(! (await layout.evaluate((el) => el.hasAttribute('data-collapsed'))), 'the submenu did not expand the sidebar');
+    expect(await page.locator('aside details').first().evaluate((el) => el.open), 'the submenu did not open');
+    await page.evaluate(() => localStorage.removeItem('gui-sidebar-collapsed'));
+});
+
 await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
     await visit('theme-switcher');
     const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));
