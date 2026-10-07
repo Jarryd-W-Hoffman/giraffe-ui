@@ -8,6 +8,18 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 69 components and a catalog.
 
+### Calendar, Invoice and Store examples
+
+#### Added
+- **Calendar:** October's events on a month grid (a button per day, named with its events), a day agenda, calendars to show, and a New event modal with the datetime picker.
+- **Invoice:** an invoice with line items, totals, payment details and activity.
+  - Recording a payment marks it paid and updates the badge, amount due, activity and progress.
+- **Store:** a product page. Glaze swatches recolour the drawn mug in every picture. It also has:
+  - sizes, quantity and add to cart, with the cart count in the navbar;
+  - details, shipping and returns as an accordion;
+  - reviews with a rating breakdown, related products, and a review modal.
+- The workspace sidebar links to Calendar and Invoices. The landing page's gallery shows nine examples.
+
 ### Marketing components
 
 #### Added

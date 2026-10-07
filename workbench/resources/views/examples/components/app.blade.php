@@ -32,7 +32,8 @@
                     <x-gui::sidebar.item href="/catalog/examples/customers" icon="users">Customers</x-gui::sidebar.item>
                 @endif
                 <x-gui::sidebar.item href="/catalog/examples/inbox" icon="inbox" badge="3">Inbox</x-gui::sidebar.item>
-                <x-gui::sidebar.item href="#" icon="calendar">Calendar</x-gui::sidebar.item>
+                <x-gui::sidebar.item href="/catalog/examples/calendar" icon="calendar">Calendar</x-gui::sidebar.item>
+                <x-gui::sidebar.item href="/catalog/examples/invoice" icon="document-text">Invoices</x-gui::sidebar.item>
                 {{-- No href: a button that opens the settings modal. --}}
                 <x-gui::sidebar.item icon="cog-6-tooth" commandfor="settings" command="show-modal">Settings</x-gui::sidebar.item>
             </x-gui::sidebar.group>
