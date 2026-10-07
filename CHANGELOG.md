@@ -8,6 +8,19 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### Landing page
+
+#### Added
+- Catalog: a landing page at `/` (and `/catalog/home`), built from GiraffeUI components. It has:
+  - a hero with the install command and a copy button;
+  - a wall of working components: sign-up form, OTP input, rating, a line chart, switches, date and time pickers, team list, plan cards and a donut;
+  - the numbers and a feature grid;
+  - a live theming playground: primary colour and corners restyle a preview, the switch toggles dark mode, and the matching `@theme` code is ready to copy;
+  - a code-and-preview section with a working modal;
+  - live, scaled-down previews of the example apps;
+  - a Livewire section, a closing call to action and a footer;
+  - ⌘K search over every component and guide.
+
 ### New look for every example
 
 #### Added

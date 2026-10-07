@@ -523,6 +523,23 @@ await check('sidebar: collapses to a rail and remembers it, and a submenu opens 
     await page.evaluate(() => localStorage.removeItem('gui-sidebar-collapsed'));
 });
 
+await check('landing page: the theming playground restyles its preview, and ⌘K finds components', async () => {
+    await visit('home');
+    const preview = page.locator('section[aria-labelledby=theming-heading] [x-bind\\:style]').first();
+    await page.locator('label', { has: page.locator('input[name=home_color][value=emerald]') }).click();
+    await page.locator('label', { hasText: 'Full' }).click();
+    await page.waitForFunction((el) => el.style.getPropertyValue('--radius-gui') === '9999px', await preview.elementHandle());
+    expect((await preview.evaluate((el) => el.style.getPropertyValue('--color-gui-primary'))).includes('emerald'), 'the colour did not apply');
+    expect((await page.locator('section[aria-labelledby=theming-heading] code').textContent()).includes('--color-emerald-600'), 'the theme code did not follow');
+
+    await page.locator('header').getByRole('button', { name: /Search components/ }).click();
+    const palette = page.locator('#home-search');
+    await palette.waitFor();
+    await palette.locator('input').fill('date');
+    await page.waitForFunction(() => [...document.querySelectorAll('#home-search [role=option]')].some((el) => el.offsetParent && el.textContent.includes('Date picker')));
+    await page.keyboard.press('Escape');
+});
+
 await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
     await visit('theme-switcher');
     const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));

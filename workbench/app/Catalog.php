@@ -22,6 +22,7 @@ class Catalog
     public static function guides(): array
     {
         return array_filter([
+            'home' => 'Home',
             'introduction' => 'Introduction',
             'installation' => 'Installation',
             'theming' => 'Theming',

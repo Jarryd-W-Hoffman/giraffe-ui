@@ -4,8 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Workbench\App\Http\Controllers\CatalogController;
 use Workbench\App\Http\Controllers\OnboardingController;
 
+// The landing page.
+Route::redirect('/', '/catalog/home');
+
 Route::prefix('catalog')->middleware('web')->group(function () {
-    Route::redirect('/', '/catalog/introduction');
+    Route::redirect('/', '/catalog/home');
     Route::get('assets/catalog.css', [CatalogController::class, 'css']);
     Route::get('assets/alpine.js', [CatalogController::class, 'alpine']);
     Route::get('api/timezones', [CatalogController::class, 'timezones']);
