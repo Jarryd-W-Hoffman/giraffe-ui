@@ -551,6 +551,7 @@ await check('inbox: opening a conversation marks it read, replies appear, and ar
     await thread.getByRole('button', { name: /Send/ }).click();
     await thread.getByText('Yes please.').waitFor();
     await thread.getByRole('button', { name: 'Archive' }).click();
+    await page.locator('button', { hasText: 'Numbers for the board deck' }).waitFor({ state: 'hidden', timeout: 3000 }).catch(() => {});
     expect(await page.locator('button', { hasText: 'Numbers for the board deck' }).isHidden(), 'the archived conversation is still listed');
     await page.locator('input[aria-label="Search conversations"]').fill('payout');
     await page.waitForFunction(() => [...document.querySelectorAll('section[aria-label=Conversations] li')].filter((li) => li.offsetParent).length === 1);
