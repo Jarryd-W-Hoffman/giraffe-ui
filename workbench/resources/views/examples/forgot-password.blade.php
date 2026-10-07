@@ -18,7 +18,7 @@
                 <x-gui::input type="email" autocomplete="email" placeholder="ada@example.com" />
             </x-gui::field>
 
-            <x-gui::button type="submit" class="w-full">{{ session('status') ? 'Send another link' : 'Send reset link' }}</x-gui::button>
+            <x-gui::button color="ink" shape="pill" type="submit" class="w-full">{{ session('status') ? 'Send another link' : 'Send reset link' }}</x-gui::button>
         </form>
 
         <x-slot:footer>

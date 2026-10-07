@@ -155,3 +155,14 @@ describe('stat', function () {
             ->and($plain)->toMatch('/1,024<\/p>\s*<\/div>/');
     });
 });
+
+it('gives a badge a pill shape and a dot', function () {
+    expect((string) $this->blade('<x-gui::badge shape="pill" dot="success">Paid</x-gui::badge>'))->toContain('rounded-full', 'bg-gui-success', 'aria-hidden="true"', 'Paid')
+        ->and((string) $this->blade('<x-gui::badge dot="var(--color-lime-500)">Hosting</x-gui::badge>'))->toContain('style="background: var(--color-lime-500)"');
+});
+
+it('has a filled card with an icon before its title', function () {
+    $html = (string) $this->blade('<x-gui::card variant="filled" title="Goals" icon="trophy">Body</x-gui::card>');
+
+    expect($html)->toContain('data-variant="filled"', 'bg-zinc-100', 'rounded-[calc(var(--radius-gui)+1.125rem)]', '<svg')->not->toContain('shadow-xs');
+});

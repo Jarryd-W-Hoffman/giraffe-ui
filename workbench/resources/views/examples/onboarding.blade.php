@@ -14,22 +14,19 @@
         $timezones = [($tz = old('timezone', $data['timezone'] ?? 'Europe/London')) => str_replace('_', ' ', $tz)] + $timezones;
     @endphp
 
-    <div class="min-h-dvh bg-zinc-50 dark:bg-zinc-950">
-        <header class="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-            <div class="mx-auto flex max-w-2xl items-center gap-2 px-4 py-4 font-semibold sm:px-6">
-                <span class="flex size-7 items-center justify-center rounded-gui bg-gui-primary text-sm text-gui-primary-foreground" aria-hidden="true">A</span>
-                Acme
-            </div>
+    <div class="min-h-dvh bg-white dark:bg-black">
+        <header class="mx-auto flex max-w-2xl items-center px-4 py-5 sm:px-6">
+            <x-example::brand />
         </header>
 
-        <main class="mx-auto max-w-2xl space-y-8 px-4 py-10 sm:px-6">
+        <main class="mx-auto max-w-2xl space-y-8 px-4 pt-4 pb-12 sm:px-6">
             {{-- Steps already done are links back; the rest aren't, so nobody skips ahead. --}}
             <x-gui::stepper aria-label="Setup" :steps="$steps" :current="$step" />
 
-            <x-gui::card>
+            <x-gui::card variant="filled">
                 <div class="mb-6">
-                    <h1 class="text-xl font-semibold tracking-tight">{{ $headings[$step][0] }}</h1>
-                    <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{{ $headings[$step][1] }}</p>
+                    <h1 class="text-3xl font-normal tracking-tight">{{ $headings[$step][0] }}</h1>
+                    <p class="mt-2 text-zinc-600 dark:text-zinc-400">{{ $headings[$step][1] }}</p>
                 </div>
 
                 @if ($errors->any())
@@ -81,12 +78,12 @@
                 <x-slot:footer>
                     <div class="flex w-full items-center justify-between gap-3">
                         @if ($previous)
-                            <x-gui::button href="/catalog/examples/onboarding?step={{ $previous }}" variant="ghost" color="secondary">
+                            <x-gui::button variant="ghost" color="ink" shape="pill" href="/catalog/examples/onboarding?step={{ $previous }}">
                                 <x-gui::icon name="arrow-left" size="sm" />
                                 Back
                             </x-gui::button>
                         @endif
-                        <x-gui::button type="submit" form="onboarding-form" class="ms-auto">{{ $step === 'review' ? 'Create workspace' : 'Continue' }}</x-gui::button>
+                        <x-gui::button color="ink" shape="pill" type="submit" form="onboarding-form" class="ms-auto">{{ $step === 'review' ? 'Create workspace' : 'Continue' }}</x-gui::button>
                     </div>
                 </x-slot:footer>
             </x-gui::card>

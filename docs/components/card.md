@@ -50,12 +50,30 @@ A surface for grouping content, with an optional header and footer.
 </x-gui::card>
 ```
 
+## Filled, with an icon
+
+variant="filled" drops the border and shadow and sits a step off the page, with rounder corners, for dashboards that group by tone rather than lines. icon goes before the title; buttons in actions pick up a matching shade.
+
+```blade
+<x-gui::card variant="filled" title="Recent transactions" icon="arrows-right-left" class="max-w-md">
+    <x-slot:actions>
+        <x-gui::button variant="ghost" color="ink" shape="pill" icon size="sm" aria-label="Search transactions"><x-gui::icon name="magnifying-glass" size="sm" /></x-gui::button>
+    </x-slot:actions>
+    <ul class="divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
+        <li class="flex items-center justify-between gap-3 pb-3"><span>Figma</span><x-gui::badge size="sm" shape="pill" dot="info">Software</x-gui::badge><span class="tabular-nums">-$248.80</span></li>
+        <li class="flex items-center justify-between gap-3 pt-3"><span>Alan Turing</span><x-gui::badge size="sm" shape="pill" dot="var(--color-violet-500)">Transfer</x-gui::badge><span class="tabular-nums">+$500.00</span></li>
+    </ul>
+</x-gui::card>
+```
+
 ## Props
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `title` | `string` | `null` | Heading (an h3). |
 | `description` | `string` | `null` | Text under the title. |
+| `icon` | `string` | `null` | An icon before the title. |
+| `variant` | `'default' \| 'filled'` | `'default'` | filled: no border or shadow, a step off the page, and rounder corners that grow with the theme's radius. |
 
 Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 

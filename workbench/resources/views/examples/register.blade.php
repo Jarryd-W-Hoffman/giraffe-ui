@@ -36,7 +36,7 @@
                 </x-gui::checkbox>
             </x-gui::fieldset>
 
-            <x-gui::button type="submit" class="w-full">Create account</x-gui::button>
+            <x-gui::button color="ink" shape="pill" type="submit" class="w-full">Create account</x-gui::button>
         </form>
 
         <x-slot:footer>

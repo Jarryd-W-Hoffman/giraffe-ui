@@ -49,7 +49,7 @@ class WorkbenchServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'catalog');
         $this->loadRoutesFrom(__DIR__.'/../../routes/web.php');
 
-        // Pieces shared by the full-page examples, e.g. <x-example::app-shell>.
+        // Pieces shared by the full-page examples, e.g. <x-example::app>.
         Blade::anonymousComponentPath(__DIR__.'/../../resources/views/examples/components', 'example');
 
         // Livewire is a dev dependency, used to prove the components work with it.

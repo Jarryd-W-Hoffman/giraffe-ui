@@ -126,13 +126,30 @@ Any attribute passes straight through, including x-on and wire:click.
 </div>
 ```
 
+## Pills, ink and icons
+
+shape="pill" rounds the ends. color="ink" is the page's own contrast: black on light, white on dark, and a soft grey as ghost. icon makes a square (or, with pill, round) button for just an icon; give it an aria-label.
+
+```blade
+<div class="flex flex-wrap items-center gap-3">
+    <x-gui::button color="ink" shape="pill">Transfer <x-gui::icon name="arrow-up" size="sm" /></x-gui::button>
+    <x-gui::button variant="outline" color="ink" shape="pill">Request</x-gui::button>
+    <x-gui::button variant="ghost" color="ink" shape="pill">Later</x-gui::button>
+    <x-gui::button shape="pill">Upgrade</x-gui::button>
+    <x-gui::button variant="ghost" color="ink" shape="pill" icon aria-label="Search"><x-gui::icon name="magnifying-glass" size="sm" /></x-gui::button>
+    <x-gui::button variant="outline" color="ink" icon size="sm" aria-label="More"><x-gui::icon name="ellipsis-vertical" size="sm" /></x-gui::button>
+</div>
+```
+
 ## Props
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `variant` | `'solid' \| 'outline' \| 'ghost'` | `'solid'` | Visual style. |
-| `color` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'primary'` | Theme colour. Unknown values fall back to primary. |
+| `color` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info' \| 'ink'` | `'primary'` | Theme colour. ink is the page's own contrast: black on light, white on dark. Unknown values fall back to primary. |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Height, padding and text size. |
+| `shape` | `'default' \| 'pill'` | `'default'` | pill: fully rounded ends, whatever the theme's radius. |
+| `icon` | `bool` | `false` | A square button for just an icon (a circle with pill). Give it an aria-label. |
 | `href` | `string` | `null` | Renders an &lt;a&gt; instead of a &lt;button&gt;. |
 | `external` | `bool` | `false` | With href, opens in a new tab with rel="noopener noreferrer". |
 | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Ignored for links. |

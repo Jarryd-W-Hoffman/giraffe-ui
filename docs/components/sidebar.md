@@ -22,7 +22,7 @@ An application shell with side navigation: a sticky column on large screens and 
 
 ## Navigation
 
-A labelled nav of groups and links. The link for the page being shown gets aria-current="page" automatically, or set current yourself. Group headings name their group without an id, so the layout can render the same navigation in its column and its drawer. See it all together in the Settings example.
+A labelled nav of groups and links. The link for the page being shown gets aria-current="page" automatically, or set current yourself. Group headings name their group without an id, so the layout can render the same navigation in its column and its drawer. See it all together in the Projects example.
 
 ```blade
 <div class="rounded-gui border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900">
@@ -37,7 +37,7 @@ A labelled nav of groups and links. The link for the page being shown gets aria-
         </x-gui::sidebar.group>
     </x-gui::sidebar>
 </div>
-<x-gui::button href="/catalog/examples/settings" variant="outline" color="secondary">Open the Settings example →</x-gui::button>
+<x-gui::button href="/catalog/examples/projects" variant="outline" color="secondary">Open the Projects example →</x-gui::button>
 ```
 
 ## Sub-sections
@@ -69,7 +69,7 @@ sidebar.submenu nests items under a parent, behind a native disclosure that work
 
 ## Collapsing to a rail
 
-collapsible on the layout adds a Collapse sidebar button below the navigation. Collapsed, the column becomes a rail of icons: hover or focus one for its name, and screen readers still hear every label. Items without an icon show their first letter. The choice is remembered in this browser and applied before the page paints. Below, a rail on its own (data-collapsed is what the button sets); the Settings example has the real thing.
+collapsible on the layout adds a Collapse sidebar button below the navigation. Collapsed, the column becomes a rail of icons: hover or focus one for its name, and screen readers still hear every label. Items without an icon show their first letter. The choice is remembered in this browser and applied before the page paints. Below, a rail on its own (data-collapsed is what the button sets); the Projects example has the real thing.
 
 ```blade
 <div data-collapsed class="w-16 rounded-gui border border-zinc-200 bg-zinc-50 px-3 py-3 dark:border-zinc-800 dark:bg-zinc-900">
@@ -103,7 +103,7 @@ collapsible on the layout adds a Collapse sidebar button below the navigation. C
 | `sidebar.group: collapsible, open` | `bool` | `false, true` | Let the heading show and hide the group, and whether it starts open. It opens anyway when it holds the current page. |
 | `sidebar.submenu: label, icon, badge` | `string` | `` | The parent item: its text, icon and badge. |
 | `sidebar.submenu: open` | `bool \| null` | `null` | Whether it starts open. Defaults to open when it holds the current page. |
-| `sidebar.item: href` | `string` | `` | Where the link goes. |
+| `sidebar.item: href` | `string` | `null` | Where the link goes. Leave it out for a button, e.g. commandfor="settings" command="show-modal" to open a modal. |
 | `sidebar.item: icon` | `string` | `null` | An icon name. |
 | `sidebar.item: current` | `bool \| null` | `null` | Whether this is the current page. Defaults to comparing href with the current URL. |
 | `sidebar.item: badge` | `string` | `null` | A count or label after the text. |

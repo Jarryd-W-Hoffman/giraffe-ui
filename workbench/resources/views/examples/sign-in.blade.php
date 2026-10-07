@@ -27,7 +27,7 @@
                 <a href="/catalog/examples/forgot-password" class="text-sm font-medium text-gui-primary-text hover:underline">Forgot password?</a>
             </div>
 
-            <x-gui::button type="submit" class="w-full">Sign in</x-gui::button>
+            <x-gui::button color="ink" shape="pill" type="submit" class="w-full">Sign in</x-gui::button>
         </form>
 
         <x-slot:footer>

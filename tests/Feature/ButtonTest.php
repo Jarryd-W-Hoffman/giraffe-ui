@@ -141,3 +141,11 @@ describe('spinner', function () {
         expect((string) $this->blade('<x-gui::spinner label="Loading results" />'))->toContain('role="status"', '<span class="sr-only">Loading results</span>');
     });
 });
+
+it('comes as a pill, in ink, and as an icon button', function () {
+    $html = (string) $this->blade('<x-gui::button color="ink" shape="pill">Go</x-gui::button>');
+    $icon = (string) $this->blade('<x-gui::button variant="ghost" color="ink" icon size="sm" aria-label="Search"><x-gui::icon name="magnifying-glass" size="sm" /></x-gui::button>');
+
+    expect($html)->toContain('rounded-full', 'bg-zinc-900', 'dark:bg-white')->not->toContain('rounded-gui')
+        ->and($icon)->toContain('size-8', 'aria-label="Search"', 'in-data-[variant=filled]:bg-zinc-200')->not->toContain('px-3');
+});

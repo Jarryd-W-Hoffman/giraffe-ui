@@ -48,12 +48,10 @@
         ];
     @endphp
 
-    <x-gui::navbar sticky>
+    <div class="bg-white dark:bg-black">
+    <x-gui::navbar sticky variant="pills" class="border-transparent! bg-white/90! dark:bg-black/90!">
         <x-slot:brand>
-            <a href="#" class="flex items-center gap-2 font-semibold">
-                <span class="flex size-7 items-center justify-center rounded-gui bg-gui-primary text-sm text-gui-primary-foreground" aria-hidden="true">A</span>
-                Acme
-            </a>
+            <x-example::brand />
         </x-slot:brand>
 
         <x-gui::navbar.item href="#">Product</x-gui::navbar.item>
@@ -61,8 +59,8 @@
         <x-gui::navbar.item href="/catalog/introduction">Docs</x-gui::navbar.item>
 
         <x-slot:actions>
-            <x-gui::button href="/catalog/examples/sign-in" variant="ghost" color="secondary" size="sm">Sign in</x-gui::button>
-            <x-gui::button href="/catalog/examples/register" size="sm">Start free trial</x-gui::button>
+            <x-gui::button href="/catalog/examples/sign-in" variant="ghost" color="ink" shape="pill" size="sm" class="max-sm:hidden">Sign in</x-gui::button>
+            <x-gui::button href="/catalog/examples/register" color="ink" shape="pill" size="sm">Start free trial</x-gui::button>
         </x-slot:actions>
     </x-gui::navbar>
 
@@ -70,36 +68,39 @@
         {{-- The billing switch is native radios; prices swap with :has(), so this works without JavaScript. --}}
         <section aria-labelledby="pricing-heading" class="group/billing mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
             <div class="mx-auto max-w-2xl text-center">
-                <p class="text-sm font-semibold text-gui-primary-text">Pricing</p>
-                <h1 id="pricing-heading" class="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">Simple plans that grow with your shop</h1>
+                <x-gui::badge shape="pill" dot="var(--color-lime-500)">Pricing</x-gui::badge>
+                <h1 id="pricing-heading" class="mt-4 text-4xl font-normal tracking-tight text-balance sm:text-6xl">Simple plans <span class="text-zinc-500 dark:text-zinc-400">that grow with your shop</span></h1>
                 <p class="mt-4 text-lg text-zinc-600 dark:text-zinc-400">Every plan starts with a 14-day free trial. No card needed.</p>
             </div>
 
             <div class="mt-10 flex flex-wrap items-center justify-center gap-3">
-                <x-gui::segmented-control name="billing" label="Billing period" :options="['monthly' => 'Monthly', 'yearly' => 'Yearly']" value="monthly" />
-                <x-gui::badge color="success">Save 20% yearly</x-gui::badge>
+                <div style="--radius-gui: 9999px">
+                    <x-gui::segmented-control name="billing" label="Billing period" :options="['monthly' => 'Monthly', 'yearly' => 'Yearly']" value="monthly" />
+                </div>
+                <x-gui::badge color="success" shape="pill">Save 20% yearly</x-gui::badge>
             </div>
 
-            <div class="mt-10 grid gap-6 lg:grid-cols-3">
+            <div class="mt-10 grid gap-4 lg:grid-cols-3">
                 @foreach ($plans as $key => $plan)
+                    {{-- The popular plan is the inverse: dark on light, light on dark. --}}
                     <div @class([
-                        'relative flex flex-col rounded-gui border bg-white p-6 shadow-xs dark:bg-zinc-900',
-                        'border-gui-primary-text ring-1 ring-gui-primary-text' => $plan['popular'] ?? false,
-                        'border-zinc-200 dark:border-zinc-800' => ! ($plan['popular'] ?? false),
+                        'relative flex flex-col rounded-3xl p-7',
+                        'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900' => $plan['popular'] ?? false,
+                        'bg-zinc-100 dark:bg-zinc-900' => ! ($plan['popular'] ?? false),
                     ])>
                         <div class="flex items-center justify-between gap-3">
-                            <h2 id="plan-{{ $key }}" class="text-lg font-semibold">{{ $plan['name'] }}</h2>
+                            <h2 id="plan-{{ $key }}" class="text-xl">{{ $plan['name'] }}</h2>
                             @if ($plan['popular'] ?? false)
-                                <x-gui::badge color="primary" variant="solid" size="sm">Most popular</x-gui::badge>
+                                <x-gui::badge variant="solid" size="sm" shape="pill" class="bg-lime-300! text-zinc-900!">Most popular</x-gui::badge>
                             @endif
                         </div>
-                        <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{{ $plan['description'] }}</p>
+                        <p @class(['mt-1 text-sm', ($plan['popular'] ?? false) ? 'text-zinc-300 dark:text-zinc-600' : 'text-zinc-600 dark:text-zinc-400'])>{{ $plan['description'] }}</p>
 
                         <p class="mt-6 flex items-baseline gap-1">
                             @isset($plan['monthly'])
                                 <span class="text-4xl font-semibold tracking-tight tabular-nums group-has-[[value=yearly]:checked]/billing:hidden">${{ $plan['monthly'] }}</span>
                                 <span class="hidden text-4xl font-semibold tracking-tight tabular-nums group-has-[[value=yearly]:checked]/billing:inline">${{ $plan['yearly'] }}</span>
-                                <span class="text-sm text-zinc-600 dark:text-zinc-400">
+                                <span @class(['text-sm', ($plan['popular'] ?? false) ? 'text-zinc-300 dark:text-zinc-600' : 'text-zinc-600 dark:text-zinc-400'])>
                                     per month<span class="hidden group-has-[[value=yearly]:checked]/billing:inline">, billed yearly</span>
                                 </span>
                             @else
@@ -108,15 +109,15 @@
                         </p>
 
                         @isset($plan['monthly'])
-                            <x-gui::button href="/catalog/examples/register" :variant="($plan['popular'] ?? false) ? 'solid' : 'outline'" :color="($plan['popular'] ?? false) ? 'primary' : 'secondary'" class="mt-6 w-full" aria-describedby="plan-{{ $key }}">{{ $plan['cta'] }}</x-gui::button>
+                            <x-gui::button href="/catalog/examples/register" shape="pill" :color="($plan['popular'] ?? false) ? 'primary' : 'ink'" class="mt-6 w-full" aria-describedby="plan-{{ $key }}">{{ $plan['cta'] }}</x-gui::button>
                         @else
-                            <x-gui::button variant="outline" color="secondary" class="mt-6 w-full" commandfor="contact-sales" command="show-modal">{{ $plan['cta'] }}</x-gui::button>
+                            <x-gui::button color="ink" shape="pill" class="mt-6 w-full" commandfor="contact-sales" command="show-modal">{{ $plan['cta'] }}</x-gui::button>
                         @endisset
 
                         <ul class="mt-8 space-y-3 text-sm" aria-label="{{ $plan['name'] }} includes">
                             @foreach ($plan['features'] as $feature)
                                 <li class="flex gap-3">
-                                    <x-gui::icon name="check" size="sm" class="mt-0.5 text-gui-primary-text" />
+                                    <x-gui::icon name="check" size="sm" @class(['mt-0.5', ($plan['popular'] ?? false) ? 'text-lime-300 dark:text-lime-700' : 'text-gui-primary-text']) />
                                     {{ $feature }}
                                 </li>
                             @endforeach
@@ -127,7 +128,7 @@
         </section>
 
         <section aria-labelledby="compare-heading" class="mx-auto max-w-4xl px-4 pb-16 sm:px-6 sm:pb-20">
-            <h2 id="compare-heading" class="text-2xl font-semibold tracking-tight">Compare plans</h2>
+            <h2 id="compare-heading" class="text-3xl font-normal tracking-tight">Compare plans</h2>
 
             <x-gui::table label="Features by plan" class="mt-6">
                 <x-slot:head>
@@ -157,7 +158,7 @@
         </section>
 
         <section aria-labelledby="faq-heading" class="mx-auto max-w-3xl px-4 pb-16 sm:px-6 sm:pb-20">
-            <h2 id="faq-heading" class="text-2xl font-semibold tracking-tight">Questions and answers</h2>
+            <h2 id="faq-heading" class="text-3xl font-normal tracking-tight">Questions and answers</h2>
 
             <x-gui::accordion class="mt-6">
                 @foreach ($faqs as $question => $answer)
@@ -166,17 +167,18 @@
             </x-gui::accordion>
         </section>
 
-        <section class="border-t border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
-            <div class="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-16 text-center sm:px-6">
-                <h2 class="text-2xl font-semibold tracking-tight">Ready to sell more?</h2>
-                <p class="max-w-md text-zinc-600 dark:text-zinc-400">Set up your shop in an afternoon. If Acme isn't for you, leave any time and take your data with you.</p>
+        <section class="px-3 pb-3">
+            <div class="mx-auto flex max-w-6xl flex-col items-center gap-6 rounded-3xl bg-linear-to-br from-lime-300 via-violet-300 to-violet-600 px-4 py-16 text-center text-zinc-950 sm:px-6">
+                <h2 class="text-4xl font-normal tracking-tight">Ready to sell more?</h2>
+                <p class="max-w-md text-zinc-800">Set up your shop in an afternoon. If Acme isn't for you, leave any time and take your data with you.</p>
                 <div class="flex flex-wrap justify-center gap-3">
-                    <x-gui::button href="/catalog/examples/register">Start free trial</x-gui::button>
-                    <x-gui::button variant="outline" color="secondary" commandfor="contact-sales" command="show-modal">Talk to sales</x-gui::button>
+                    <x-gui::button href="/catalog/examples/register" shape="pill" class="bg-zinc-950! text-white! hover:bg-zinc-800!">Start free trial</x-gui::button>
+                    <x-gui::button shape="pill" class="bg-white/70! text-zinc-950! hover:bg-white!" commandfor="contact-sales" command="show-modal">Talk to sales</x-gui::button>
                 </div>
             </div>
         </section>
     </main>
+    </div>
 
     <footer class="border-t border-zinc-200 dark:border-zinc-800">
         <p class="mx-auto max-w-6xl px-4 py-8 text-sm text-zinc-600 sm:px-6 dark:text-zinc-400">© 2026 Acme, Inc. Prices in US dollars, before tax.</p>
@@ -199,7 +201,7 @@
         </form>
         <x-slot:footer>
             <x-gui::modal.close>Cancel</x-gui::modal.close>
-            <x-gui::button type="submit" form="contact-sales-form">Send</x-gui::button>
+            <x-gui::button type="submit" form="contact-sales-form" color="ink" shape="pill">Send</x-gui::button>
         </x-slot:footer>
     </x-gui::modal>
 @endsection

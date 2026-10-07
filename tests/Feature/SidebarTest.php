@@ -84,3 +84,9 @@ it('lets a group heading show and hide the group', function () {
         ->and((string) $this->blade('<x-gui::sidebar.group heading="Help" collapsible :open="false"><x-gui::sidebar.item href="/docs" :current="true">Docs</x-gui::sidebar.item></x-gui::sidebar.group>'))
         ->toMatch('/<details\s+open\s+class="group\/section">/');
 });
+
+it('makes an item without an href a button', function () {
+    $html = (string) $this->blade('<x-gui::sidebar.item icon="cog-6-tooth" commandfor="settings" command="show-modal">Settings</x-gui::sidebar.item>');
+
+    expect($html)->toMatch('/<button\s+type="button"/')->toContain('commandfor="settings"', 'command="show-modal"')->not->toContain('href=', 'aria-current');
+});

@@ -36,6 +36,19 @@ A small label for status, counts or categories.
 </x-gui::badge>
 ```
 
+## Pills with a dot
+
+dot puts a small coloured mark before the label, from the theme (success) or any CSS colour. The label says what it means; the dot only helps scanning.
+
+```blade
+<div class="flex flex-wrap items-center gap-2">
+    <x-gui::badge shape="pill" dot="success">Paid</x-gui::badge>
+    <x-gui::badge shape="pill" dot="warning">Pending</x-gui::badge>
+    <x-gui::badge shape="pill" dot="var(--color-violet-500)">Transfer</x-gui::badge>
+    <x-gui::badge shape="pill" dot="var(--color-lime-500)">Hosting</x-gui::badge>
+</div>
+```
+
 ## Props
 
 | Prop | Type | Default | Description |
@@ -43,6 +56,8 @@ A small label for status, counts or categories.
 | `variant` | `'soft' \| 'solid' \| 'outline'` | `'soft'` |  |
 | `color` | `'primary' \| 'secondary' \| 'success' \| 'warning' \| 'danger' \| 'info'` | `'secondary'` |  |
 | `size` | `'sm' \| 'md'` | `'md'` |  |
+| `shape` | `'default' \| 'pill'` | `'default'` | pill: fully rounded ends. |
+| `dot` | `string` | `null` | A small coloured dot before the label: a theme colour (success) or any CSS colour. Decoration only. |
 
 Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
 
