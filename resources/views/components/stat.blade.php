@@ -7,6 +7,7 @@
     'description' => null,
     'increaseLabel' => null,
     'decreaseLabel' => null,
+    'variant' => 'default',
 ])
 
 @php
@@ -17,6 +18,13 @@
     $good = $trend === null ? null : (($trend === 'up') xor $invert);
 @endphp
 
+{{-- display: a big number with its label under it, centred, for a landing page's "in numbers" strip. --}}
+@if ($variant === 'display')
+<div {{ $attributes->class('text-center') }}>
+    <p class="text-5xl font-normal tracking-tight tabular-nums">{{ $value }}</p>
+    <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{{ $label }}</p>
+</div>
+@else
 <div {{ $attributes }}>
     <p class="text-sm font-medium text-zinc-600 dark:text-zinc-400">{{ $label }}</p>
     <p class="mt-1 text-2xl font-semibold tracking-tight text-zinc-900 tabular-nums dark:text-zinc-100">{{ $value }}</p>
@@ -43,3 +51,4 @@
         </p>
     @endif
 </div>
+@endif

@@ -29,6 +29,7 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Switch](switch.md): An on/off toggle. A real checkbox with role="switch" underneath.
 - [Fieldset](fieldset.md): Groups related controls under a legend, with a shared hint and error.
 - [Label](label.md): A form label. Field uses it for you; use it directly for custom layouts.
+- [Swatches](swatches.md): Pick a colour from a set of swatches. Native radios, so one tab stop, arrow keys and forms all work.
 
 ## Display
 
@@ -43,6 +44,8 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Icon](icon.md): Heroicons that GiraffeUI ships with, or any icon from a blade-icons set.
 - [Progress](progress.md): Shows how far along a task is, or that it is working when you can't tell.
 - [Timeline](timeline.md): Events in order: an order's history, an activity feed, a changelog. An ordered list with a marker for each event and a line joining them.
+- [Code block](code-block.md): A block of code with a Copy button. It scrolls sideways rather than wrapping, and takes keyboard focus to do so.
+- [Snippet](snippet.md): One line of code to copy, such as an install command: a prompt, the code and a copy button.
 - [Kbd](kbd.md): A keyboard key, for shortcuts and instructions.
 - [Skeleton](skeleton.md): A placeholder shaped like the content that is loading.
 - [Empty state](empty-state.md): What to show when there is nothing to show yet, with a way forward.
@@ -59,6 +62,14 @@ _Generated from `workbench/app/Catalog.php` by `composer docs`. Run `composer ca
 - [Heatmap](heatmap.md): A grid of values, each cell shaded on a single-hue scale: busy hours, activity by day. A real table, so every value can be read.
 - [Sparkline](sparkline.md): A tiny trend line for a stat or a table row. The line is quiet and the latest point is the accent, so the eye lands on now.
 - [Line chart](line-chart.md): Change over time, for one series or a few. Drawn on the server as SVG, with real text for every label, a keyboard-friendly crosshair and the numbers as a table.
+
+## Marketing
+
+- [Announcement](announcement.md): A small pill that links to something new, for the top of a landing page or a changelog.
+- [Backdrop](backdrop.md): Decoration for behind a hero: a glow, a grid, dots, an aurora or a spotlight. Hidden from screen readers.
+- [Feature](feature.md): A feature for a landing page: an icon on a tile, a title and a sentence or two.
+- [Page preview](page-preview.md): A link to a page, with the live page shown small above its name. For galleries of examples or templates.
+- [Footer](footer.md): A site footer: your brand and a line about it, columns of links, and the fine print.
 
 ## Navigation
 

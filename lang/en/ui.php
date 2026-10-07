@@ -12,6 +12,11 @@ return [
     'navigation' => 'Navigation',
     'menu' => 'Menu',
     'open_navigation' => 'Open navigation',
+    // Footer
+    'footer' => 'Footer',
+    'newsletter' => 'Get the newsletter',
+    'subscribe' => 'Subscribe',
+
     'collapse_sidebar' => 'Collapse sidebar',
     'expand_sidebar' => 'Expand sidebar',
     'main' => 'Main',

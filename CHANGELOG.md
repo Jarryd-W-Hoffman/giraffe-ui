@@ -6,7 +6,30 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 ## [0.1.0] - Unreleased
 
-The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
+The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 69 components and a catalog.
+
+### Marketing components
+
+#### Added
+- Announcement: a pill that links to something new.
+- Snippet: one line of code (an install command) with a prompt and a copy button.
+- Code block: code with a Copy button, static or `live` (an Alpine expression).
+- Swatches: a colour picker made of native radios, named for screen readers.
+- Backdrop: a glow over a fine grid, for behind a hero.
+- Feature: an icon tile, a title and a sentence, for a landing page.
+- Page preview: a link with the live page shown small, in an inert, lazy-loaded frame.
+- Footer: brand, description, columns of links (each a named nav) and the fine print.
+- Stat: `variant="display"`, a big centred number with its label under it.
+- Command palette: `command-palette.trigger`, a search pill with the shortcut, or a panel.
+- Variants:
+  - Backdrop: `glow`, `grid`, `dots`, `aurora`, `spotlight`.
+  - Footer: `columns`, `simple`, `centered` (with a `social` slot), `newsletter` (a real sign-up form).
+  - Feature: `tile`, `inline`, `plain`.
+  - Announcement: `pill`, `subtle`.
+- Translations: `footer`, `newsletter`, `subscribe`.
+
+#### Changed
+- The landing page is built from these components, with no change to how it looks. The catalog's code blocks use Code block.
 
 ### Examples: filters that filter
 

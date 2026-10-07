@@ -85,16 +85,7 @@
             <x-gui::navbar.item href="https://github.com/Jarryd-W-Hoffman/GiraffeUI">GitHub</x-gui::navbar.item>
 
             <x-slot:actions>
-                <button
-                    type="button"
-                    commandfor="home-search"
-                    command="show-modal"
-                    class="hidden cursor-pointer items-center gap-2 rounded-full bg-zinc-100 py-1.5 ps-3 pe-1.5 text-sm text-zinc-600 transition-colors hover:bg-zinc-200 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text sm:flex dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
-                >
-                    <x-gui::icon name="magnifying-glass" size="sm" />
-                    Search components
-                    <span class="flex gap-0.5" aria-hidden="true"><x-gui::kbd>⌘</x-gui::kbd><x-gui::kbd>K</x-gui::kbd></span>
-                </button>
+                <x-gui::command-palette.trigger for="home-search" class="max-sm:hidden">Search components</x-gui::command-palette.trigger>
                 <x-gui::theme-switcher variant="toggle" size="sm" />
                 <x-gui::button href="/catalog/installation" color="ink" shape="pill" size="sm" class="max-sm:hidden">Get started</x-gui::button>
             </x-slot:actions>
@@ -103,17 +94,10 @@
         <main>
             {{-- The hero: a glow, a fine grid, and the one command to install. --}}
             <section class="relative isolate overflow-hidden px-4 pt-20 pb-16 sm:px-6 sm:pt-28">
-                <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-                    <div class="absolute top-0 left-1/2 h-[36rem] w-[64rem] -translate-x-1/2 rounded-full bg-linear-to-r from-lime-300/40 via-violet-400/30 to-violet-600/40 opacity-70 blur-3xl dark:from-lime-400/20 dark:via-violet-500/20 dark:to-violet-700/30"></div>
-                    <div class="absolute inset-0 bg-[linear-gradient(to_right,var(--color-zinc-200)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-zinc-200)_1px,transparent_1px)] bg-size-[3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_70%)] opacity-60 dark:bg-[linear-gradient(to_right,var(--color-zinc-800)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-zinc-800)_1px,transparent_1px)]"></div>
-                </div>
+                <x-gui::backdrop />
 
                 <div class="mx-auto max-w-4xl text-center">
-                    <a href="/catalog/line-chart" class="group inline-flex items-center gap-2 rounded-full bg-white/70 py-1 ps-1 pe-3 text-sm ring-1 ring-zinc-200 backdrop-blur transition hover:ring-zinc-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text dark:bg-zinc-900/70 dark:ring-zinc-800 dark:hover:ring-zinc-700">
-                        <x-gui::badge shape="pill" size="sm" variant="solid" class="bg-lime-300! text-zinc-900!">New</x-gui::badge>
-                        Charts, a collapsible sidebar and {{ $iconCount }} icons
-                        <x-gui::icon name="arrow-right" size="xs" class="transition-transform group-hover:translate-x-0.5" />
-                    </a>
+                    <x-gui::announcement href="/catalog/line-chart">Charts, a collapsible sidebar and {{ $iconCount }} icons</x-gui::announcement>
 
                     <h1 class="mt-8 text-5xl font-normal tracking-tight text-balance sm:text-7xl">
                         Beautiful,
@@ -131,11 +115,7 @@
                         <x-gui::button href="/catalog/introduction" variant="outline" color="ink" shape="pill" size="lg">Browse components</x-gui::button>
                     </div>
 
-                    <div class="mx-auto mt-8 flex w-fit max-w-full items-center gap-3 rounded-full bg-zinc-100 py-1.5 ps-5 pe-1.5 font-mono text-sm ring-1 ring-zinc-200 dark:bg-zinc-900 dark:ring-zinc-800">
-                        <span class="text-zinc-400 select-none dark:text-zinc-500" aria-hidden="true">$</span>
-                        <code class="truncate">{{ $install }}</code>
-                        <x-gui::copy-button :value="$install" label="Copy the install command" class="[&_button]:rounded-full" />
-                    </div>
+                    <x-gui::snippet :value="$install" copy-label="Copy the install command" class="mx-auto mt-8" />
                 </div>
             </section>
 
@@ -265,33 +245,18 @@
                             <x-gui::chart.donut :size="110" :thickness="12" :data="['Card' => 31200, 'PayPal' => 11400, 'Bank transfer' => 4100]" prefix="$" compact />
                         </x-gui::card>
 
-                        <button
-                            type="button"
-                            commandfor="home-search"
-                            command="show-modal"
-                            class="group flex w-full cursor-pointer items-center justify-between gap-4 rounded-[calc(var(--radius-gui)+1.125rem)] bg-zinc-900 p-6 text-start text-white transition hover:bg-zinc-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
-                        >
-                            <span>
-                                <span class="block text-lg">Find any component</span>
-                                <span class="block text-sm text-zinc-400 dark:text-zinc-600">Press ⌘K anywhere on this page.</span>
-                            </span>
-                            <x-gui::icon name="magnifying-glass" class="transition-transform group-hover:scale-110" />
-                        </button>
+                        <x-gui::command-palette.trigger for="home-search" variant="panel" description="Press ⌘K anywhere on this page.">Find any component</x-gui::command-palette.trigger>
                     </div>
                 </div>
             </section>
 
             {{-- The numbers. --}}
             <section aria-label="GiraffeUI in numbers" class="border-y border-zinc-200 px-4 py-12 sm:px-6 dark:border-zinc-800">
-                <dl class="mx-auto grid max-w-7xl grid-cols-2 gap-8 text-center lg:grid-cols-4">
+                <div class="mx-auto grid max-w-7xl grid-cols-2 gap-8 lg:grid-cols-4">
                     @foreach ([[$componentCount, 'components'], [$iconCount, 'icons, bundled'], ['3', 'browsers tested'], ['0', 'required build steps']] as [$number, $label])
-                        <div>
-                            <dt class="sr-only">{{ ucfirst($label) }}</dt>
-                            <dd class="text-5xl font-normal tracking-tight tabular-nums">{{ $number }}</dd>
-                            <dd class="mt-2 text-sm text-zinc-600 dark:text-zinc-400" aria-hidden="true">{{ $label }}</dd>
-                        </div>
+                        <x-gui::stat variant="display" :value="$number" :label="$label" />
                     @endforeach
-                </dl>
+                </div>
             </section>
 
             {{-- Why GiraffeUI. --}}
@@ -303,13 +268,7 @@
                     </div>
                     <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($features as $feature)
-                            <div class="group rounded-3xl bg-zinc-100 p-7 transition-colors hover:bg-zinc-200/70 dark:bg-zinc-900 dark:hover:bg-zinc-800/80">
-                                <span class="flex size-11 items-center justify-center rounded-2xl bg-white text-gui-primary-text shadow-xs transition-transform group-hover:-rotate-6 group-hover:scale-110 dark:bg-black">
-                                    <x-gui::icon :name="$feature['icon']" />
-                                </span>
-                                <h3 class="mt-6 text-lg">{{ $feature['title'] }}</h3>
-                                <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{{ $feature['text'] }}</p>
-                            </div>
+                            <x-gui::feature :icon="$feature['icon']" :title="$feature['title']">{{ $feature['text'] }}</x-gui::feature>
                         @endforeach
                     </div>
                 </div>
@@ -338,18 +297,7 @@
                         <h2 id="theming-heading" class="text-4xl font-normal tracking-tight sm:text-5xl">Make it <span class="text-zinc-500 dark:text-zinc-400">yours</span></h2>
                         <p class="mt-4 text-lg text-zinc-600 dark:text-zinc-400">Two variables restyle everything, in light and dark. Try it: the preview is live, with its own dark mode.</p>
 
-                        <fieldset class="mt-10">
-                            <legend class="text-sm font-medium">Primary colour</legend>
-                            <div class="mt-3 flex flex-wrap gap-2">
-                                @foreach ($colors as $color)
-                                    <label class="relative cursor-pointer">
-                                        <input type="radio" name="home_color" value="{{ $color }}" x-model="color" class="peer sr-only">
-                                        <span class="sr-only">{{ ucfirst($color) }}</span>
-                                        <span class="block size-9 rounded-full ring-2 ring-transparent ring-offset-2 ring-offset-zinc-100 transition peer-checked:ring-zinc-900 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-zinc-900 dark:ring-offset-zinc-950 dark:peer-checked:ring-white dark:peer-focus-visible:outline-white" style="background: var(--color-{{ $color }}-600)" aria-hidden="true"></span>
-                                    </label>
-                                @endforeach
-                            </div>
-                        </fieldset>
+                        <x-gui::swatches name="home_color" label="Primary colour" x-model="color" value="violet" class="mt-10" :options="collect($colors)->mapWithKeys(fn ($color) => [$color => ['label' => ucfirst($color), 'color' => 'var(--color-'.$color.'-600)']])->all()" />
 
                         <div class="mt-8 space-y-3">
                             <p id="home-radius-label" class="text-sm font-medium">Corners</p>
@@ -461,19 +409,7 @@
                     </div>
                     <div class="mt-12 grid gap-4 md:grid-cols-3">
                         @foreach ($examples as $example)
-                            <a href="/catalog/examples/{{ $example['slug'] }}" class="group block rounded-3xl bg-zinc-100 p-3 transition hover:-translate-y-1 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gui-primary-text dark:bg-zinc-900">
-                                {{-- A live page at a third of its size; inert, so it's a picture you can't tab into. --}}
-                                <div class="relative h-56 overflow-hidden rounded-2xl bg-white dark:bg-black" aria-hidden="true">
-                                    <iframe src="/catalog/examples/{{ $example['slug'] }}" title="{{ $example['title'] }} example" loading="lazy" inert tabindex="-1" class="pointer-events-none absolute top-0 left-0 h-[300%] w-[300%] origin-top-left scale-[0.3334] border-0"></iframe>
-                                </div>
-                                <div class="flex items-center justify-between gap-3 px-3 pt-4 pb-2">
-                                    <div>
-                                        <p class="text-lg">{{ $example['title'] }}</p>
-                                        <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ $example['text'] }}</p>
-                                    </div>
-                                    <x-gui::icon name="arrow-up-right" class="text-zinc-500 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-zinc-400" />
-                                </div>
-                            </a>
+                            <x-gui::page-preview :href="'/catalog/examples/'.$example['slug']" :title="$example['title']" :description="$example['text']" />
                         @endforeach
                     </div>
                 </div>
@@ -496,10 +432,7 @@
                 <div class="relative isolate mx-auto max-w-7xl overflow-hidden rounded-3xl bg-linear-to-br from-lime-300 via-violet-300 to-violet-600 px-6 py-20 text-center text-zinc-950">
                     <h2 class="text-4xl font-normal tracking-tight text-balance sm:text-6xl">Build your next Laravel app <span class="text-zinc-800">with GiraffeUI</span></h2>
                     <p class="mx-auto mt-5 max-w-xl text-lg text-zinc-800">Free and open source under the MIT licence. Install it in a minute.</p>
-                    <div class="mx-auto mt-10 flex w-fit max-w-full items-center gap-3 rounded-full bg-white/70 py-1.5 ps-5 pe-1.5 font-mono text-sm backdrop-blur">
-                        <code class="truncate">{{ $install }}</code>
-                        <x-gui::copy-button :value="$install" label="Copy the install command" />
-                    </div>
+                    <x-gui::snippet :value="$install" :prompt="false" copy-label="Copy the install command" class="mx-auto mt-10 bg-white/70! ring-0! backdrop-blur" />
                     <div class="mt-8 flex flex-wrap justify-center gap-3">
                         <x-gui::button href="/catalog/installation" shape="pill" size="lg" class="bg-zinc-950! text-white! hover:bg-zinc-800!">Get started</x-gui::button>
                         <x-gui::button href="https://github.com/Jarryd-W-Hoffman/GiraffeUI" shape="pill" size="lg" class="bg-white/70! text-zinc-950! hover:bg-white!">Star on GitHub</x-gui::button>
@@ -508,28 +441,13 @@
             </section>
         </main>
 
-        <footer class="px-4 py-16 sm:px-6">
-            <div class="mx-auto grid grid-cols-1 max-w-7xl gap-10 md:grid-cols-[minmax(0,1fr)_repeat(3,auto)] md:gap-16">
-                <div>
-                    <p class="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
-                        @include('catalog::partials.logo', ['class' => 'size-9'])
-                        GiraffeUI
-                    </p>
-                    <p class="mt-3 max-w-xs text-sm text-zinc-600 dark:text-zinc-400">Accessible Blade and Alpine components for Laravel and Tailwind CSS v4.</p>
-                </div>
-                @foreach ($footer as $heading => $links)
-                    <nav aria-label="{{ $heading }}">
-                        <p class="text-sm font-medium">{{ $heading }}</p>
-                        <ul class="mt-4 space-y-2.5 text-sm text-zinc-600 dark:text-zinc-400">
-                            @foreach ($links as $text => $href)
-                                <li><a href="{{ $href }}" class="hover:text-zinc-900 hover:underline dark:hover:text-zinc-100">{{ $text }}</a></li>
-                            @endforeach
-                        </ul>
-                    </nav>
-                @endforeach
-            </div>
-            <p class="mx-auto mt-12 max-w-7xl border-t border-zinc-200 pt-8 text-sm text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">© {{ date('Y') }} GiraffeUI. MIT licensed. Icons by Heroicons.</p>
-        </footer>
+        <x-gui::footer :links="$footer" container="max-w-7xl" description="Accessible Blade and Alpine components for Laravel and Tailwind CSS v4.">
+            <x-slot:brand>
+                @include('catalog::partials.logo', ['class' => 'size-9'])
+                GiraffeUI
+            </x-slot:brand>
+            <x-slot:legal>© {{ date('Y') }} GiraffeUI. MIT licensed. Icons by Heroicons.</x-slot:legal>
+        </x-gui::footer>
 
         <x-gui::modal id="home-invite" title="Invite a teammate" description="They'll get an email with a link to join." size="sm">
             <form id="home-invite-form" class="space-y-4" x-on:submit.prevent="$el.closest('dialog').close(); GiraffeUI.toast('Invitation sent', { color: 'success' })">
