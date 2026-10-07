@@ -531,6 +531,11 @@ await check('landing page: the theming playground restyles its preview, and ⌘K
     await page.waitForFunction((el) => el.style.getPropertyValue('--radius-gui') === '9999px', await preview.elementHandle());
     expect((await preview.evaluate((el) => el.style.getPropertyValue('--color-gui-primary'))).includes('emerald'), 'the colour did not apply');
     expect((await page.locator('section[aria-labelledby=theming-heading] code').textContent()).includes('--color-emerald-600'), 'the theme code did not follow');
+    // The preview's dark mode is its own: the page keeps its theme.
+    const pageDark = await page.evaluate(() => document.documentElement.classList.contains('dark'));
+    await page.locator('label', { hasText: 'Dark preview' }).click();
+    await page.waitForFunction((el) => el.classList.contains('dark') !== el.classList.contains('light'), await preview.elementHandle());
+    expect((await page.evaluate(() => document.documentElement.classList.contains('dark'))) === pageDark, 'the switch changed the whole page');
 
     await page.locator('header').getByRole('button', { name: /Search components/ }).click();
     const palette = page.locator('#home-search');

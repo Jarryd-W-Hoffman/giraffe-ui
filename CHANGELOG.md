@@ -8,6 +8,12 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### Landing page: a preview with its own dark mode
+
+#### Changed
+- The theming playground's "Dark preview" switch changes only the preview; the page keeps its theme.
+  - The catalog's `dark:` variant now stops at a `.light` box, and boxes that pick their own mode get the matching theme colours.
+
 ### Charts: the data table is optional
 
 #### Changed
