@@ -140,3 +140,18 @@ it('shades a heatmap in five steps of one hue, as a table', function () {
         ->and(substr_count($html, 'bg-zinc-100 dark:bg-zinc-800'))->toBe(3)
         ->and($html)->toContain('<span class="sr-only">10</span>', '<span class="sr-only">–</span>');
 });
+
+it('draws a dashed, muted comparison behind the main line, and can drop the axis', function () {
+    $html = (string) $this->blade('<x-gui::chart.line :labels="[\'A\', \'B\']" :series="[\'Now\' => [1, 2], \'Before\' => [2, 1]]" :colors="[\'Before\' => \'muted\']" :dashed="[\'Before\']" :axis="false" area />');
+
+    expect($html)->toContain('stroke-dasharray="6 5"', 'var(--gui-chart-muted)', 'border-dashed', '<linearGradient', 'fill="url(#gui-chart-fill')
+        ->and(strpos($html, 'stroke-dasharray="6 5"'))->toBeLessThan(strpos($html, 'color: var(--color-gui-chart-1)'))
+        // No y axis or gridlines, but the data table is still there.
+        ->and(substr_count($html, 'class="relative shrink-0 text-right tabular-nums hidden"'))->toBe(1)
+        ->and($html)->toContain('Show the data');
+});
+
+it('makes navbar links pills', function () {
+    expect((string) $this->blade('<x-gui::navbar variant="pills"><x-gui::navbar.item href="/x">X</x-gui::navbar.item></x-gui::navbar>'))
+        ->toContain('data-variant="pills"', 'group-data-[variant=pills]/navbar:rounded-full');
+});

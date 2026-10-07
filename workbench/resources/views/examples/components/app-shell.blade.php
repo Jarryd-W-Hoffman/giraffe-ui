@@ -1,4 +1,4 @@
-{{-- The app around the Dashboard and Settings examples: brand, navigation, signed-in user and top bar. --}}
+{{-- The app around the Settings and Customers examples: brand, navigation, signed-in user and top bar. --}}
 @php
     $photo = \Workbench\App\Catalog::data()['photo'];
 @endphp

@@ -3,6 +3,7 @@
     'menuLabel' => null,
     'sticky' => false,
     'container' => 'max-w-6xl',
+    'variant' => 'default',
 ])
 
 @php
@@ -31,7 +32,8 @@
         @endisset
 
         <nav aria-label="{{ $label }}" class="hidden md:block">
-            <ul class="group/navbar flex items-center gap-1" data-place="bar">{{ $slot }}</ul>
+            {{-- pills: each link a rounded pill, the current one filled. --}}
+            <ul class="group/navbar flex items-center gap-1" data-place="bar" data-variant="{{ $variant }}">{{ $slot }}</ul>
         </nav>
 
         <div class="ms-auto flex items-center gap-2">

@@ -22,7 +22,7 @@ An application shell with side navigation: a sticky column on large screens and 
 
 ## Navigation
 
-A labelled nav of groups and links. The link for the page being shown gets aria-current="page" automatically, or set current yourself. Group headings name their group without an id, so the layout can render the same navigation in its column and its drawer. See it all together in the Dashboard example.
+A labelled nav of groups and links. The link for the page being shown gets aria-current="page" automatically, or set current yourself. Group headings name their group without an id, so the layout can render the same navigation in its column and its drawer. See it all together in the Settings example.
 
 ```blade
 <div class="rounded-gui border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900">
@@ -37,7 +37,7 @@ A labelled nav of groups and links. The link for the page being shown gets aria-
         </x-gui::sidebar.group>
     </x-gui::sidebar>
 </div>
-<x-gui::button href="/catalog/examples/dashboard" variant="outline" color="secondary">Open the Dashboard example →</x-gui::button>
+<x-gui::button href="/catalog/examples/settings" variant="outline" color="secondary">Open the Settings example →</x-gui::button>
 ```
 
 ## Sub-sections
@@ -69,7 +69,7 @@ sidebar.submenu nests items under a parent, behind a native disclosure that work
 
 ## Collapsing to a rail
 
-collapsible on the layout adds a Collapse sidebar button below the navigation. Collapsed, the column becomes a rail of icons: hover or focus one for its name, and screen readers still hear every label. Items without an icon show their first letter. The choice is remembered in this browser and applied before the page paints. Below, a rail on its own (data-collapsed is what the button sets); the Dashboard example has the real thing.
+collapsible on the layout adds a Collapse sidebar button below the navigation. Collapsed, the column becomes a rail of icons: hover or focus one for its name, and screen readers still hear every label. Items without an icon show their first letter. The choice is remembered in this browser and applied before the page paints. Below, a rail on its own (data-collapsed is what the button sets); the Settings example has the real thing.
 
 ```blade
 <div data-collapsed class="w-16 rounded-gui border border-zinc-200 bg-zinc-50 px-3 py-3 dark:border-zinc-800 dark:bg-zinc-900">

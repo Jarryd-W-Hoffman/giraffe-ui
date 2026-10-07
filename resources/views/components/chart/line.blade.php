@@ -11,6 +11,8 @@
     'curve' => false,
     'markers' => false,
     'highlight' => null,
+    'dashed' => [],
+    'axis' => true,
     'reference' => null,
     'referenceLabel' => null,
     'zero' => true,
@@ -60,8 +62,10 @@
 
         // Colour follows the series, not its position on screen: give a series its own slot with colors.
         $slot = 0;
-        $lines = collect($series)->map(function ($values, $seriesName) use (&$slot, $colors, $min, $max, $count, $format, $exact, $stacked, $tops, $curve, $highlight) {
-            $color = 'var(--color-gui-'.($colors[$seriesName] ?? 'chart-'.(($slot++ % 8) + 1)).')';
+        $lines = collect($series)->map(function ($values, $seriesName) use (&$slot, $colors, $min, $max, $count, $format, $exact, $stacked, $tops, $curve, $highlight, $dashed) {
+            // A theme colour by name (chart-3, primary), or muted for the grey that recedes.
+            $name = $colors[$seriesName] ?? 'chart-'.(($slot++ % 8) + 1);
+            $color = $name === 'muted' ? 'var(--gui-chart-muted)' : 'var(--color-gui-'.$name.')';
             // highlight: one series keeps its colour and the rest step back to grey, drawn underneath it.
             $muted = $highlight !== null && (string) $highlight !== (string) $seriesName;
             $color = $muted ? 'var(--gui-chart-muted)' : $color;
@@ -74,6 +78,8 @@
                 'name' => (string) $seriesName,
                 'color' => $color,
                 'muted' => $muted,
+                // A dashed line, for a comparison such as last year or a forecast.
+                'dashed' => in_array((string) $seriesName, array_map('strval', (array) $dashed), true),
                 'line' => Chart::line($drawn, $min, $max, $curve),
                 'area' => $stacked ? Chart::band($tops[$seriesName]['upper'], $tops[$seriesName]['lower'], $min, $max, $curve) : Chart::area($values, $min, $max, $curve),
                 'ys' => array_map(fn ($value, $index) => is_numeric($value) ? Chart::y($drawn[$index], $min, $max) / 10 : null, $values, array_keys($values)),
@@ -84,8 +90,9 @@
                 'lastValue' => $last === null ? null : $format($values[$last]),
             ];
         })->values()->all();
-        // Grey lines first, so the highlighted one is drawn on top of them.
-        $drawOrder = collect($lines)->sortBy(fn ($line) => $line['muted'] ? 0 : 1)->all();
+        $gradient = \JayAitch\GiraffeUI\Support\Id::make('gui-chart-fill');
+        // Grey lines first, then dashed comparisons, so the main lines are drawn on top.
+        $drawOrder = collect($lines)->sortBy(fn ($line) => $line['muted'] ? 0 : ($line['dashed'] ? 1 : 2))->all();
 
         $xs = array_map(fn ($index) => Chart::x($index, $count) / 10, range(0, $count - 1));
         $several = count($lines) > 1;
@@ -153,8 +160,8 @@
             {{-- Labels and values are data: Alpine reads them with JSON.parse and shows them with x-text, never as HTML. --}}
             <script type="application/json" x-ref="data">{!! json_encode(['labels' => $labels, 'xs' => $xs, 'series' => collect($lines)->map(fn ($line) => ['name' => $line['name'], 'color' => $line['color'], 'ys' => $line['ys'], 'values' => $line['values']])->all()], JSON_HEX_TAG | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>
 
-            {{-- The y axis: rounded ticks, right-aligned so the digits line up. --}}
-            <div class="relative shrink-0 text-right tabular-nums" style="height: {{ $height }}px" aria-hidden="true">
+            {{-- The y axis: rounded ticks, right-aligned so the digits line up. axis="false" leaves it and the gridlines out. --}}
+            <div @class(['relative shrink-0 text-right tabular-nums', 'hidden' => ! $axis]) style="height: {{ $height }}px" aria-hidden="true">
                 @foreach ($ticks as $value)
                     <span class="absolute right-0 -translate-y-1/2 whitespace-nowrap" style="top: {{ Chart::y($value, $min, $max) / 10 }}%">{{ $tick($value) }}</span>
                 @endforeach
@@ -179,7 +186,7 @@
                 >
                     <svg viewBox="0 0 {{ Chart::SIZE }} {{ Chart::SIZE }}" preserveAspectRatio="none" aria-hidden="true" class="absolute inset-0 size-full overflow-visible">
                         {{-- Hairline gridlines, one shade off the surface, solid. --}}
-                        <g class="text-zinc-200 dark:text-zinc-800" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
+                        <g @class(['text-zinc-200 dark:text-zinc-800', 'hidden' => ! $axis]) stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke">
                             @foreach ($ticks as $value)
                                 <line x1="0" x2="{{ Chart::SIZE }}" y1="{{ Chart::y($value, $min, $max) }}" y2="{{ Chart::y($value, $min, $max) }}" vector-effect="non-scaling-stroke" />
                             @endforeach
@@ -188,12 +195,21 @@
                             {{-- The reference line: dashed and neutral, so it never reads as another series. --}}
                             <line x1="0" x2="{{ Chart::SIZE }}" y1="{{ Chart::y($referenceValue, $min, $max) }}" y2="{{ Chart::y($referenceValue, $min, $max) }}" class="text-zinc-500 dark:text-zinc-400" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" vector-effect="non-scaling-stroke" />
                         @endif
-                        @foreach ($drawOrder as $line)
+                        @foreach ($drawOrder as $index => $line)
                             <g style="color: {{ $line['color'] }}">
-                                @if ($area && ! $line['muted'])
-                                    <path d="{{ $line['area'] }}" fill="currentColor" fill-opacity="{{ $stacked ? 0.25 : 0.1 }}" />
+                                @if ($area && ! $line['muted'] && ! $line['dashed'])
+                                    @if ($stacked)
+                                        <path d="{{ $line['area'] }}" fill="currentColor" fill-opacity="0.25" />
+                                    @else
+                                        {{-- A soft wash that fades towards the baseline. --}}
+                                        <linearGradient id="{{ $gradient }}-{{ $index }}" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0" stop-color="currentColor" stop-opacity="0.24" />
+                                            <stop offset="1" stop-color="currentColor" stop-opacity="0" />
+                                        </linearGradient>
+                                        <path d="{{ $line['area'] }}" fill="url(#{{ $gradient }}-{{ $index }})" />
+                                    @endif
                                 @endif
-                                <path d="{{ $line['line'] }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+                                <path d="{{ $line['line'] }}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" @if ($line['dashed']) stroke-dasharray="6 5" @endif vector-effect="non-scaling-stroke" />
                             </g>
                         @endforeach
                     </svg>

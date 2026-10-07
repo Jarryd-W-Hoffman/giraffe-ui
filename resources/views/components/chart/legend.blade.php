@@ -10,7 +10,11 @@
 <ul {{ $attributes->class('flex flex-wrap gap-x-4 gap-y-1') }}>
     @foreach ($items as $item)
         <li class="flex items-center gap-1.5">
-            <span @class(['shrink-0', 'h-0.5 w-3 rounded-full' => $shape === 'line', 'size-2.5 rounded-[2px]' => $shape !== 'line']) style="background: {{ $item['color'] }}" aria-hidden="true"></span>
+            @if ($shape === 'line' && ($item['dashed'] ?? false))
+                <span class="w-3.5 shrink-0 border-t-2 border-dashed" style="border-color: {{ $item['color'] }}" aria-hidden="true"></span>
+            @else
+                <span @class(['shrink-0', 'h-0.5 w-3 rounded-full' => $shape === 'line', 'size-2.5 rounded-[2px]' => $shape !== 'line']) style="background: {{ $item['color'] }}" aria-hidden="true"></span>
+            @endif
             {{ $item['name'] }}
         </li>
     @endforeach

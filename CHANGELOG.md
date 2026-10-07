@@ -8,6 +8,25 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### Dashboard redesign
+
+#### Added
+- Navbar: `variant="pills"`, where each link is a rounded pill and the current one is filled.
+- Line chart:
+  - `dashed` draws series dashed and behind the others, for comparisons.
+  - `colors` takes `muted` for a receding grey.
+  - `axis="false"` drops the y axis and gridlines.
+  - Area fills now fade towards the baseline.
+
+#### Changed
+- The Dashboard example is redesigned as a dark-first analytics page. It has:
+  - a pill navbar and a welcome headline;
+  - total revenue with Transfer and Request buttons;
+  - a split bar of spending by category;
+  - cash flow (income against dashed expenses), activity by time as a heatmap, and recent transactions with category pills.
+- The heatmap shows every column label when there are eight or fewer.
+- The sidebar's catalog examples and browser test now use the Settings example.
+
 ### Sidebar: collapsing and sub-sections
 
 #### Added
