@@ -64,3 +64,14 @@ it('has exactly one aria-hidden on a decorative blade-icons icon, and none on a 
         ->and($decorative)->toMatch('/^<svg aria-hidden="true"/')
         ->and($labelled)->not->toContain('aria-hidden');
 })->group('blade-icons')->skip(fn () => ! function_exists('svg'), 'blade-icons is not installed');
+
+it('draws every bundled icon, with each shape\'s own fill rule', function () {
+    foreach (array_keys(Icons::PATHS) as $name) {
+        expect((string) $this->blade('<x-gui::icon :name="$name" />', ['name' => $name]))->toContain('<path');
+    }
+
+    // Some icons mix fill rules across their shapes; each shape keeps its own.
+    expect(array_diff(array_keys(Icons::SHAPES), array_keys(Icons::PATHS)))->toBe([])
+        ->and(count(Icons::PATHS))->toBeGreaterThan(150)
+        ->and((string) $this->blade('<x-gui::icon name="briefcase" />'))->toMatch('/<path\s+fill-rule="evenodd"[^>]*d="/')->toMatch('/<path\s+d="/');
+});

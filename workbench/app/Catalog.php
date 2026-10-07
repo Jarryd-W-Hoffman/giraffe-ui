@@ -4,6 +4,7 @@ namespace Workbench\App;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use JayAitch\GiraffeUI\Support\Icons;
 use Livewire\Livewire;
 
 /**
@@ -1757,15 +1758,18 @@ class Catalog
                 'examples' => [
                     [
                         'title' => 'Bundled icons',
-                        'description' => 'These come with GiraffeUI and are what its components use.',
+                        'description' => 'These '.count(Icons::PATHS).' come with GiraffeUI, no packages needed: Heroicons\' 20px solid set. Type to filter them.',
                         'code' => <<<'BLADE'
-                            <div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                                @foreach (array_keys(\JayAitch\GiraffeUI\Support\Icons::PATHS) as $name)
-                                    <div class="flex flex-col items-center gap-2 rounded-gui p-3 text-center text-xs text-zinc-600 dark:text-zinc-400">
-                                        <x-gui::icon :name="$name" class="text-zinc-900 dark:text-zinc-100" />
-                                        {{ $name }}
-                                    </div>
-                                @endforeach
+                            <div x-data="{ query: '' }" class="w-full space-y-4">
+                                <x-gui::input type="search" x-model="query" placeholder="Filter icons" aria-label="Filter icons" class="max-w-xs" />
+                                <div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                                    @foreach (array_keys(\JayAitch\GiraffeUI\Support\Icons::PATHS) as $name)
+                                        <div x-show="@js($name).includes(query.trim().toLowerCase())" class="flex flex-col items-center gap-2 rounded-gui p-3 text-center text-xs text-zinc-600 dark:text-zinc-400">
+                                            <x-gui::icon :name="$name" class="text-zinc-900 dark:text-zinc-100" />
+                                            {{ $name }}
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
                             BLADE,
                     ],
