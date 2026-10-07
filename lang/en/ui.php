@@ -12,6 +12,8 @@ return [
     'navigation' => 'Navigation',
     'menu' => 'Menu',
     'open_navigation' => 'Open navigation',
+    'collapse_sidebar' => 'Collapse sidebar',
+    'expand_sidebar' => 'Expand sidebar',
     'main' => 'Main',
     'breadcrumb' => 'Breadcrumb',
     'command_palette' => 'Command palette',

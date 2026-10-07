@@ -10,7 +10,7 @@ Heroicons that GiraffeUI ships with, or any icon from a blade-icons set.
 
 ## Bundled icons
 
-These 165 come with GiraffeUI, no packages needed: Heroicons' 20px solid set. Type to filter them.
+These 166 come with GiraffeUI, no packages needed: Heroicons' 20px solid set. Type to filter them.
 
 ```blade
 <div x-data="{ query: '' }" class="w-full space-y-4">
