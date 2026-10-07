@@ -33,7 +33,7 @@ describe('forms', function () {
             ->call('save')
             ->assertHasNoErrors()
             ->assertDontSeeHtml('aria-invalid="true"')
-            ->assertDispatched('toast', message: "Saved Ada Lovelace's profile.", color: 'success');
+            ->assertDispatched('gui-toast', message: "Saved Ada Lovelace's profile.", color: 'success');
     });
 
     it('validates the birthday from the date picker', function () {
@@ -132,13 +132,13 @@ describe('customers table', function () {
     it('changes the status of one customer or the selection', function () {
         $table = Livewire::test(CustomersTable::class)
             ->call('setStatus', 'churned', 'cus_1001')
-            ->assertDispatched('toast', color: 'success');
+            ->assertDispatched('gui-toast', color: 'success');
 
         expect($table->instance()->customers()->firstWhere('id', 'cus_1001')['status'])->toBe('churned');
 
         $table->set('selected', ['cus_1002', 'cus_1003'])
             ->call('setStatus', 'churned')
-            ->assertDispatched('toast', message: '2 customers marked churned.')
+            ->assertDispatched('gui-toast', message: '2 customers marked churned.')
             ->call('setStatus', 'deleted-ish', 'cus_1004');
 
         expect($table->instance()->customers()->whereIn('id', ['cus_1002', 'cus_1003'])->pluck('status')->unique()->all())->toBe(['churned'])
@@ -160,7 +160,7 @@ describe('customers table', function () {
         $table->call('confirmDelete')
             ->assertSee('Delete 2 customers?')
             ->call('delete')
-            ->assertDispatched('toast', message: '2 customers deleted.')
+            ->assertDispatched('gui-toast', message: '2 customers deleted.')
             ->assertSet('selected', []);
 
         expect($table->instance()->rows()->total())->toBe(39);
@@ -194,7 +194,7 @@ describe('timezone picker', function () {
             ->tap(fn ($picker) => expect(array_key_first($picker->instance()->initialTimezones()))->toBe('Asia/Tokyo'))
             ->call('save')
             ->assertHasNoErrors()
-            ->assertDispatched('toast', message: 'Saved Asia/Tokyo.')
+            ->assertDispatched('gui-toast', message: 'Saved Asia/Tokyo.')
             ->set('timezone', 'Mars/Olympus')
             ->call('save')
             ->assertHasErrors(['timezone' => 'timezone']);
@@ -245,7 +245,7 @@ describe('wizard', function () {
             ->call('next')
             ->call('next')
             ->call('finish')
-            ->assertDispatched('toast', message: 'Created the analytical-engine workspace.', color: 'success')
+            ->assertDispatched('gui-toast', message: 'Created the analytical-engine workspace.', color: 'success')
             ->assertSet('step', 'account')
             ->assertSet('name', '');
     });
@@ -293,6 +293,6 @@ describe('uploads', function () {
             ->set('avatar', UploadedFile::fake()->image('ada.png'))
             ->call('save')
             ->assertHasNoErrors()
-            ->assertDispatched('toast', message: 'Uploaded ada.png.', color: 'success');
+            ->assertDispatched('gui-toast', message: 'Uploaded ada.png.', color: 'success');
     });
 });

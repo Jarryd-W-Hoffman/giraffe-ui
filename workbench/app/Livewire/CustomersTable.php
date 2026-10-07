@@ -95,7 +95,7 @@ class CustomersTable extends Component
             $this->statuses[$each] = $status;
         }
 
-        $this->dispatch('toast', message: $this->describe($ids).' marked '.strtolower(self::STATUSES[$status]).'.', color: 'success');
+        $this->dispatch('gui-toast', message: $this->describe($ids).' marked '.strtolower(self::STATUSES[$status]).'.', color: 'success');
     }
 
     /**
@@ -125,7 +125,7 @@ class CustomersTable extends Component
 
         // The menu item that opened the dialog is gone, so put focus somewhere sensible.
         $this->js("document.getElementById('confirm-delete').close(); document.getElementById('customers-heading').focus()");
-        $this->dispatch('toast', message: $message, color: 'success');
+        $this->dispatch('gui-toast', message: $message, color: 'success');
     }
 
     /**

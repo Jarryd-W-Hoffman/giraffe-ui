@@ -29,7 +29,7 @@
 
                 // ...
 
-                $this->dispatch('toast', message: 'Saved', color: 'success');
+                $this->dispatch('gui-toast', message: 'Saved', color: 'success');
             }
             PHP;
 
@@ -152,7 +152,7 @@
 
     <h2 id="overlays" class="mt-12 scroll-mt-20 text-xl font-semibold tracking-tight">Modals and menus</h2>
     <p class="mt-2 text-zinc-600 dark:text-zinc-400">
-        Modals and accordions have <code class="font-mono text-sm">wire:ignore.self</code>, so a re-render doesn't close them. Dropdown items run their <code class="font-mono text-sm">wire:click</code> and then close the menu. Toasts listen for Livewire's <code class="font-mono text-sm">$this->dispatch('toast', …)</code>.
+        Modals and accordions have <code class="font-mono text-sm">wire:ignore.self</code>, so a re-render doesn't close them. Dropdown items run their <code class="font-mono text-sm">wire:click</code> and then close the menu. Toasts listen for Livewire's <code class="font-mono text-sm">$this->dispatch('gui-toast', …)</code>.
     </p>
     <div class="mt-4">
         @include('catalog::partials.code', ['code' => $overlays])

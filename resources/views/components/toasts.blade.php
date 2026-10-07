@@ -3,17 +3,20 @@
 ])
 
 @php
-    // A toast flashed to the session: session()->flash('toast', 'Saved') or ['message' => 'Saved', 'color' => 'success'].
-    $flashed = session('toast');
+    // A toast flashed to the session: session()->flash('gui-toast', 'Saved') or ['message' => 'Saved', 'color' => 'success'].
+    // The unprefixed 'toast' key still works until 1.0.
+    $flashed = session('gui-toast') ?? session('toast');
     $flashed = is_string($flashed) ? ['message' => $flashed] : (is_array($flashed) ? $flashed : null);
 @endphp
 
 {{--
     Place once, e.g. in your layout. Show a toast with:
       GiraffeUI.toast('Saved', { color: 'success' })        // JavaScript
-      $dispatch('toast', { message: 'Saved' })               // Alpine
-      $this->dispatch('toast', message: 'Saved')             // Livewire
-      session()->flash('toast', 'Saved')                     // a redirect
+      $dispatch('gui-toast', { message: 'Saved' })           // Alpine
+      $this->dispatch('gui-toast', message: 'Saved')         // Livewire
+      session()->flash('gui-toast', 'Saved')                 // a redirect
+    The names are prefixed so they don't collide with an app's own "toast". The old unprefixed event and session key
+    still work until 1.0.
     The region is a popover in the top layer, so toasts also appear above open modals.
 --}}
 <div
@@ -43,6 +46,7 @@
         },
     }"
     x-init="$el.showPopover?.(); @if ($flashed) add(@js($flashed)); @endif"
+    x-on:gui-toast.window="add($event.detail)"
     x-on:toast.window="add($event.detail)"
     {{ $attributes->class('pointer-events-none fixed inset-auto end-0 bottom-0 m-0 flex w-full max-w-sm flex-col gap-2 overflow-visible border-0 bg-transparent p-4') }}
 >
@@ -89,5 +93,5 @@
 
 <script @if ($nonce = \Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ $nonce }}" @endif>
     window.GiraffeUI = window.GiraffeUI || {};
-    window.GiraffeUI.toast = (message, options = {}) => window.dispatchEvent(new CustomEvent('toast', { detail: { message, ...options } }));
+    window.GiraffeUI.toast = (message, options = {}) => window.dispatchEvent(new CustomEvent('gui-toast', { detail: { message, ...options } }));
 </script>

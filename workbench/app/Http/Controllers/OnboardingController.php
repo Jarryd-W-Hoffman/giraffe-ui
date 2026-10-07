@@ -52,7 +52,7 @@ class OnboardingController
             $data = $request->session()->pull('onboarding', []);
             abort_unless($this->reached($data) === 3, 409);
 
-            return redirect('/catalog/examples/dashboard')->with('toast', ['message' => "Created the {$data['workspace']} workspace.", 'color' => 'success']);
+            return redirect('/catalog/examples/dashboard')->with('gui-toast', ['message' => "Created the {$data['workspace']} workspace.", 'color' => 'success']);
         }
 
         $validated = $request->validate($this->rules($step), $this->messages());
