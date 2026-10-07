@@ -8,6 +8,26 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### New look for every example
+
+#### Added
+- Button:
+  - `shape="pill"`;
+  - `color="ink"`, the page's own contrast: black on light, white on dark, and a soft grey as ghost;
+  - `icon` for square (or round) icon-only buttons.
+- Badge: `shape="pill"`, and `dot` for a small coloured mark before the label.
+- Card: `variant="filled"`, borderless and a step off the page with rounder corners, and `icon` before the title.
+- Projects example: a project board in a workspace with the collapsible sidebar, submenus and a collapsible group.
+- Sidebar item: without an `href` it's a button, e.g. to open a modal with `commandfor`.
+
+#### Changed
+- Every example uses the dashboard's style: black (or white) pages, pill navigation and buttons, filled cards and large light headings.
+  - Dashboard, Projects and Customers share one workspace shell: the collapsible sidebar, search and notifications. Settings opens as a modal from the sidebar or the account menu.
+  - Sign in, Register and Forgot password are split pages with a gradient panel.
+  - Pricing, Onboarding and Not found are restyled to match.
+- The Dashboard example adds stat tiles with sparklines, revenue by channel, goals, top products, payment methods and upcoming payments.
+- The examples use GiraffeUI components for these parts, not one-off markup.
+
 ### Dashboard redesign
 
 #### Added
@@ -25,7 +45,7 @@ The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 componen
   - a split bar of spending by category;
   - cash flow (income against dashed expenses), activity by time as a heatmap, and recent transactions with category pills.
 - The heatmap shows every column label when there are eight or fewer.
-- The sidebar's catalog examples and browser test now use the Settings example.
+- The sidebar's catalog examples and browser test now use the Projects example.
 
 ### Sidebar: collapsing and sub-sections
 
@@ -39,7 +59,7 @@ The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 componen
 - Icon: `chevron-double-left`. Translations: `collapse_sidebar`, `expand_sidebar`.
 
 #### Changed
-- The Dashboard and Settings examples use a collapsible sidebar, with a Projects submenu and a collapsible Help group.
+- The examples use a collapsible sidebar, with a Projects submenu and a collapsible group.
 ### More icons
 
 #### Added

@@ -7,6 +7,8 @@
     'disabled' => false,
     'external' => false,
     'loading' => false,
+    'shape' => 'default',
+    'icon' => false,
 ])
 
 @php
@@ -19,6 +21,8 @@
             'warning' => 'bg-gui-warning text-gui-warning-foreground hover:bg-gui-warning/90 focus-visible:outline-gui-warning-text',
             'danger' => 'bg-gui-danger text-gui-danger-foreground hover:bg-gui-danger/90 focus-visible:outline-gui-danger-text',
             'info' => 'bg-gui-info text-gui-info-foreground hover:bg-gui-info/90 focus-visible:outline-gui-info-text',
+            // ink: the page's own contrast, black on light and white on dark.
+            'ink' => 'bg-zinc-900 text-white hover:bg-zinc-700 focus-visible:outline-zinc-900 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200 dark:focus-visible:outline-white',
         ],
         'outline' => [
             'primary' => 'border border-gui-primary-text text-gui-primary-text hover:bg-gui-primary/10 focus-visible:outline-gui-primary-text',
@@ -27,6 +31,7 @@
             'warning' => 'border border-gui-warning-text text-gui-warning-text hover:bg-gui-warning/10 focus-visible:outline-gui-warning-text',
             'danger' => 'border border-gui-danger-text text-gui-danger-text hover:bg-gui-danger/10 focus-visible:outline-gui-danger-text',
             'info' => 'border border-gui-info-text text-gui-info-text hover:bg-gui-info/10 focus-visible:outline-gui-info-text',
+            'ink' => 'border border-zinc-300 text-zinc-900 hover:bg-zinc-100 focus-visible:outline-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-900 dark:focus-visible:outline-white',
         ],
         'ghost' => [
             'primary' => 'text-gui-primary-text hover:bg-gui-primary/10 focus-visible:outline-gui-primary-text',
@@ -35,6 +40,8 @@
             'warning' => 'text-gui-warning-text hover:bg-gui-warning/10 focus-visible:outline-gui-warning-text',
             'danger' => 'text-gui-danger-text hover:bg-gui-danger/10 focus-visible:outline-gui-danger-text',
             'info' => 'text-gui-info-text hover:bg-gui-info/10 focus-visible:outline-gui-info-text',
+            // On a filled card, a step darker so it still stands out.
+            'ink' => 'bg-zinc-100 text-zinc-800 hover:bg-zinc-200 hover:text-zinc-900 focus-visible:outline-zinc-900 in-data-[variant=filled]:bg-zinc-200 in-data-[variant=filled]:hover:bg-zinc-300 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 dark:hover:text-zinc-100 dark:focus-visible:outline-white dark:in-data-[variant=filled]:bg-zinc-800 dark:in-data-[variant=filled]:hover:bg-zinc-700',
         ],
     ];
 
@@ -43,12 +50,16 @@
         'md' => 'h-10 px-4 gap-2 text-sm',
         'lg' => 'h-12 px-6 gap-2.5 text-base',
     ];
+    // icon: a square button holding just an icon. Give it an aria-label.
+    $iconSizes = ['sm' => 'size-8', 'md' => 'size-10', 'lg' => 'size-12'];
 
     // Only buttons that can be busy carry a spinner: Livewire actions, submit buttons, or loading set by hand.
     $canLoad = $loading || $type === 'submit' || collect($attributes->getAttributes())->keys()->contains(fn ($key) => str_starts_with($key, 'wire:'));
 
     $classes = \Illuminate\Support\Arr::toCssClasses([
-        'inline-flex shrink-0 items-center justify-center rounded-gui font-medium whitespace-nowrap transition-colors',
+        'inline-flex shrink-0 items-center justify-center font-medium whitespace-nowrap transition-colors',
+        // pill: fully rounded ends, whatever the theme's radius (a circle, with icon).
+        $shape === 'pill' ? 'rounded-full' : 'rounded-gui',
         'cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2',
         'disabled:cursor-not-allowed disabled:opacity-50',
         'aria-disabled:pointer-events-none aria-disabled:opacity-50',
@@ -57,7 +68,7 @@
         // A submit button is also busy while its wire:submit form is.
         'in-data-loading:pointer-events-none' => $type === 'submit' && ! $href,
         ($variants[$variant] ?? $variants['solid'])[$color] ?? $variants['solid']['primary'],
-        $sizes[$size] ?? $sizes['md'],
+        $icon ? ($iconSizes[$size] ?? $iconSizes['md']) : ($sizes[$size] ?? $sizes['md']),
     ]);
 @endphp
 

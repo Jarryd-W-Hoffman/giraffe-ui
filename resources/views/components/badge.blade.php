@@ -2,6 +2,8 @@
     'variant' => 'soft',
     'color' => 'secondary',
     'size' => 'md',
+    'shape' => 'default',
+    'dot' => null,
 ])
 
 @php
@@ -39,8 +41,17 @@
     ];
 @endphp
 
+@php
+    // dot: a small coloured mark before the text, e.g. for a category. Decoration only: the text says it.
+    $dots = [
+        'primary' => 'bg-gui-primary', 'secondary' => 'bg-gui-secondary', 'success' => 'bg-gui-success',
+        'warning' => 'bg-gui-warning', 'danger' => 'bg-gui-danger', 'info' => 'bg-gui-info',
+    ];
+@endphp
+
 <span {{ $attributes->class([
-    'inline-flex w-fit shrink-0 items-center rounded-gui font-medium whitespace-nowrap ring-1 ring-inset',
+    'inline-flex w-fit shrink-0 items-center font-medium whitespace-nowrap ring-1 ring-inset',
+    $shape === 'pill' ? 'rounded-full' : 'rounded-gui',
     ($variants[$variant] ?? $variants['soft'])[$color] ?? $variants['soft']['secondary'],
     $sizes[$size] ?? $sizes['md'],
-]) }}>{{ $slot }}</span>
+]) }}>@if ($dot)<span @class(['size-1.5 shrink-0 rounded-full', $dots[$dot] ?? null]) @unless (isset($dots[$dot])) style="background: {{ $dot }}" @endunless aria-hidden="true"></span>@endif{{ $slot }}</span>

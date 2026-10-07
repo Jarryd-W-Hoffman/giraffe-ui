@@ -47,8 +47,8 @@ class Catalog
     {
         return array_filter([
             'dashboard' => 'Dashboard',
+            'projects' => 'Projects',
             'customers' => self::livewire() ? 'Customers' : null,
-            'settings' => 'Settings',
             'sign-in' => 'Sign in',
             'register' => 'Register',
             'forgot-password' => 'Forgot password',
@@ -280,11 +280,27 @@ class Catalog
                             </div>
                             BLADE,
                     ],
+                    [
+                        'title' => 'Pills, ink and icons',
+                        'description' => 'shape="pill" rounds the ends. color="ink" is the page\'s own contrast: black on light, white on dark, and a soft grey as ghost. icon makes a square (or, with pill, round) button for just an icon; give it an aria-label.',
+                        'code' => <<<'BLADE'
+                            <div class="flex flex-wrap items-center gap-3">
+                                <x-gui::button color="ink" shape="pill">Transfer <x-gui::icon name="arrow-up" size="sm" /></x-gui::button>
+                                <x-gui::button variant="outline" color="ink" shape="pill">Request</x-gui::button>
+                                <x-gui::button variant="ghost" color="ink" shape="pill">Later</x-gui::button>
+                                <x-gui::button shape="pill">Upgrade</x-gui::button>
+                                <x-gui::button variant="ghost" color="ink" shape="pill" icon aria-label="Search"><x-gui::icon name="magnifying-glass" size="sm" /></x-gui::button>
+                                <x-gui::button variant="outline" color="ink" icon size="sm" aria-label="More"><x-gui::icon name="ellipsis-vertical" size="sm" /></x-gui::button>
+                            </div>
+                            BLADE,
+                    ],
                 ],
                 'props' => [
                     ['variant', "'solid' | 'outline' | 'ghost'", "'solid'", 'Visual style.'],
-                    ['color', "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'", "'primary'", 'Theme colour. Unknown values fall back to primary.'],
+                    ['color', "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info' | 'ink'", "'primary'", 'Theme colour. ink is the page\'s own contrast: black on light, white on dark. Unknown values fall back to primary.'],
                     ['size', "'sm' | 'md' | 'lg'", "'md'", 'Height, padding and text size.'],
+                    ['shape', "'default' | 'pill'", "'default'", 'pill: fully rounded ends, whatever the theme\'s radius.'],
+                    ['icon', 'bool', 'false', 'A square button for just an icon (a circle with pill). Give it an aria-label.'],
                     ['href', 'string', 'null', 'Renders an <a> instead of a <button>.'],
                     ['external', 'bool', 'false', 'With href, opens in a new tab with rel="noopener noreferrer".'],
                     ['type', "'button' | 'submit' | 'reset'", "'button'", 'Ignored for links.'],
@@ -1704,11 +1720,25 @@ class Catalog
                             </x-gui::badge>
                             BLADE,
                     ],
+                    [
+                        'title' => 'Pills with a dot',
+                        'description' => 'dot puts a small coloured mark before the label, from the theme (success) or any CSS colour. The label says what it means; the dot only helps scanning.',
+                        'code' => <<<'BLADE'
+                            <div class="flex flex-wrap items-center gap-2">
+                                <x-gui::badge shape="pill" dot="success">Paid</x-gui::badge>
+                                <x-gui::badge shape="pill" dot="warning">Pending</x-gui::badge>
+                                <x-gui::badge shape="pill" dot="var(--color-violet-500)">Transfer</x-gui::badge>
+                                <x-gui::badge shape="pill" dot="var(--color-lime-500)">Hosting</x-gui::badge>
+                            </div>
+                            BLADE,
+                    ],
                 ],
                 'props' => [
                     ['variant', "'soft' | 'solid' | 'outline'", "'soft'", ''],
                     ['color', "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'", "'secondary'", ''],
                     ['size', "'sm' | 'md'", "'md'", ''],
+                    ['shape', "'default' | 'pill'", "'default'", 'pill: fully rounded ends.'],
+                    ['dot', 'string', 'null', 'A small coloured dot before the label: a theme colour (success) or any CSS colour. Decoration only.'],
                 ],
                 'slots' => [
                     ['default', 'The label.'],
@@ -2593,10 +2623,27 @@ class Catalog
                             </x-gui::card>
                             BLADE,
                     ],
+                    [
+                        'title' => 'Filled, with an icon',
+                        'description' => 'variant="filled" drops the border and shadow and sits a step off the page, with rounder corners, for dashboards that group by tone rather than lines. icon goes before the title; buttons in actions pick up a matching shade.',
+                        'code' => <<<'BLADE'
+                            <x-gui::card variant="filled" title="Recent transactions" icon="arrows-right-left" class="max-w-md">
+                                <x-slot:actions>
+                                    <x-gui::button variant="ghost" color="ink" shape="pill" icon size="sm" aria-label="Search transactions"><x-gui::icon name="magnifying-glass" size="sm" /></x-gui::button>
+                                </x-slot:actions>
+                                <ul class="divide-y divide-zinc-200 text-sm dark:divide-zinc-800">
+                                    <li class="flex items-center justify-between gap-3 pb-3"><span>Figma</span><x-gui::badge size="sm" shape="pill" dot="info">Software</x-gui::badge><span class="tabular-nums">-$248.80</span></li>
+                                    <li class="flex items-center justify-between gap-3 pt-3"><span>Alan Turing</span><x-gui::badge size="sm" shape="pill" dot="var(--color-violet-500)">Transfer</x-gui::badge><span class="tabular-nums">+$500.00</span></li>
+                                </ul>
+                            </x-gui::card>
+                            BLADE,
+                    ],
                 ],
                 'props' => [
                     ['title', 'string', 'null', 'Heading (an h3).'],
                     ['description', 'string', 'null', 'Text under the title.'],
+                    ['icon', 'string', 'null', 'An icon before the title.'],
+                    ['variant', "'default' | 'filled'", "'default'", 'filled: no border or shadow, a step off the page, and rounder corners that grow with the theme\'s radius.'],
                 ],
                 'slots' => [
                     ['default', 'The body.'],
@@ -2665,7 +2712,7 @@ class Catalog
                 'examples' => [
                     [
                         'title' => 'Navigation',
-                        'description' => 'A labelled nav of groups and links. The link for the page being shown gets aria-current="page" automatically, or set current yourself. Group headings name their group without an id, so the layout can render the same navigation in its column and its drawer. See it all together in the Settings example.',
+                        'description' => 'A labelled nav of groups and links. The link for the page being shown gets aria-current="page" automatically, or set current yourself. Group headings name their group without an id, so the layout can render the same navigation in its column and its drawer. See it all together in the Projects example.',
                         'code' => <<<'BLADE'
                             <div class="rounded-gui border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-900">
                                 <x-gui::sidebar label="Example">
@@ -2679,7 +2726,7 @@ class Catalog
                                     </x-gui::sidebar.group>
                                 </x-gui::sidebar>
                             </div>
-                            <x-gui::button href="/catalog/examples/settings" variant="outline" color="secondary">Open the Settings example →</x-gui::button>
+                            <x-gui::button href="/catalog/examples/projects" variant="outline" color="secondary">Open the Projects example →</x-gui::button>
                             BLADE,
                     ],
                     [
@@ -2710,7 +2757,7 @@ class Catalog
                     ],
                     [
                         'title' => 'Collapsing to a rail',
-                        'description' => 'collapsible on the layout adds a Collapse sidebar button below the navigation. Collapsed, the column becomes a rail of icons: hover or focus one for its name, and screen readers still hear every label. Items without an icon show their first letter. The choice is remembered in this browser and applied before the page paints. Below, a rail on its own (data-collapsed is what the button sets); the Settings example has the real thing.',
+                        'description' => 'collapsible on the layout adds a Collapse sidebar button below the navigation. Collapsed, the column becomes a rail of icons: hover or focus one for its name, and screen readers still hear every label. Items without an icon show their first letter. The choice is remembered in this browser and applied before the page paints. Below, a rail on its own (data-collapsed is what the button sets); the Projects example has the real thing.',
                         'code' => <<<'BLADE'
                             <div data-collapsed class="w-16 rounded-gui border border-zinc-200 bg-zinc-50 px-3 py-3 dark:border-zinc-800 dark:bg-zinc-900">
                                 <x-gui::sidebar label="Rail example">
@@ -2741,7 +2788,7 @@ class Catalog
                     ['sidebar.group: collapsible, open', 'bool', 'false, true', 'Let the heading show and hide the group, and whether it starts open. It opens anyway when it holds the current page.'],
                     ['sidebar.submenu: label, icon, badge', 'string', '', 'The parent item: its text, icon and badge.'],
                     ['sidebar.submenu: open', 'bool | null', 'null', 'Whether it starts open. Defaults to open when it holds the current page.'],
-                    ['sidebar.item: href', 'string', '', 'Where the link goes.'],
+                    ['sidebar.item: href', 'string', 'null', 'Where the link goes. Leave it out for a button, e.g. commandfor="settings" command="show-modal" to open a modal.'],
                     ['sidebar.item: icon', 'string', 'null', 'An icon name.'],
                     ['sidebar.item: current', 'bool | null', 'null', 'Whether this is the current page. Defaults to comparing href with the current URL.'],
                     ['sidebar.item: badge', 'string', 'null', 'A count or label after the text.'],
