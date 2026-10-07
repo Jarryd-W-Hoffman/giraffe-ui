@@ -20,8 +20,10 @@ const SERVER = { timeout: 10000 };
 const failures = [];
 let logs = [];
 
-// Alpine reports expression errors as console warnings, so both count.
-page.on('console', (message) => ['error', 'warning'].includes(message.type()) && logs.push(`${message.type()}: ${message.text()}`));
+// Alpine reports expression errors as console warnings, so both count. Firefox's note that a lazy-loaded preview
+// frame laid out before its styles arrived is about timing, not a fault, so it doesn't.
+const harmless = /Layout was forced before the page was fully loaded/;
+page.on('console', (message) => ['error', 'warning'].includes(message.type()) && ! harmless.test(message.text()) && logs.push(`${message.type()}: ${message.text()}`));
 page.on('pageerror', (error) => logs.push(`uncaught: ${error.message}`));
 
 async function visit(path) {

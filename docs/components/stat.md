@@ -26,10 +26,24 @@ The arrow and hidden text ("Increased by", "Decreased by") carry the direction, 
 </div>
 ```
 
+## Display
+
+variant="display" is a big number with its label underneath, centred, for a landing page's "in numbers" strip.
+
+```blade
+<div class="grid w-full grid-cols-2 gap-8 lg:grid-cols-4">
+    <x-gui::stat variant="display" value="61" label="components" />
+    <x-gui::stat variant="display" value="167" label="icons, bundled" />
+    <x-gui::stat variant="display" value="3" label="browsers tested" />
+    <x-gui::stat variant="display" value="0" label="required build steps" />
+</div>
+```
+
 ## Props
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
+| `variant` | `'default' \| 'display'` | `'default'` | display: a big centred number with its label under it. |
 | `label` | `string` | `` | What the number is. |
 | `value` | `string` | `` | The number, formatted. |
 | `change` | `string` | `null` | The change, formatted, e.g. 12%. |

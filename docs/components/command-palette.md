@@ -32,10 +32,22 @@ Type to filter (keywords count too), arrow keys to move, Enter to go. Items are 
 </x-gui::command-palette>
 ```
 
+## Triggers
+
+command-palette.trigger is a button that opens a palette, by its id in for: a search pill showing the shortcut, or a larger panel with a description. The palette itself listens for ⌘K.
+
+```blade
+<div class="w-full max-w-sm space-y-4">
+    <x-gui::command-palette.trigger for="demo-palette" :shortcut="null">Search components</x-gui::command-palette.trigger>
+    <x-gui::command-palette.trigger for="demo-palette" variant="panel" description="Every page and action, in one place.">Find anything</x-gui::command-palette.trigger>
+</div>
+```
+
 ## Props
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
+| `command-palette.trigger: for, variant, description, shortcut` | `string, 'pill' \| 'panel', string, string` | `'command-palette', 'pill', null, 'K'` | Opens the palette with that id. shortcut is the key shown after ⌘; null hides it. |
 | `id` | `string` | `'command-palette'` | Used to open it with commandfor. |
 | `shortcut` | `string \| null` | `'k'` | Opens with ⌘ or Ctrl plus this key. null turns it off. |
 | `placeholder` | `string` | `'Search…'` | Also the search box's accessible name. |

@@ -1607,8 +1607,21 @@ class Catalog
                             </div>
                             BLADE,
                     ],
+                    [
+                        'title' => 'Display',
+                        'description' => 'variant="display" is a big number with its label underneath, centred, for a landing page\'s "in numbers" strip.',
+                        'code' => <<<'BLADE'
+                            <div class="grid w-full grid-cols-2 gap-8 lg:grid-cols-4">
+                                <x-gui::stat variant="display" value="61" label="components" />
+                                <x-gui::stat variant="display" value="167" label="icons, bundled" />
+                                <x-gui::stat variant="display" value="3" label="browsers tested" />
+                                <x-gui::stat variant="display" value="0" label="required build steps" />
+                            </div>
+                            BLADE,
+                    ],
                 ],
                 'props' => [
+                    ['variant', "'default' | 'display'", "'default'", 'display: a big centred number with its label under it.'],
                     ['label', 'string', '', 'What the number is.'],
                     ['value', 'string', '', 'The number, formatted.'],
                     ['change', 'string', 'null', 'The change, formatted, e.g. 12%.'],
@@ -2469,6 +2482,309 @@ class Catalog
                 ],
             ],
 
+            'code-block' => [
+                'name' => 'Code block',
+                'group' => 'Display',
+                'description' => 'A block of code with a Copy button. It scrolls sideways rather than wrapping, and takes keyboard focus to do so.',
+                'usage' => '<x-gui::code-block :code="$snippet" />',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'Pass the code as code (or in the slot, for plain text). The button says Copied for a moment, and screen readers hear it.',
+                        'code' => <<<'BLADE'
+                            <x-gui::code-block class="w-full" code="php artisan vendor:publish --tag=giraffeui-lang" />
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Live',
+                        'description' => 'live takes an Alpine expression: the block shows, and copies, its value as it changes.',
+                        'code' => <<<'BLADE'
+                            <div x-data="{ color: 'violet' }" class="w-full space-y-3">
+                                <x-gui::segmented-control name="code_block_color" label="Colour" size="sm" x-model="color" :options="['violet' => 'Violet', 'emerald' => 'Emerald', 'rose' => 'Rose']" value="violet" />
+                                <x-gui::code-block live="`@theme {\n    --color-gui-primary: var(--color-${color}-600);\n}`" />
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['code', 'string', 'null', 'The code. Or put plain text in the slot.'],
+                    ['live', 'string', 'null', 'An Alpine expression to show instead, updated as it changes.'],
+                    ['copy-label, copied-label', 'string', "'Copy', 'Copied'", 'The button\'s text (translatable).'],
+                ],
+                'slots' => [],
+            ],
+
+            'snippet' => [
+                'name' => 'Snippet',
+                'group' => 'Display',
+                'description' => 'One line of code to copy, such as an install command: a prompt, the code and a copy button.',
+                'usage' => '<x-gui::snippet value="composer require jayaitch/giraffeui" />',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'The prompt is decoration and isn\'t copied; :prompt="false" leaves it out.',
+                        'code' => <<<'BLADE'
+                            <div class="space-y-3">
+                                <x-gui::snippet value="composer require jayaitch/giraffeui" />
+                                <x-gui::snippet value="npm install alpinejs" prompt=">" />
+                                <x-gui::snippet value="php artisan giraffeui:install" :prompt="false" />
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['value', 'string', 'null', 'The code to show and copy. Or put it in the slot.'],
+                    ['prompt', 'string | false', "'$'", 'Shown before the code, not copied.'],
+                    ['copy-label', 'string', "'Copy'", 'The copy button\'s accessible name (translatable).'],
+                ],
+                'slots' => [],
+            ],
+
+            'swatches' => [
+                'name' => 'Swatches',
+                'group' => 'Forms',
+                'description' => 'Pick a colour from a set of swatches. Native radios, so one tab stop, arrow keys and forms all work.',
+                'usage' => '<x-gui::swatches name="color" label="Colour" :options="[\'violet\' => \'#7c3aed\', \'emerald\' => \'#059669\']" />',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'options are value => colour, or value => [\'label\' => …, \'color\' => …]; each swatch is named for screen readers. x-model and wire:model bind every radio.',
+                        'code' => <<<'BLADE'
+                            <x-gui::swatches
+                                name="accent"
+                                label="Accent colour"
+                                value="violet"
+                                :options="[
+                                    'indigo' => 'var(--color-indigo-600)',
+                                    'violet' => 'var(--color-violet-600)',
+                                    'sky' => 'var(--color-sky-600)',
+                                    'emerald' => 'var(--color-emerald-600)',
+                                    'rose' => ['label' => 'Rose', 'color' => 'var(--color-rose-600)'],
+                                    'orange' => 'var(--color-orange-600)',
+                                ]"
+                            />
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['name', 'string', '', 'The radios\' name.'],
+                    ['options', 'array', '[]', 'value => CSS colour, or value => [\'label\' => …, \'color\' => …].'],
+                    ['value', 'string', 'null', 'The chosen value.'],
+                    ['label', 'string', 'null', 'The group\'s legend.'],
+                    ['size', "'sm' | 'md' | 'lg'", "'md'", ''],
+                ],
+                'slots' => [],
+            ],
+
+            'announcement' => [
+                'name' => 'Announcement',
+                'group' => 'Marketing',
+                'description' => 'A small pill that links to something new, for the top of a landing page or a changelog.',
+                'usage' => '<x-gui::announcement href="/changelog">Charts are here</x-gui::announcement>',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'badge sets the label in front (or false for none). Screen readers hear it with the text: "New: Charts are here". variant="subtle" drops the pill.',
+                        'code' => <<<'BLADE'
+                            <div class="flex flex-col items-center gap-3">
+                                <x-gui::announcement href="#">Charts, a collapsible sidebar and 167 icons</x-gui::announcement>
+                                <x-gui::announcement href="#" badge="Beta">Try the new theme editor</x-gui::announcement>
+                                <x-gui::announcement href="#" variant="subtle">Version 0.2 is out</x-gui::announcement>
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['href', 'string', '', 'Where it links.'],
+                    ['badge', 'string | false', "'New'", 'The label in front.'],
+                    ['variant', "'pill' | 'subtle'", "'pill'", 'A ringed pill, or just the badge and the words.'],
+                ],
+                'slots' => [['default', 'The announcement.']],
+            ],
+
+            'backdrop' => [
+                'name' => 'Backdrop',
+                'group' => 'Marketing',
+                'description' => 'Decoration for behind a hero: a glow, a grid, dots, an aurora or a spotlight. Hidden from screen readers.',
+                'preview' => 'block',
+                'usage' => '<section class="relative isolate overflow-hidden"><x-gui::backdrop /> …</section>',
+                'examples' => [
+                    [
+                        'title' => 'Behind a hero',
+                        'description' => 'It fills its section from behind: give the section relative isolate overflow-hidden. The default is a glow over a fine grid.',
+                        'code' => <<<'BLADE'
+                            <section class="relative isolate overflow-hidden rounded-3xl px-6 py-20 text-center">
+                                <x-gui::backdrop />
+                                <h2 class="text-4xl font-normal tracking-tight">Build something <span class="text-zinc-500 dark:text-zinc-400">lovely</span></h2>
+                            </section>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Variants',
+                        'description' => 'grid on its own, dots, aurora (drifting colour) and spotlight (a pool of light from the top).',
+                        'code' => <<<'BLADE'
+                            <div class="grid w-full gap-4 sm:grid-cols-2">
+                                @foreach (['grid' => 'Grid', 'dots' => 'Dots', 'aurora' => 'Aurora', 'spotlight' => 'Spotlight'] as $variant => $name)
+                                    <section class="relative isolate overflow-hidden rounded-3xl px-6 py-16 text-center ring-1 ring-zinc-200 dark:ring-zinc-800">
+                                        <x-gui::backdrop :variant="$variant" />
+                                        <p class="text-2xl font-normal tracking-tight">{{ $name }}</p>
+                                    </section>
+                                @endforeach
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['variant', "'glow' | 'grid' | 'dots' | 'aurora' | 'spotlight'", "'glow'", 'The style of decoration.'],
+                ],
+                'slots' => [],
+            ],
+
+            'feature' => [
+                'name' => 'Feature',
+                'group' => 'Marketing',
+                'description' => 'A feature for a landing page: an icon on a tile, a title and a sentence or two.',
+                'usage' => '<x-gui::feature icon="bolt" title="Fast">Pages load in a blink.</x-gui::feature>',
+                'examples' => [
+                    [
+                        'title' => 'A grid of features',
+                        'description' => 'heading sets the title\'s level (h3 by default), to fit your page\'s outline.',
+                        'code' => <<<'BLADE'
+                            <div class="grid w-full gap-4 sm:grid-cols-2">
+                                <x-gui::feature icon="check-badge" title="Accessible by default">Keyboard support, focus management and labels, done for you.</x-gui::feature>
+                                <x-gui::feature icon="swatch" title="Yours to theme">Change one variable and every component follows.</x-gui::feature>
+                            </div>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Inline and plain',
+                        'description' => 'inline puts the icon beside the text, for denser lists. plain drops the panel for an airy grid.',
+                        'code' => <<<'BLADE'
+                            <div class="grid w-full gap-8 sm:grid-cols-2">
+                                <div class="space-y-6">
+                                    <x-gui::feature variant="inline" icon="bolt" title="Ready for Livewire">wire:model and loading states work out of the box.</x-gui::feature>
+                                    <x-gui::feature variant="inline" icon="squares-2x2" title="Platform first">Native dialog, popover and form validation.</x-gui::feature>
+                                </div>
+                                <div class="grid gap-6 sm:grid-cols-2">
+                                    <x-gui::feature variant="plain" icon="check-badge" title="Accessible">Tested with axe in three browsers.</x-gui::feature>
+                                    <x-gui::feature variant="plain" icon="presentation-chart-line" title="Charts">No chart library needed.</x-gui::feature>
+                                </div>
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['icon', 'string', 'null', 'An icon for the tile.'],
+                    ['title', 'string', '', 'The feature\'s name.'],
+                    ['heading', 'string', "'h3'", 'The title\'s element.'],
+                    ['variant', "'tile' | 'inline' | 'plain'", "'tile'", 'The layout.'],
+                ],
+                'slots' => [['default', 'The description.']],
+            ],
+
+            'page-preview' => [
+                'name' => 'Page preview',
+                'group' => 'Marketing',
+                'description' => 'A link to a page, with the live page shown small above its name. For galleries of examples or templates.',
+                'preview' => 'block',
+                'usage' => '<x-gui::page-preview href="/dashboard" title="Dashboard" description="Charts and stats." />',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'The page loads lazily in an inert frame at a third of its size, so it\'s a picture you can\'t tab into. src defaults to href.',
+                        'code' => <<<'BLADE'
+                            <div class="grid w-full gap-4 md:grid-cols-2">
+                                <x-gui::page-preview href="/catalog/examples/projects" title="Projects" description="A board of tasks in a workspace." />
+                                <x-gui::page-preview href="/catalog/examples/pricing" title="Pricing" description="Plans, a billing switch and FAQs." />
+                            </div>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['href', 'string', '', 'Where it links.'],
+                    ['src', 'string', 'href', 'The page shown, if not the link.'],
+                    ['title, description', 'string', '', 'The name and a line under it.'],
+                ],
+                'slots' => [],
+            ],
+
+            'footer' => [
+                'name' => 'Footer',
+                'group' => 'Marketing',
+                'description' => 'A site footer: your brand and a line about it, columns of links, and the fine print.',
+                'preview' => 'block',
+                'usage' => '<x-gui::footer :links="[\'Docs\' => [\'Install\' => \'/install\']]" />',
+                'examples' => [
+                    [
+                        'title' => 'Basic',
+                        'description' => 'links is heading => [text => href]; each column is a nav named by its heading. container sets the width.',
+                        'code' => <<<'BLADE'
+                            <x-gui::footer
+                                class="w-full"
+                                description="Accessible components for Laravel."
+                                :links="[
+                                    'Docs' => ['Introduction' => '#', 'Installation' => '#'],
+                                    'Company' => ['About' => '#', 'Blog' => '#'],
+                                    'Legal' => ['Privacy' => '#', 'Terms' => '#'],
+                                ]"
+                            >
+                                <x-slot:brand>Acme</x-slot:brand>
+                                <x-slot:legal>© 2026 Acme. All rights reserved.</x-slot:legal>
+                            </x-gui::footer>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Simple',
+                        'description' => 'One row: brand, every link, and the fine print. Good under app pages.',
+                        'code' => <<<'BLADE'
+                            <x-gui::footer variant="simple" class="w-full" :links="['Docs' => ['Docs' => '#', 'Changelog' => '#'], 'Legal' => ['Privacy' => '#', 'Terms' => '#']]">
+                                <x-slot:brand>Acme</x-slot:brand>
+                                <x-slot:legal>© 2026 Acme</x-slot:legal>
+                            </x-gui::footer>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'Centred, with social links',
+                        'description' => 'Everything centred. The social slot holds icon links; give each an aria-label.',
+                        'code' => <<<'BLADE'
+                            <x-gui::footer variant="centered" class="w-full" description="Accessible components for Laravel." :links="['Product' => ['Features' => '#', 'Pricing' => '#'], 'Company' => ['About' => '#', 'Blog' => '#', 'Careers' => '#']]">
+                                <x-slot:brand>Acme</x-slot:brand>
+                                <x-slot:social>
+                                    <x-gui::button href="#" variant="ghost" color="ink" shape="pill" icon size="sm" aria-label="Email us"><x-gui::icon name="envelope" size="sm" /></x-gui::button>
+                                    <x-gui::button href="#" variant="ghost" color="ink" shape="pill" icon size="sm" aria-label="RSS feed"><x-gui::icon name="rss" size="sm" /></x-gui::button>
+                                    <x-gui::button href="#" variant="ghost" color="ink" shape="pill" icon size="sm" aria-label="Our website"><x-gui::icon name="globe-alt" size="sm" /></x-gui::button>
+                                </x-slot:social>
+                                <x-slot:legal>© 2026 Acme. All rights reserved.</x-slot:legal>
+                            </x-gui::footer>
+                            BLADE,
+                    ],
+                    [
+                        'title' => 'With a newsletter',
+                        'description' => 'Columns, with an email sign-up beside them. It\'s a real form that posts the email to newsletter-action.',
+                        'code' => <<<'BLADE'
+                            <x-gui::footer variant="newsletter" class="w-full" newsletter-action="#" :links="['Docs' => ['Introduction' => '#', 'Installation' => '#'], 'Company' => ['About' => '#', 'Blog' => '#'], 'Legal' => ['Privacy' => '#', 'Terms' => '#']]">
+                                <x-slot:brand>Acme</x-slot:brand>
+                                <x-slot:newsletter-text>One email a month. No spam.</x-slot:newsletter-text>
+                                <x-slot:legal>© 2026 Acme</x-slot:legal>
+                            </x-gui::footer>
+                            BLADE,
+                    ],
+                ],
+                'props' => [
+                    ['links', 'array', '[]', 'heading => [text => href].'],
+                    ['description', 'string', 'null', 'A line under the brand.'],
+                    ['container', 'string', "'max-w-6xl'", 'Width classes for the contents.'],
+                    ['variant', "'columns' | 'simple' | 'centered' | 'newsletter'", "'columns'", 'The layout.'],
+                    ['newsletter, newsletter-action, newsletter-button', 'string', "'Get the newsletter', '#', 'Subscribe'", 'For the newsletter variant (translatable).'],
+                ],
+                'slots' => [
+                    ['brand', 'Your logo and name.'],
+                    ['legal', 'The fine print along the bottom.'],
+                    ['social', 'Icon links, for every variant but simple.'],
+                    ['newsletter-text', 'A line under the newsletter heading.'],
+                ],
+            ],
+
             'kbd' => [
                 'name' => 'Kbd',
                 'group' => 'Display',
@@ -3201,8 +3517,19 @@ class Catalog
                             </x-gui::command-palette>
                             BLADE,
                     ],
+                    [
+                        'title' => 'Triggers',
+                        'description' => 'command-palette.trigger is a button that opens a palette, by its id in for: a search pill showing the shortcut, or a larger panel with a description. The palette itself listens for ⌘K.',
+                        'code' => <<<'BLADE'
+                            <div class="w-full max-w-sm space-y-4">
+                                <x-gui::command-palette.trigger for="demo-palette" :shortcut="null">Search components</x-gui::command-palette.trigger>
+                                <x-gui::command-palette.trigger for="demo-palette" variant="panel" description="Every page and action, in one place.">Find anything</x-gui::command-palette.trigger>
+                            </div>
+                            BLADE,
+                    ],
                 ],
                 'props' => [
+                    ['command-palette.trigger: for, variant, description, shortcut', "string, 'pill' | 'panel', string, string", "'command-palette', 'pill', null, 'K'", 'Opens the palette with that id. shortcut is the key shown after ⌘; null hides it.'],
                     ['id', 'string', "'command-palette'", 'Used to open it with commandfor.'],
                     ['shortcut', 'string | null', "'k'", 'Opens with ⌘ or Ctrl plus this key. null turns it off.'],
                     ['placeholder', 'string', "'Search…'", 'Also the search box\'s accessible name.'],
