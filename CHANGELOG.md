@@ -8,6 +8,13 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 69 components and a catalog.
 
+### One header for the site
+
+#### Changed
+- The catalog's docs and component pages share the landing page's header: GiraffeUI's navbar with Docs, Components, Examples and GitHub, ⌘K search, the theme toggle and Get started.
+  - The current section is highlighted.
+  - On small screens, a button before the logo opens the docs' contents.
+
 ### Calendar, Invoice and Store examples
 
 #### Added

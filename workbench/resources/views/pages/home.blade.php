@@ -74,25 +74,7 @@
         @include('catalog::partials.head')
     </head>
     <body class="bg-white text-zinc-900 antialiased dark:bg-black dark:text-zinc-100" x-data>
-        <x-gui::navbar sticky container="max-w-7xl" class="border-transparent! bg-white/80! dark:bg-black/80!">
-            <x-slot:brand>
-                <a href="/catalog/home" class="flex items-center gap-2.5 rounded-full text-lg font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gui-primary-text">
-                    @include('catalog::partials.logo', ['class' => 'size-9'])
-                    GiraffeUI
-                </a>
-            </x-slot:brand>
-
-            <x-gui::navbar.item href="/catalog/introduction">Docs</x-gui::navbar.item>
-            <x-gui::navbar.item href="/catalog/button">Components</x-gui::navbar.item>
-            <x-gui::navbar.item href="/catalog/examples/dashboard">Examples</x-gui::navbar.item>
-            <x-gui::navbar.item href="https://github.com/Jarryd-W-Hoffman/GiraffeUI">GitHub</x-gui::navbar.item>
-
-            <x-slot:actions>
-                <x-gui::command-palette.trigger for="home-search" class="max-sm:hidden">Search components</x-gui::command-palette.trigger>
-                <x-gui::theme-switcher variant="toggle" size="sm" />
-                <x-gui::button href="/catalog/installation" color="ink" shape="pill" size="sm" class="max-sm:hidden">Get started</x-gui::button>
-            </x-slot:actions>
-        </x-gui::navbar>
+        @include('catalog::partials.site-header', ['search' => 'home-search'])
 
         <main>
             {{-- The hero: a glow, a fine grid, and the one command to install. --}}
