@@ -175,26 +175,43 @@
                     </div>
 
                     <div class="space-y-4">
-                        <x-gui::card variant="filled">
+                        {{-- The period switch really switches: each period's numbers and chart are here. --}}
+                        @php
+                            $revenue = [
+                                '7d' => ['value' => '$11,240', 'change' => '6%', 'compare' => 'vs last week', 'labels' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], 'now' => [1.42, 1.68, 1.59, 1.89, 2.14, 1.36, 1.16], 'before' => [1.31, 1.52, 1.61, 1.70, 1.88, 1.29, 1.08]],
+                                '30d' => ['value' => '$48,200', 'change' => '12%', 'compare' => 'vs last month', 'labels' => ['1 Oct', '5 Oct', '9 Oct', '13 Oct', '17 Oct', '21 Oct', '25 Oct', '29 Oct'], 'now' => [5.1, 5.6, 5.3, 6.4, 6.1, 6.9, 7.2, 5.6], 'before' => [4.6, 4.9, 5.0, 5.2, 5.4, 5.7, 5.9, 5.3]],
+                                '12m' => ['value' => '$512,900', 'change' => '31%', 'compare' => 'vs last year', 'labels' => ['Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'], 'now' => [31, 34, 33, 38, 37, 41, 43, 44, 46, 45, 47, 48.2], 'before' => [27, 29, 28, 30, 32, 31, 33, 34, 33, 35, 36, 36.8]],
+                            ];
+                        @endphp
+                        <x-gui::card variant="filled" x-data="{ period: '30d' }">
                             <div class="flex items-start justify-between gap-4">
-                                <x-gui::stat label="Revenue" value="$48,200" change="12%" trend="up" description="vs last month" />
+                                @foreach ($revenue as $key => $data)
+                                    <div x-show="period === '{{ $key }}'" @if ($key !== '30d') x-cloak @endif>
+                                        <x-gui::stat label="Revenue" :value="$data['value']" :change="$data['change']" trend="up" :description="$data['compare']" />
+                                    </div>
+                                @endforeach
                                 <div style="--radius-gui: 9999px">
-                                    <x-gui::segmented-control name="showcase_period" label="Period" size="sm" :options="['7d' => '7d', '30d' => '30d', '12m' => '12m']" value="30d" />
+                                    <x-gui::segmented-control name="showcase_period" label="Period" size="sm" x-model="period" :options="['7d' => '7d', '30d' => '30d', '12m' => '12m']" value="30d" />
                                 </div>
                             </div>
-                            <x-gui::chart.line
-                                class="mt-4"
-                                :labels="['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct']"
-                                :series="['This year' => [31, 34, 33, 38, 37, 41, 43, 48.2], 'Last year' => [27, 29, 28, 30, 32, 31, 33, 36]]"
-                                :colors="['This year' => 'primary', 'Last year' => 'muted']"
-                                :dashed="['Last year']"
-                                :axis="false"
-                                :height="140"
-                                prefix="$"
-                                suffix="K"
-                                curve
-                                area
-                            />
+                            @foreach ($revenue as $key => $data)
+                                <div x-show="period === '{{ $key }}'" @if ($key !== '30d') x-cloak @endif>
+                                    <x-gui::chart.line
+                                        class="mt-4"
+                                        :labels="$data['labels']"
+                                        :series="['This period' => $data['now'], 'Last period' => $data['before']]"
+                                        :colors="['This period' => 'primary', 'Last period' => 'muted']"
+                                        :dashed="['Last period']"
+                                        :axis="false"
+                                        :height="140"
+                                        :label="'Revenue, '.$key"
+                                        prefix="$"
+                                        suffix="K"
+                                        curve
+                                        area
+                                    />
+                                </div>
+                            @endforeach
                         </x-gui::card>
 
                         <x-gui::card variant="filled" title="Notifications" icon="bell">

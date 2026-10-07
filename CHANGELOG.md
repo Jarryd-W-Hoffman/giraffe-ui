@@ -8,6 +8,16 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### Examples: filters that filter
+
+#### Changed
+- **Dashboard:** Week / Month / Year switches the revenue headline, the spending split, the cash flow chart and the stat tiles, each with its own mock data.
+- **Projects:** Board / List / Timeline works.
+  - List is a table of every task with its stage, progress and people.
+  - Timeline shows each task as a bar across October, with today marked.
+- **Landing page:** the revenue card's 7d / 30d / 12m switch changes its numbers and chart.
+- **Dashboard (Overview):** now matches the rest of the example app, with breadcrumbs, a two-tone heading with a subtitle, and the revenue headline and spending split in a filled panel.
+
 ### Landing page: a preview with its own dark mode
 
 #### Changed
