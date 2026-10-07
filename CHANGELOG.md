@@ -8,6 +8,12 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### Charts: the data table is optional
+
+#### Changed
+- Line, area, bar and scatter charts hide "Show the data" by default. Add `table` to show it.
+  - Without it, the same table of exact numbers is still in the page for screen readers, so the charts keep a text equivalent.
+
 ### Inbox example
 
 #### Added

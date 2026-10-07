@@ -1963,6 +1963,7 @@ class Catalog
                     ['height', 'int', '240', 'The plot\'s height in pixels (vertical bars).'],
                     ['prefix, suffix, decimals, compact', 'string, string, int, bool', "'', '', auto, false", 'How values read.'],
                     ['label', 'string', 'null', 'The chart\'s accessible name. Defaults to its series and range (translatable).'],
+                    ['table', 'bool', 'false', 'Show the numbers behind a "Show the data" disclosure. Off, the same table is still there for screen readers.'],
                 ],
                 'slots' => [],
             ],
@@ -2165,6 +2166,7 @@ class Catalog
                     ['colors', 'array', '[]', 'name => chart-1…chart-8, to pin a series to its colour.'],
                     ['height', 'int', '260', 'The plot\'s height in pixels.'],
                     ['label', 'string', 'null', 'The chart\'s accessible name. Defaults to its series and axes.'],
+                    ['table', 'bool', 'false', 'Show the numbers behind a "Show the data" disclosure. Off, the same table is still there for screen readers.'],
                 ],
                 'slots' => [],
             ],
@@ -2280,7 +2282,7 @@ class Catalog
                 'examples' => [
                     [
                         'title' => 'One series',
-                        'description' => 'A single line needs no legend: say what it is in the heading around it. Its latest value is labelled at the end. Hover, or focus it and use the arrow keys, for the value at each point.',
+                        'description' => 'A single line needs no legend: say what it is in the heading around it. Its latest value is labelled at the end. Hover, or focus it and use the arrow keys, for the value at each point. table adds a "Show the data" disclosure with the exact numbers; without it, the table is there for screen readers only.',
                         'code' => <<<'BLADE'
                             <x-gui::chart.line
                                 name="Revenue"
@@ -2289,6 +2291,7 @@ class Catalog
                                 prefix="$"
                                 compact
                                 area
+                                table
                             />
                             BLADE,
                     ],
@@ -2309,7 +2312,7 @@ class Catalog
                     ],
                     [
                         'title' => 'Against last year, minimal',
-                        'description' => 'dashed draws a series dashed, behind the others, for a comparison; muted colours it grey. axis="false" drops the y axis and gridlines; hover, the keyboard and "Show the data" still give the numbers.',
+                        'description' => 'dashed draws a series dashed, behind the others, for a comparison; muted colours it grey. axis="false" drops the y axis and gridlines; hover and the keyboard still give the numbers, and screen readers get them as a table.',
                         'code' => <<<'BLADE'
                             <x-gui::chart.line
                                 :labels="['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']"
@@ -2397,6 +2400,7 @@ class Catalog
                     ['height', 'int', '240', 'The plot\'s height in pixels (axis labels are extra).'],
                     ['prefix, suffix, decimals, compact', 'string, string, int, bool', "'', '', auto, false", 'How values read on the axis, in the tooltip and table. compact gives 12.9K, 4.2M.'],
                     ['label', 'string', 'null', 'The chart\'s accessible name. Defaults to its series and range (translatable).'],
+                    ['table', 'bool', 'false', 'Show the numbers behind a "Show the data" disclosure. Off, the same table is still there for screen readers.'],
                 ],
                 'slots' => [],
                 'notes' => [

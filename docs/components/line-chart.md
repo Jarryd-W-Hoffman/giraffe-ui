@@ -10,7 +10,7 @@ Change over time, for one series or a few. Drawn on the server as SVG, with real
 
 ## One series
 
-A single line needs no legend: say what it is in the heading around it. Its latest value is labelled at the end. Hover, or focus it and use the arrow keys, for the value at each point.
+A single line needs no legend: say what it is in the heading around it. Its latest value is labelled at the end. Hover, or focus it and use the arrow keys, for the value at each point. table adds a "Show the data" disclosure with the exact numbers; without it, the table is there for screen readers only.
 
 ```blade
 <x-gui::chart.line
@@ -20,6 +20,7 @@ A single line needs no legend: say what it is in the heading around it. Its late
     prefix="$"
     compact
     area
+    table
 />
 ```
 
@@ -41,7 +42,7 @@ Two or more lines get a legend, and labels at their ends when there's room. The 
 
 ## Against last year, minimal
 
-dashed draws a series dashed, behind the others, for a comparison; muted colours it grey. axis="false" drops the y axis and gridlines; hover, the keyboard and "Show the data" still give the numbers.
+dashed draws a series dashed, behind the others, for a comparison; muted colours it grey. axis="false" drops the y axis and gridlines; hover and the keyboard still give the numbers, and screen readers get them as a table.
 
 ```blade
 <x-gui::chart.line
@@ -135,6 +136,7 @@ A missing value (null) breaks the line rather than pretending it was zero. The y
 | `height` | `int` | `240` | The plot's height in pixels (axis labels are extra). |
 | `prefix, suffix, decimals, compact` | `string, string, int, bool` | `'', '', auto, false` | How values read on the axis, in the tooltip and table. compact gives 12.9K, 4.2M. |
 | `label` | `string` | `null` | The chart's accessible name. Defaults to its series and range (translatable). |
+| `table` | `bool` | `false` | Show the numbers behind a "Show the data" disclosure. Off, the same table is still there for screen readers. |
 
 Colours come from --color-gui-chart-1 to 8 in the theme, in a fixed order validated for colour-blind readers. Override them in your @theme, and re-check the set.
 

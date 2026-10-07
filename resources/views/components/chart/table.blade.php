@@ -2,12 +2,20 @@
     'label' => '',
     'labels' => [],
     'columns' => [],
+    'visible' => false,
 ])
 
-{{-- The chart's numbers as a table: its text equivalent, exact rather than abbreviated, and no JavaScript to open. --}}
+{{--
+    The chart's numbers as a table: its text equivalent, exact rather than abbreviated. visible puts it behind a
+    "Show the data" disclosure (no JavaScript to open); otherwise it's there for screen readers only.
+--}}
+@if ($visible)
 <details {{ $attributes->class('mt-3') }}>
     <summary class="w-fit cursor-pointer rounded-sm font-medium text-zinc-700 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text dark:text-zinc-300 dark:hover:text-zinc-100">{{ __('giraffeui::ui.show_data') }}</summary>
-    <div class="mt-2 overflow-x-auto">
+@else
+<div class="sr-only">
+@endif
+    <div @class(['mt-2 overflow-x-auto' => $visible])>
         <table class="w-full text-left text-xs">
             <caption class="sr-only">{{ $label }}</caption>
             <thead class="text-zinc-600 dark:text-zinc-400">
@@ -30,4 +38,8 @@
             </tbody>
         </table>
     </div>
+@if ($visible)
 </details>
+@else
+</div>
+@endif

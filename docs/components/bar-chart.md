@@ -90,5 +90,6 @@ Bars grow down from a stronger zero line.
 | `height` | `int` | `240` | The plot's height in pixels (vertical bars). |
 | `prefix, suffix, decimals, compact` | `string, string, int, bool` | `'', '', auto, false` | How values read. |
 | `label` | `string` | `null` | The chart's accessible name. Defaults to its series and range (translatable). |
+| `table` | `bool` | `false` | Show the numbers behind a "Show the data" disclosure. Off, the same table is still there for screen readers. |
 
 Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.
