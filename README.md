@@ -1,3 +1,5 @@
+<p align="center"><img src="art/logo.svg" width="120" alt="GiraffeUI"></p>
+
 # GiraffeUI
 
 Free, accessible Blade + Alpine components for Laravel and Tailwind CSS v4.

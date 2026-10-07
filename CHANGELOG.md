@@ -8,6 +8,11 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### Logo
+
+#### Added
+- A logo: a rounded U whose right arm is a giraffe's neck, its head curving over the opening. It's in `art/logo.svg` and appears in the README, in the catalog and landing page headers, and as the favicon.
+
 ### Landing page
 
 #### Added
