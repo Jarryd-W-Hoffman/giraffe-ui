@@ -92,15 +92,19 @@
 
     <x-example::app>
         {{-- Week, Month or Year: every period's numbers are on the page; the switch shows one. --}}
-        <div class="space-y-10" x-data="{ period: 'month' }">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <h1 class="text-4xl font-normal tracking-tight sm:text-5xl">Welcome back, <span class="text-zinc-500 dark:text-zinc-400">Ada</span></h1>
+        <div class="space-y-8" x-data="{ period: 'month' }">
+            <div class="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                    <x-gui::breadcrumbs :items="['Workspace' => '/catalog/examples/dashboard', 'Overview' => null]" />
+                    <h1 class="mt-3 text-4xl font-normal tracking-tight sm:text-5xl">Welcome back, <span class="text-zinc-500 dark:text-zinc-400">Ada</span></h1>
+                    <p class="mt-3 text-zinc-600 dark:text-zinc-400">Here's how Acme is doing.</p>
+                </div>
                 <div style="--radius-gui: 9999px">
                     <x-gui::segmented-control name="period" label="Period" size="sm" x-model="period" :options="['week' => 'Week', 'month' => 'Month', 'year' => 'Year']" value="month" />
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-10 2xl:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] 2xl:gap-6">
+            <div class="grid grid-cols-1 gap-10 rounded-3xl bg-zinc-100 p-6 sm:p-8 2xl:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] 2xl:gap-8 dark:bg-zinc-900">
                 {{-- The headline: total revenue, with the cents quieter than the dollars. --}}
                 <section aria-labelledby="revenue-heading" class="space-y-6">
                     @foreach ($periods as $key => $period)
@@ -150,7 +154,7 @@
                                 @foreach ($period['breakdown'] as $i => [$label, $value, $change])
                                     @php($style = $styles[$i])
                                     {{-- Equal columns on phones, so every amount fits; sized by share from md up. --}}
-                                    <div class="flex min-w-0 flex-1 flex-col border-s border-zinc-200 ps-3 md:flex-(--share) md:ps-4 dark:border-zinc-800" style="--share: {{ round($value / $total * 100, 1) }} 1 0%">
+                                    <div class="flex min-w-0 flex-1 flex-col border-s border-zinc-300 ps-3 md:flex-(--share) md:ps-4 dark:border-zinc-800" style="--share: {{ round($value / $total * 100, 1) }} 1 0%">
                                         <dd class="text-base tabular-nums md:text-xl" style="margin-top: {{ round(48 - $value / $max * 44) }}px">${{ number_format($value, 2) }}</dd>
                                         <dt class="mt-auto mb-2 truncate text-sm">
                                             <span class="font-medium">{{ $change }}</span>
