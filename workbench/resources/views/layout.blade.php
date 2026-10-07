@@ -117,7 +117,7 @@
                 </button>
 
                 <a href="/catalog" class="flex items-center gap-2 font-semibold tracking-tight">
-                    <span class="grid size-7 place-items-center rounded-gui bg-gui-primary text-sm font-bold text-gui-primary-foreground">G</span>
+                    @include('catalog::partials.logo', ['class' => 'size-8'])
                     GiraffeUI
                 </a>
                 <span class="rounded-full border border-zinc-200 px-2 py-0.5 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">pre-1.0</span>

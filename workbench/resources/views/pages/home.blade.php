@@ -68,7 +68,7 @@
         <x-gui::navbar sticky container="max-w-7xl" class="border-transparent! bg-white/80! dark:bg-black/80!">
             <x-slot:brand>
                 <a href="/catalog/home" class="flex items-center gap-2.5 rounded-full text-lg font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gui-primary-text">
-                    <span class="flex size-8 items-center justify-center rounded-full bg-linear-to-br from-lime-300 to-violet-600 text-sm font-bold text-zinc-950" aria-hidden="true">G</span>
+                    @include('catalog::partials.logo', ['class' => 'size-9'])
                     GiraffeUI
                 </a>
             </x-slot:brand>
@@ -490,7 +490,7 @@
             <div class="mx-auto grid grid-cols-1 max-w-7xl gap-10 md:grid-cols-[minmax(0,1fr)_repeat(3,auto)] md:gap-16">
                 <div>
                     <p class="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
-                        <span class="flex size-8 items-center justify-center rounded-full bg-linear-to-br from-lime-300 to-violet-600 text-sm font-bold text-zinc-950" aria-hidden="true">G</span>
+                        @include('catalog::partials.logo', ['class' => 'size-9'])
                         GiraffeUI
                     </p>
                     <p class="mt-3 max-w-xs text-sm text-zinc-600 dark:text-zinc-400">Accessible Blade and Alpine components for Laravel and Tailwind CSS v4.</p>
