@@ -76,11 +76,16 @@ class Chart
         }
 
         $power = 10 ** floor(log10($raw));
+        $best = $power;
 
-        return collect([1, 2, 2.5, 5, 10])
-            ->map(fn ($multiple) => $multiple * $power)
-            ->sortBy(fn ($step) => abs(log($step / $raw)))
-            ->first();
+        // On a tie, the smaller step wins.
+        foreach ([2, 2.5, 5, 10] as $multiple) {
+            if (abs(log($multiple * $power / $raw)) < abs(log($best / $raw))) {
+                $best = $multiple * $power;
+            }
+        }
+
+        return $best;
     }
 
     /**
@@ -232,7 +237,7 @@ class Chart
         $value = abs($value);
 
         if ($compact && $value >= 1000) {
-            foreach ([1e12 => 'T', 1e9 => 'B', 1e6 => 'M', 1e3 => 'K'] as $size => $unit) {
+            foreach ([[1e12, 'T'], [1e9, 'B'], [1e6, 'M'], [1e3, 'K']] as [$size, $unit]) {
                 if ($value >= $size) {
                     $short = $value / $size;
 

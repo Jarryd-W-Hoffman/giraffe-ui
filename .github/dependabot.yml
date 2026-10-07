@@ -1,0 +1,29 @@
+# Weekly, grouped update PRs. GiraffeUI is a library, so Composer constraints are only ever widened (e.g. to allow
+# a new Laravel major), never raised: raising a lower bound would force that version on every app.
+version: 2
+updates:
+  - package-ecosystem: composer
+    directory: /
+    schedule:
+      interval: weekly
+    versioning-strategy: widen
+    groups:
+      composer:
+        patterns: ['*']
+
+  # Only development tools (Tailwind, Playwright, axe, Alpine for the catalog).
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      npm:
+        patterns: ['*']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']

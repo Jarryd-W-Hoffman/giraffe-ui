@@ -20,6 +20,6 @@ class Slot
 
         $html = $slot instanceof Htmlable ? $slot->toHtml() : $slot;
 
-        return trim(preg_replace('/<!--\[if (?:END)?BLOCK\]><!\[endif\]-->/', '', $html)) === '';
+        return trim(preg_replace('/<!--\[if (?:END)?BLOCK\]><!\[endif\]-->/', '', $html) ?? $html) === '';
     }
 }
