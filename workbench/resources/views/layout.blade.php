@@ -103,50 +103,18 @@
         {{-- Alpine comes from Livewire's injected script, or from the head partial when Livewire isn't installed. --}}
     </head>
     <body class="min-h-screen bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100" x-data="{ menu: false }">
-        <header class="sticky top-0 z-30 border-b border-zinc-200 bg-white/80 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
-            <div class="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 md:px-6">
-                <button
-                    type="button"
-                    class="-ms-1 rounded-md p-1.5 text-zinc-600 hover:bg-zinc-100 md:hidden dark:text-zinc-400 dark:hover:bg-zinc-900"
-                    x-on:click="menu = ! menu"
-                    x-bind:aria-expanded="menu"
-                    aria-controls="sidebar"
-                    aria-label="Toggle navigation"
-                >
-                    <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2 4.75A.75.75 0 0 1 2.75 4h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75ZM2 10a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 10Zm0 5.25a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" /></svg>
-                </button>
-
-                <a href="/catalog" class="flex items-center gap-2 font-semibold tracking-tight">
-                    @include('catalog::partials.logo', ['class' => 'size-8'])
-                    GiraffeUI
-                </a>
-                <span class="rounded-full border border-zinc-200 px-2 py-0.5 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">pre-1.0</span>
-
-                <nav class="ms-auto flex items-center gap-1">
-                    <button
-                        type="button"
-                        commandfor="catalog-search"
-                        command="show-modal"
-                        class="me-1 flex cursor-pointer items-center gap-2 rounded-gui border border-zinc-200 px-2.5 py-1.5 text-sm text-zinc-600 hover:border-zinc-300 hover:text-zinc-900 focus-visible:outline-2 focus-visible:outline-gui-primary-text dark:border-zinc-800 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-100"
-                    >
-                        <x-gui::icon name="magnifying-glass" size="sm" />
-                        <span>Search</span>
-                        <span class="hidden gap-0.5 sm:flex" aria-hidden="true"><x-gui::kbd>⌘</x-gui::kbd><x-gui::kbd>K</x-gui::kbd></span>
-                    </button>
-
-                    <a href="https://github.com/Jarryd-W-Hoffman/GiraffeUI" class="hidden rounded-md px-3 py-1.5 text-sm text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 sm:block dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-100">GitHub</a>
-
-                    <x-gui::theme-switcher variant="toggle" size="sm" />
-                </nav>
-            </div>
-        </header>
+        {{-- The same header as the landing page; on small screens a button before the logo opens the docs' contents. --}}
+        @php
+            $section = isset(\Workbench\App\Catalog::components()[$current ?? '']) ? 'components' : ((($current ?? '') === 'home') ? null : 'docs');
+        @endphp
+        @include('catalog::partials.site-header', ['search' => 'catalog-search', 'section' => $section, 'bordered' => true, 'leading' => new \Illuminate\Support\HtmlString(view('catalog::partials.docs-menu-button')->render())])
 
         <div class="mx-auto flex max-w-7xl">
-            <div x-show="menu" x-cloak x-transition.opacity class="fixed inset-0 top-14 z-20 bg-zinc-950/40 md:hidden" x-on:click="menu = false"></div>
+            <div x-show="menu" x-cloak x-transition.opacity class="fixed inset-0 top-16 z-20 bg-zinc-950/40 md:hidden" x-on:click="menu = false"></div>
 
             <aside
                 id="sidebar"
-                class="fixed inset-y-0 top-14 start-0 z-20 w-64 -translate-x-full overflow-y-auto border-e border-zinc-200 bg-white px-4 py-8 transition-transform md:sticky md:block md:h-[calc(100vh-3.5rem)] md:translate-x-0 md:border-e-0 md:bg-transparent md:px-6 dark:border-zinc-800 dark:bg-zinc-950 md:dark:bg-transparent"
+                class="fixed inset-y-0 top-16 start-0 z-20 w-64 -translate-x-full overflow-y-auto border-e border-zinc-200 bg-white px-4 py-8 transition-transform md:sticky md:block md:h-[calc(100vh-4rem)] md:translate-x-0 md:border-e-0 md:bg-transparent md:px-6 dark:border-zinc-800 dark:bg-zinc-950 md:dark:bg-transparent"
                 x-bind:class="menu && 'translate-x-0'"
             >
                 @foreach (collect($nav)->groupBy('group') as $group => $items)
