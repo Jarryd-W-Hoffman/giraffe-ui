@@ -48,7 +48,7 @@ it('draws a line chart with real text, a keyboard crosshair and a data table', f
 
     expect($html)
         ->toContain('role="group"', 'aria-roledescription="chart"', 'tabindex="0"', 'aria-label="Online &amp; In store from Jan to Mar"')
-        ->toContain('aria-live="polite"', 'Show the data', '<caption class="sr-only">')
+        ->toContain('aria-live="polite"', '<caption class="sr-only">')->not->toContain('Show the data')
         // The legend for two series, the colours in order, and exact numbers in the table.
         ->toContain('var(--color-gui-chart-1)', 'var(--color-gui-chart-2)', '$12,000', '$15K')
         ->and(substr_count($html, '<tr '))->toBe(4)
@@ -148,10 +148,20 @@ it('draws a dashed, muted comparison behind the main line, and can drop the axis
         ->and(strpos($html, 'stroke-dasharray="6 5"'))->toBeLessThan(strpos($html, 'color: var(--color-gui-chart-1)'))
         // No y axis or gridlines, but the data table is still there.
         ->and(substr_count($html, 'class="relative shrink-0 text-right tabular-nums hidden"'))->toBe(1)
-        ->and($html)->toContain('Show the data');
+        ->and($html)->toContain('<caption class="sr-only">');
 });
 
 it('makes navbar links pills', function () {
     expect((string) $this->blade('<x-gui::navbar variant="pills"><x-gui::navbar.item href="/x">X</x-gui::navbar.item></x-gui::navbar>'))
         ->toContain('data-variant="pills"', 'group-data-[variant=pills]/navbar:rounded-full');
+});
+
+it('keeps the data table for screen readers, and shows it with table', function () {
+    $hidden = (string) $this->blade('<x-gui::chart.bar :labels="[\'A\', \'B\']" :data="[1, 2]" />');
+    $shown = (string) $this->blade('<x-gui::chart.bar :labels="[\'A\', \'B\']" :data="[1, 2]" table />');
+    $area = (string) $this->blade('<x-gui::chart.area :labels="[\'A\', \'B\']" :data="[1, 2]" table />');
+
+    expect($hidden)->toContain('<div class="sr-only">', '<table')->not->toContain('<details', 'Show the data')
+        ->and($shown)->toContain('<details', 'Show the data', '<table')
+        ->and($area)->toContain('Show the data');
 });

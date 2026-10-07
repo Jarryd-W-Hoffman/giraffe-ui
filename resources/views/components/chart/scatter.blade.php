@@ -15,6 +15,7 @@
     'compact' => false,
     'zero' => false,
     'label' => null,
+    'table' => false,
 ])
 
 @php
@@ -211,7 +212,7 @@
             <p class="sr-only" aria-live="polite" x-text="readout"></p>
         </div>
 
-        <x-gui::chart.table
+        <x-gui::chart.table :visible="$table"
             :label="$label"
             :labels="collect($points)->map(fn ($point, $index) => $point['label'] !== '' ? $point['label'] : '#'.($index + 1))->all()"
             :columns="array_values(array_filter([

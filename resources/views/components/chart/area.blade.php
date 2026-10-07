@@ -16,6 +16,7 @@
     'compact' => false,
     'decimals' => null,
     'label' => null,
+    'table' => false,
 ])
 
 {{--
@@ -41,5 +42,6 @@
     :compact="$compact"
     :decimals="$decimals"
     :label="$label"
+    :table="$table"
     {{ $attributes }}
 />

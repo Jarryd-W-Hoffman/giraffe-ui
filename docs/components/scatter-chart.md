@@ -61,5 +61,6 @@ With series, each group gets a colour and a shape (circle, square, diamond, tria
 | `colors` | `array` | `[]` | name =&gt; chart-1…chart-8, to pin a series to its colour. |
 | `height` | `int` | `260` | The plot's height in pixels. |
 | `label` | `string` | `null` | The chart's accessible name. Defaults to its series and axes. |
+| `table` | `bool` | `false` | Show the numbers behind a "Show the data" disclosure. Off, the same table is still there for screen readers. |
 
 Any other attribute, such as `class`, `wire:model` or `x-on:click`, is passed through to the element. To replace one of the component's own classes, use Tailwind's `!` modifier, e.g. `class="px-0!"`.

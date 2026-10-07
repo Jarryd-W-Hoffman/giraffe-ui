@@ -15,6 +15,7 @@
     'compact' => false,
     'decimals' => null,
     'label' => null,
+    'table' => false,
 ])
 
 @php
@@ -282,6 +283,6 @@
             <p class="sr-only" aria-live="polite" x-text="readout"></p>
         </div>
 
-        <x-gui::chart.table :label="$label" :labels="$labels" :columns="collect($bars)->map(fn ($bar) => ['name' => $bar['name'], 'values' => $bar['exact']])->all()" />
+        <x-gui::chart.table :visible="$table" :label="$label" :labels="$labels" :columns="collect($bars)->map(fn ($bar) => ['name' => $bar['name'], 'values' => $bar['exact']])->all()" />
     @endif
 </figure>
