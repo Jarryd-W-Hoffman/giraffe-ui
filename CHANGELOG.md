@@ -8,6 +8,18 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 61 components and a catalog.
 
+### More icons
+
+#### Added
+- Icons: 165 bundled Heroicons (up from 37), with no packages needed. They're generated from the Heroicons source and cover:
+  - money (`banknotes`, `credit-card`, `wallet`, `receipt-percent`);
+  - charts (`chart-bar`, `chart-pie`, `presentation-chart-line`, `arrow-trending-up`);
+  - messages (`envelope`, `bell`, `chat-bubble-left-right`, `inbox`);
+  - people, files, commerce, media and devices;
+  - more arrows, plus `ellipsis-vertical`.
+- `Icons::SHAPES` draws icons whose shapes use different fill rules shape by shape, so they render exactly as designed.
+- Catalog: the icon grid has a filter.
+
 ### Bar list, scatter chart and heatmap
 
 #### Added

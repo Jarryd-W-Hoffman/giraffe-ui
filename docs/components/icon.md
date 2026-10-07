@@ -10,16 +10,19 @@ Heroicons that GiraffeUI ships with, or any icon from a blade-icons set.
 
 ## Bundled icons
 
-These come with GiraffeUI and are what its components use.
+These 165 come with GiraffeUI, no packages needed: Heroicons' 20px solid set. Type to filter them.
 
 ```blade
-<div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
-    @foreach (array_keys(\JayAitch\GiraffeUI\Support\Icons::PATHS) as $name)
-        <div class="flex flex-col items-center gap-2 rounded-gui p-3 text-center text-xs text-zinc-600 dark:text-zinc-400">
-            <x-gui::icon :name="$name" class="text-zinc-900 dark:text-zinc-100" />
-            {{ $name }}
-        </div>
-    @endforeach
+<div x-data="{ query: '' }" class="w-full space-y-4">
+    <x-gui::input type="search" x-model="query" placeholder="Filter icons" aria-label="Filter icons" class="max-w-xs" />
+    <div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
+        @foreach (array_keys(\JayAitch\GiraffeUI\Support\Icons::PATHS) as $name)
+            <div x-show="@js($name).includes(query.trim().toLowerCase())" class="flex flex-col items-center gap-2 rounded-gui p-3 text-center text-xs text-zinc-600 dark:text-zinc-400">
+                <x-gui::icon :name="$name" class="text-zinc-900 dark:text-zinc-100" />
+                {{ $name }}
+            </div>
+        @endforeach
+    </div>
 </div>
 ```
 

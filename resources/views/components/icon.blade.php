@@ -20,7 +20,9 @@
 
 @if (\JayAitch\GiraffeUI\Support\Icons::has($name))
     <svg viewBox="0 0 20 20" fill="currentColor" {{ $attributes->merge($a11y)->class($classes) }}>
-        <path fill-rule="evenodd" clip-rule="evenodd" d="{{ \JayAitch\GiraffeUI\Support\Icons::path($name) }}" />
+        @foreach (\JayAitch\GiraffeUI\Support\Icons::shapes($name) as [$d, $rule])
+            <path @if ($rule === 'evenodd') fill-rule="evenodd" clip-rule="evenodd" @endif d="{{ $d }}" />
+        @endforeach
     </svg>
 @elseif (function_exists('svg'))
     {{-- Any blade-icons set: <x-gui::icon name="heroicon-o-bell" />, <x-gui::icon name="lucide-rocket" />. --}}
