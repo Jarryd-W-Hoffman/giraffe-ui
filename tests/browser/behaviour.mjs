@@ -562,6 +562,24 @@ await check('inbox: opening a conversation marks it read, replies appear, and ar
     await page.waitForFunction(() => [...document.querySelectorAll('section[aria-label=Conversations] li')].filter((li) => li.offsetParent).length === 1);
 });
 
+await check('example filters: the period and view switches change what is shown', async () => {
+    await visit('examples/dashboard');
+    await page.locator('label', { hasText: 'Year' }).click();
+    await page.getByText('$512,900').first().waitFor();
+    expect(await page.getByText('Total revenue this month').isHidden(), 'the month still shows');
+
+    await visit('examples/projects');
+    await page.locator('label', { hasText: 'List' }).click();
+    await page.locator('table').first().waitFor();
+    await page.locator('label', { hasText: 'Timeline' }).click();
+    await page.getByText('Today, 13 October').waitFor();
+
+    await visit('home');
+    const revenue = page.locator('[x-data*="30d"]').first();
+    await revenue.locator('label', { hasText: '12m' }).click();
+    await revenue.getByText('$512,900').waitFor();
+});
+
 await check('theme switcher: picks a theme, saves it, and keeps every switcher in sync', async () => {
     await visit('theme-switcher');
     const state = () => page.evaluate(() => [document.documentElement.classList.contains('dark'), localStorage.getItem('theme'), document.querySelector('header [aria-label="Dark mode"]')?.getAttribute('aria-pressed')].join(','));
