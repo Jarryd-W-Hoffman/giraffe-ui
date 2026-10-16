@@ -10,8 +10,8 @@
     "devDependencies": {
         "@tailwindcss/cli": "^4.3",
         "alpinejs": "^3.17.4",
-        "axe-core": "^4.10",
-        "playwright": "^1.50",
+        "axe-core": "^4.14",
+        "playwright": "^1.64",
         "tailwindcss": "^4.3"
     }
 }
