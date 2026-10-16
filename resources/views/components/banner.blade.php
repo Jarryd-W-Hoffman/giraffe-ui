@@ -78,5 +78,5 @@
 </section>
 @if ($key)
     {{-- Runs as the page is parsed, before it paints, so a dismissed banner never flashes. --}}
-    <script>try { if (localStorage.getItem(@js($key))) document.currentScript.previousElementSibling.hidden = true; } catch (e) {}</script>
+    <script @if ($nonce = \Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ $nonce }}" @endif>try { if (localStorage.getItem(@js($key))) document.currentScript.previousElementSibling.hidden = true; } catch (e) {}</script>
 @endif

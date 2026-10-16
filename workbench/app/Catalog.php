@@ -3850,7 +3850,7 @@ class Catalog
                         'code' => <<<'BLADE'
                             <x-gui::button variant="outline" color="secondary" x-on:click="GiraffeUI.toast('Your changes were saved.', { color: 'success', title: 'Saved' })">Success</x-gui::button>
                             <x-gui::button variant="outline" color="secondary" x-on:click="GiraffeUI.toast('Check your connection and try again.', { color: 'danger', title: 'Upload failed', duration: 0 })">Error (stays)</x-gui::button>
-                            <x-gui::button variant="outline" color="secondary" x-on:click="$dispatch('toast', { message: 'Sent with $dispatch' })">From Alpine</x-gui::button>
+                            <x-gui::button variant="outline" color="secondary" x-on:click="$dispatch('gui-toast', { message: 'Sent with $dispatch' })">From Alpine</x-gui::button>
                             BLADE,
                     ],
                     [
@@ -3875,8 +3875,8 @@ class Catalog
                 'slots' => [],
                 'notes' => [
                     'Options for each toast: message, title, color (primary, secondary, success, warning, danger, info) and duration.',
-                    'From Livewire: $this->dispatch(\'toast\', message: \'Saved\', color: \'success\').',
-                    'After a redirect: session()->flash(\'toast\', \'Saved\') or an array of options.',
+                    'From Livewire: $this->dispatch(\'gui-toast\', message: \'Saved\', color: \'success\').',
+                    'After a redirect: session()->flash(\'gui-toast\', \'Saved\') or an array of options.',
                     'While a modal is open, toasts still appear and are announced, but the browser makes everything outside the modal unclickable, so they dismiss on their own timer.',
                 ],
             ],

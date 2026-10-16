@@ -10,7 +10,7 @@
             Dark mode: runs before the page paints so there's no flash of the wrong theme.
             Saved choice wins, otherwise follow the OS. Switch with GiraffeUI.setTheme('dark' | 'light' | 'system').
         -->
-        <script>
+        <script @if ($nonce = \Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ $nonce }}" @endif>
             window.GiraffeUI = {
                 setTheme(theme) {
                     try {
@@ -33,7 +33,7 @@
     <body class="min-h-screen bg-white text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
         {{ $slot }}
 
-        {{-- Shows GiraffeUI.toast(...), $dispatch('toast', ...) and session()->flash('toast', ...). --}}
+        {{-- Shows GiraffeUI.toast(...), $dispatch('gui-toast', ...) and session()->flash('gui-toast', ...). --}}
         <x-gui::toasts />
     </body>
 </html>

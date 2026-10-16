@@ -28,6 +28,20 @@ it('formats numbers for people', function () {
         ->and(Chart::format(null))->toBe('–');
 });
 
+it('drops a trailing zero from compact numbers and rounds halves up', function () {
+    expect(Chart::format(2000, compact: true))->toBe('2K')
+        ->and(Chart::format(0.125, decimals: 2))->toBe('0.13')
+        ->and(Chart::format(1234.5, decimals: 0))->toBe('1,235');
+});
+
+it('formats numbers in the app locale', function () {
+    app()->setLocale('de');
+
+    expect(Chart::format(1234.5))->toBe('1.234,5')
+        ->and(Chart::format(12500, '€', '', null, true))->toBe('€12,5K')
+        ->and(Chart::format(99.95, suffix: '%'))->toBe('99,95%');
+})->skip(! extension_loaded('intl'), 'Needs the intl extension.');
+
 it('breaks lines at missing values, and closes areas and bands', function () {
     expect(Chart::line([1, 2, null, 3, 4], 0, 4))->toBe('M0,750L250,500M750,250L1000,0')
         ->and(Chart::area([1, 2], 0, 4))->toBe('M0,750L1000,500L1000,1000L0,1000Z')

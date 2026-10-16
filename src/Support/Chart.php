@@ -2,6 +2,8 @@
 
 namespace JayAitch\GiraffeUI\Support;
 
+use NumberFormatter;
+
 /**
  * Maths for the server-rendered SVG charts: rounded axis ticks, scaling values into a 0–1000 viewBox, SVG paths
  * with gaps for missing values, and number formatting.
@@ -221,6 +223,8 @@ class Chart
 
     /**
      * A number for people: thousands separators, or compact (12.5K, 4.2M, 310K), with an optional prefix and suffix.
+     *
+     * Separators follow the app's locale (1.234,5 in German) when PHP's intl extension is installed.
      */
     public static function format(float|int|null $value, string $prefix = '', string $suffix = '', ?int $decimals = null, bool $compact = false): string
     {
@@ -236,14 +240,35 @@ class Chart
                 if ($value >= $size) {
                     $short = $value / $size;
 
-                    return $sign.$prefix.self::trim(number_format($short, $short < 100 ? 1 : 0)).$unit.$suffix;
+                    return $sign.$prefix.self::number($short, 0, $short < 100 ? 1 : 0).$unit.$suffix;
                 }
             }
         }
 
         $decimals ??= floor($value) == $value ? 0 : min(2, strlen(rtrim(substr(strrchr((string) $value, '.') ?: '', 1), '0')));
 
-        return $sign.$prefix.number_format($value, $decimals).$suffix;
+        return $sign.$prefix.self::number($value, (int) $decimals, (int) $decimals).$suffix;
+    }
+
+    /**
+     * Format a number in the app's locale, with between $min and $max decimals, rounding halves away from zero.
+     * Without intl, it falls back to English separators.
+     */
+    protected static function number(float|int $value, int $min, int $max): string
+    {
+        if (! class_exists(NumberFormatter::class)) {
+            $number = number_format($value, $max);
+
+            return $min === $max ? $number : self::trim($number);
+        }
+
+        $formatter = new NumberFormatter(app()->getLocale(), NumberFormatter::DECIMAL);
+        $formatter->setAttribute(NumberFormatter::MIN_FRACTION_DIGITS, $min);
+        $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $max);
+        // number_format's rounding, rather than ICU's default of rounding halves to even.
+        $formatter->setAttribute(NumberFormatter::ROUNDING_MODE, NumberFormatter::ROUND_HALFUP);
+
+        return $formatter->format($value) ?: number_format($value, $max);
     }
 
     /**

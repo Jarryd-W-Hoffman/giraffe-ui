@@ -29,7 +29,7 @@ class TimezonePicker extends Component
     {
         $this->validate();
 
-        $this->dispatch('toast', message: "Saved {$this->timezone}.", color: 'success');
+        $this->dispatch('gui-toast', message: "Saved {$this->timezone}.", color: 'success');
     }
 
     public function render(): string

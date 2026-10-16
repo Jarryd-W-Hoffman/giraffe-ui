@@ -8,6 +8,17 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 69 components and a catalog.
 
+### CSP nonces, prefixed toasts and localised chart numbers
+
+#### Changed
+- Toasts use the prefixed `gui-toast` event and session key, so they don't collide with an app's own "toast": `$dispatch('gui-toast', …)`, `$this->dispatch('gui-toast', …)` and `session()->flash('gui-toast', …)`. `GiraffeUI.toast()` is unchanged.
+  - The unprefixed `toast` event and session key still work until 1.0.
+- Chart numbers follow the app's locale, e.g. `1.234,5` in German, when PHP's intl extension is installed. Without intl they stay in English.
+
+#### Fixed
+- Banner's remembered dismissal, the collapsible sidebar's saved state and the published layout's dark mode script now carry the CSP nonce (`Vite::useCspNonce()`), like Modal and Toasts already did. Apps with a nonce-based Content Security Policy blocked them before.
+  - A test fails if any inline script is added without the nonce.
+
 ### One header for the site
 
 #### Changed

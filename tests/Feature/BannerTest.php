@@ -16,11 +16,11 @@ it('can be dismissed, remembered before paint, and reported', function () {
 
     expect($html)
         ->toContain('data-dismiss', 'aria-label="Dismiss"', "\$dispatch('banner-dismissed', { key: 'trial' })", "localStorage.setItem('gui-banner:trial', '1')")
-        ->toMatch("/<\/section>\s*<script>try \{ if \(localStorage.getItem\('gui-banner:trial'\)\) document.currentScript.previousElementSibling.hidden = true; \}/");
+        ->toMatch("/<\/section>\s*<script\b[^>]*>try \{ if \(localStorage.getItem\('gui-banner:trial'\)\) document.currentScript.previousElementSibling.hidden = true; \}/");
 });
 
 it('dismisses without remembering when there is no key', function () {
     $html = (string) $this->blade('<x-gui::banner dismissible>Hi</x-gui::banner>');
 
-    expect($html)->toContain('data-dismiss')->not->toContain('<script>');
+    expect($html)->toContain('data-dismiss')->not->toContain('<script');
 });
