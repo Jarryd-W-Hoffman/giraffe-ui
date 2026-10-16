@@ -8,6 +8,14 @@ All notable changes to GiraffeUI are documented here. This project follows [Sema
 
 The first release: a rebuild on Tailwind CSS v4 and Laravel 13, with 69 components and a catalog.
 
+### Static analysis and dependency updates
+
+#### Added
+- PHPStan with Larastan at level 8 on `src/`, run in CI and with `composer analyse`. CI also runs `composer audit`.
+- Dependabot opens weekly, grouped PRs for Composer, npm and GitHub Actions. Composer constraints are only widened, never raised.
+
+#### Fixed
+- `Slot::isBlank()` no longer passes null to `trim()` if the regex fails.
 ### CSP nonces, prefixed toasts and localised chart numbers
 
 #### Changed

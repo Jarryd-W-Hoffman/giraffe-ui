@@ -50,6 +50,24 @@ jobs:
           composer docs
           git diff --exit-code docs || (echo "::error::docs/components is out of date. Run composer docs and commit the result." && exit 1)
 
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - run: composer install --no-interaction --prefer-dist
+      - run: vendor/bin/phpstan analyse --no-progress --error-format=github
+
+      # Fails on known vulnerabilities in the dependencies a fresh install resolves.
+      - run: composer audit
+
   css:
     name: Tailwind finds every class
     runs-on: ubuntu-latest

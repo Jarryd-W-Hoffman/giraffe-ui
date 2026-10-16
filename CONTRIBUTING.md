@@ -15,6 +15,7 @@ composer catalog   # http://localhost:8000/catalog
 ```bash
 composer test      # Pest
 composer lint      # Pint
+composer analyse   # PHPStan (Larastan, level 8) on src/
 composer docs      # if you changed workbench/app/Catalog.php
 npm run audit:a11y   # with the catalog running: axe-core on every page, light and dark
 npm run test:browser # with the catalog running: drives the Alpine components, fails on console errors
