@@ -35,7 +35,7 @@ class CatalogController
             'password.min' => 'Passwords are at least 8 characters.',
         ]);
 
-        return redirect('/catalog/examples/dashboard')->with('toast', ['message' => "Signed in as {$request->input('email')}.", 'color' => 'success']);
+        return redirect('/catalog/examples/dashboard')->with('gui-toast', ['message' => "Signed in as {$request->input('email')}.", 'color' => 'success']);
     }
 
     /**
@@ -59,7 +59,7 @@ class CatalogController
 
         $first = Str::before($request->input('name'), ' ');
 
-        return redirect('/catalog/examples/dashboard')->with('toast', ['message' => "Welcome to Acme, {$first}.", 'color' => 'success']);
+        return redirect('/catalog/examples/dashboard')->with('gui-toast', ['message' => "Welcome to Acme, {$first}.", 'color' => 'success']);
     }
 
     /**

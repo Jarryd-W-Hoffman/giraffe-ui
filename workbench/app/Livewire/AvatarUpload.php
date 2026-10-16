@@ -17,7 +17,7 @@ class AvatarUpload extends Component
     {
         $this->validate();
 
-        $this->dispatch('toast', message: 'Uploaded '.$this->avatar->getClientOriginalName().'.', color: 'success');
+        $this->dispatch('gui-toast', message: 'Uploaded '.$this->avatar->getClientOriginalName().'.', color: 'success');
 
         $this->reset('avatar');
     }

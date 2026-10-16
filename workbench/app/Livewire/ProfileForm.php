@@ -35,7 +35,7 @@ class ProfileForm extends Component
         // Pretend to do some work so the loading state is visible.
         usleep(800_000);
 
-        $this->dispatch('toast', message: "Saved {$this->name}'s profile.", color: 'success');
+        $this->dispatch('gui-toast', message: "Saved {$this->name}'s profile.", color: 'success');
     }
 
     public function render(): string

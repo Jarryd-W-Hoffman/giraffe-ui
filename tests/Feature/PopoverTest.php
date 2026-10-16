@@ -90,18 +90,32 @@ describe('toasts', function () {
     it('renders a polite live region in the top layer', function () {
         $html = (string) $this->blade('<x-gui::toasts />');
 
-        expect($html)->toContain('popover="manual"', 'role="status"', 'aria-live="polite"', 'x-on:toast.window', 'window.GiraffeUI.toast');
+        expect($html)->toContain('popover="manual"', 'role="status"', 'aria-live="polite"', 'x-on:gui-toast.window', 'window.GiraffeUI.toast');
+    });
+
+    it('raises the prefixed event from GiraffeUI.toast()', function () {
+        expect((string) $this->blade('<x-gui::toasts />'))->toContain("new CustomEvent('gui-toast'");
+    });
+
+    it('still listens for the unprefixed toast event', function () {
+        expect((string) $this->blade('<x-gui::toasts />'))->toContain('x-on:toast.window');
     });
 
     it('shows a toast flashed to the session', function () {
-        session()->flash('toast', ['message' => 'Profile saved', 'color' => 'success']);
+        session()->flash('gui-toast', ['message' => 'Profile saved', 'color' => 'success']);
 
         expect((string) $this->blade('<x-gui::toasts />'))->toContain('add(', 'Profile saved');
     });
 
     it('accepts a plain string flash', function () {
-        session()->flash('toast', 'Saved');
+        session()->flash('gui-toast', 'Saved');
 
         expect((string) $this->blade('<x-gui::toasts />'))->toContain('Saved');
+    });
+
+    it('still shows a toast flashed under the unprefixed key', function () {
+        session()->flash('toast', 'Legacy saved');
+
+        expect((string) $this->blade('<x-gui::toasts />'))->toContain('Legacy saved');
     });
 });

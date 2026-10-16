@@ -34,7 +34,7 @@
 >
     @if ($collapsible && $persist)
         {{-- Before anything paints, so a collapsed sidebar never flashes open. --}}
-        <script>
+        <script @if ($nonce = \Illuminate\Support\Facades\Vite::cspNonce()) nonce="{{ $nonce }}" @endif>
             (function (layout) {
                 try {
                     const saved = localStorage.getItem(@js($persist));

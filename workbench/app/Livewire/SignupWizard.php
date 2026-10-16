@@ -73,7 +73,7 @@ class SignupWizard extends Component
             }
         }
 
-        $this->dispatch('toast', message: "Created the {$this->workspace} workspace.", color: 'success');
+        $this->dispatch('gui-toast', message: "Created the {$this->workspace} workspace.", color: 'success');
         $this->reset();
     }
 

@@ -68,7 +68,7 @@ it('validates the sign-in example like a real form, then signs in with a toast',
 
     $this->post('/catalog/examples/sign-in', ['email' => 'ada@example.com', 'password' => 'hunter22'])
         ->assertRedirect('/catalog/examples/dashboard')
-        ->assertSessionHas('toast', ['message' => 'Signed in as ada@example.com.', 'color' => 'success']);
+        ->assertSessionHas('gui-toast', ['message' => 'Signed in as ada@example.com.', 'color' => 'success']);
 });
 
 it('validates the register example, keeping everything but the passwords', function () {
@@ -86,7 +86,7 @@ it('validates the register example, keeping everything but the passwords', funct
 
     $this->post('/catalog/examples/register', ['name' => 'Ada Lovelace', 'email' => 'ada@example.com', 'password' => 'engine1843', 'password_confirmation' => 'engine1843', 'terms' => '1'])
         ->assertRedirect('/catalog/examples/dashboard')
-        ->assertSessionHas('toast', ['message' => 'Welcome to Acme, Ada.', 'color' => 'success']);
+        ->assertSessionHas('gui-toast', ['message' => 'Welcome to Acme, Ada.', 'color' => 'success']);
 });
 
 it('shows register errors in their fields, with the summary counting them', function () {
@@ -168,7 +168,7 @@ describe('onboarding example', function () {
 
         $this->post('/catalog/examples/onboarding', ['step' => 'review'])
             ->assertRedirect('/catalog/examples/dashboard')
-            ->assertSessionHas('toast', ['message' => 'Created the Analytical Engines workspace.', 'color' => 'success'])
+            ->assertSessionHas('gui-toast', ['message' => 'Created the Analytical Engines workspace.', 'color' => 'success'])
             ->assertSessionMissing('onboarding');
     });
 
