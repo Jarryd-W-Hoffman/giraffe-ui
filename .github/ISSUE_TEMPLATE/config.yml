@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Report a security vulnerability
-    url: https://github.com/Jarryd-W-Hoffman/GiraffeUI/security/advisories/new
+    url: https://github.com/Jarryd-W-Hoffman/giraffe-ui/security/advisories/new
     about: Please report security issues privately, not as a public issue.

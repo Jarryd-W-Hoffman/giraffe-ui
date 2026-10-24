@@ -27,7 +27,7 @@
     <x-gui::navbar.item href="/catalog/introduction" :current="$section === 'docs'">Docs</x-gui::navbar.item>
     <x-gui::navbar.item href="/catalog/button" :current="$section === 'components'">Components</x-gui::navbar.item>
     <x-gui::navbar.item href="/catalog/examples/dashboard" :current="$section === 'examples'">Examples</x-gui::navbar.item>
-    <x-gui::navbar.item href="https://github.com/Jarryd-W-Hoffman/GiraffeUI" :current="false">GitHub</x-gui::navbar.item>
+    <x-gui::navbar.item href="https://github.com/Jarryd-W-Hoffman/giraffe-ui" :current="false">GitHub</x-gui::navbar.item>
 
     <x-slot:actions>
         <x-gui::command-palette.trigger :for="$search" class="max-sm:hidden">Search components</x-gui::command-palette.trigger>
