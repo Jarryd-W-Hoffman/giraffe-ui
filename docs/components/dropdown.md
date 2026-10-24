@@ -77,8 +77,8 @@ A submenu is a nested popover beside its item. ArrowRight, Enter or a click open
 ```blade
 <x-gui::dropdown id="account-menu" position="bottom-end">
     <x-slot:trigger>
-        <button type="button" commandfor="account-menu" command="toggle-popover" aria-haspopup="menu" aria-label="Account" class="cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text">
-            <x-gui::avatar name="Ada Lovelace" />
+        <button type="button" commandfor="account-menu" command="toggle-popover" aria-haspopup="menu" class="cursor-pointer rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gui-primary-text">
+            <x-gui::avatar name="Ada Lovelace" alt="Account" />
         </button>
     </x-slot:trigger>
 

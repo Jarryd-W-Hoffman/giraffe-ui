@@ -71,13 +71,15 @@
                                     x-on:click="selected = {{ $day }}"
                                     x-bind:aria-pressed="(selected === {{ $day }}).toString()"
                                     aria-pressed="{{ $day === $today ? 'true' : 'false' }}"
-                                    aria-label="{{ $date($day)->format('l j F') }}{{ $day === $today ? ', today' : '' }}, {{ count($dayEvents) ? count($dayEvents).' '.(count($dayEvents) === 1 ? 'event' : 'events') : 'nothing on' }}"
                                     class="flex h-20 w-full cursor-pointer flex-col gap-1 rounded-2xl bg-white p-2 text-start transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gui-primary-text aria-pressed:ring-2 aria-pressed:ring-zinc-900 sm:h-28 dark:bg-black dark:hover:bg-zinc-950 dark:aria-pressed:ring-white"
                                 >
+                                    {{-- The name is the text, not an aria-label, so it contains the visible day number (WCAG 2.5.3). --}}
+                                    <span class="sr-only">{{ $date($day)->format('l') }} </span>
                                     <span @class([
                                         'flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium tabular-nums',
                                         'bg-gui-primary text-gui-primary-foreground' => $day === $today,
                                     ])>{{ $day }}</span>
+                                    <span class="sr-only"> {{ $date($day)->format('F') }}{{ $day === $today ? ', today' : '' }}, {{ count($dayEvents) ? count($dayEvents).' '.(count($dayEvents) === 1 ? 'event' : 'events') : 'nothing on' }}</span>
                                     {{-- The day's events: names from the sm breakpoint, dots below it. --}}
                                     <span class="hidden min-w-0 space-y-0.5 sm:block" aria-hidden="true">
                                         @foreach (array_slice($dayEvents, 0, 2) as [$time, $title, $kind])
