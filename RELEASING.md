@@ -6,7 +6,7 @@ GiraffeUI follows [Semantic Versioning](https://semver.org). Before 1.0, minor v
 
 1. Make the GitHub repository public.
 2. Turn on **Private vulnerability reporting**: Settings → Code security. `SECURITY.md` points there.
-3. Submit `https://github.com/Jarryd-W-Hoffman/GiraffeUI` at [packagist.org/packages/submit](https://packagist.org/packages/submit).
+3. Submit `https://github.com/Jarryd-W-Hoffman/giraffe-ui` at [packagist.org/packages/submit](https://packagist.org/packages/submit).
 4. Connect Packagist to GitHub so new tags publish on their own: [packagist.org/about#how-to-update-packages](https://packagist.org/about#how-to-update-packages).
 
 ## Every release

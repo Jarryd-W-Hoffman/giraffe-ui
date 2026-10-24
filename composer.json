@@ -10,7 +10,7 @@
         "livewire",
         "ui"
     ],
-    "homepage": "https://github.com/Jarryd-W-Hoffman/GiraffeUI",
+    "homepage": "https://github.com/Jarryd-W-Hoffman/giraffe-ui",
     "license": "MIT",
     "authors": [
         {
@@ -19,9 +19,9 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/Jarryd-W-Hoffman/GiraffeUI/issues",
-        "source": "https://github.com/Jarryd-W-Hoffman/GiraffeUI",
-        "security": "https://github.com/Jarryd-W-Hoffman/GiraffeUI/security/advisories/new"
+        "issues": "https://github.com/Jarryd-W-Hoffman/giraffe-ui/issues",
+        "source": "https://github.com/Jarryd-W-Hoffman/giraffe-ui",
+        "security": "https://github.com/Jarryd-W-Hoffman/giraffe-ui/security/advisories/new"
     },
     "require": {
         "php": "^8.4",

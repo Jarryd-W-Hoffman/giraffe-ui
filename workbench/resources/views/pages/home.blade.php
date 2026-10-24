@@ -420,7 +420,7 @@
                     <x-gui::snippet :value="$install" :prompt="false" copy-label="Copy the install command" class="mx-auto mt-10 bg-white/70! ring-0! backdrop-blur" />
                     <div class="mt-8 flex flex-wrap justify-center gap-3">
                         <x-gui::button href="/catalog/installation" shape="pill" size="lg" class="bg-zinc-950! text-white! hover:bg-zinc-800!">Get started</x-gui::button>
-                        <x-gui::button href="https://github.com/Jarryd-W-Hoffman/GiraffeUI" shape="pill" size="lg" class="bg-white/70! text-zinc-950! hover:bg-white!">Star on GitHub</x-gui::button>
+                        <x-gui::button href="https://github.com/Jarryd-W-Hoffman/giraffe-ui" shape="pill" size="lg" class="bg-white/70! text-zinc-950! hover:bg-white!">Star on GitHub</x-gui::button>
                     </div>
                 </div>
             </section>
