@@ -186,11 +186,41 @@ Wrap a control in a field to get a linked label, hint and error message. Errors 
 </form>
 ```
 
+```mermaid
+flowchart LR
+    F["x-gui::field<br/>label · name · hint · required"] -->|"id, name, required"| C["x-gui::input"]
+    F --> L["label for=id"]
+    F --> H["hint"]
+    E["$errors bag"] -->|"first error for the name"| M["error message"]
+    O["old input"] -->|"value after a failed submit"| C
+    H -.->|aria-describedby| C
+    M -.->|"aria-describedby, aria-invalid"| C
+```
+
 The input gets `id`, `name`, `required`, `aria-invalid` and `aria-describedby` automatically, and is refilled with old input after a failed submission. With Livewire, put `wire:model` on the control and keep `name` on the field. Buttons that trigger Livewire requests show a loading spinner on their own.
 
 ### Interactivity
 
 Modal, Dropdown and Popover open with `command`/`commandfor` buttons, with no JavaScript. Accordion is native `<details>`. Where the browser has no built-in behaviour, GiraffeUI uses Alpine. Livewire includes Alpine; in other apps, the installer can add it.
+
+```mermaid
+flowchart LR
+    subgraph html["1 · The browser"]
+        direction TB
+        D["dialog element<br/>Modal, Drawer"]
+        P["Popover API + anchor positioning<br/>Dropdown, Popover"]
+        I["Invoker commands<br/>command / commandfor"]
+        N["details and native inputs<br/>Accordion, Rating, Segmented control"]
+    end
+    subgraph alpine["2 · Alpine"]
+        A["Tabs<br/>Combobox<br/>Date picker calendar<br/>Tooltip<br/>Menu arrow keys<br/>Toasts"]
+    end
+    subgraph lw["3 · Livewire (optional)"]
+        L["wire:model<br/>Loading spinners<br/>Toast events"]
+    end
+    P -->|"only where the<br/>browser has nothing"| A
+    A -.->|"works alongside,<br/>never required"| L
+```
 
 ```blade
 <x-gui::button commandfor="confirm" command="show-modal">Delete</x-gui::button>
@@ -320,6 +350,15 @@ npm run test:browser # With the catalog running: drives the Alpine components in
 CI runs everything twice: with Livewire, and with Livewire removed and Alpine loaded on its own, so GiraffeUI never comes to depend on Livewire.
 
 ### Catalog
+
+```mermaid
+flowchart LR
+    C["workbench/app/Catalog.php<br/>examples · playgrounds · props"] --> S["The catalog<br/>composer catalog"]
+    C -->|composer docs| D["docs/components/*.md"]
+    S --> A["axe audit<br/>every page, light and dark"]
+    S --> B["Browser tests<br/>Chromium · Firefox · WebKit"]
+    D --> F["CI fails if the docs<br/>are out of date"]
+```
 
 The catalog runs on [Testbench Workbench](https://packages.tools/workbench) and lives in `workbench/`. To add a component, add an entry to `workbench/app/Catalog.php`, then run `composer docs`; the Markdown in `docs/components` is generated from the catalog, and CI fails if it's out of date. Example code is rendered as-is, so what you read is exactly what ran. While editing styles, run `npm run catalog:watch` in a second terminal.
 
